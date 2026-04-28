@@ -1,26 +1,132 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ─── Surfaces ─── */
+  --color-bg: #08080b;
+  --color-bg-soft: #0e0e12;
+  --color-bg-elev: #15151a;
+  --color-bg-card: #111115;
+
+  /* ─── Text ─── */
+  --color-fg: #f4efe8;
+  --color-fg-muted: #9c968e;
+  --color-fg-faint: #5a5752;
+
+  /* ─── Lines ─── */
+  --color-line: #1d1d22;
+  --color-line-bright: #28282f;
+
+  /* ─── Brand ─── */
+  --color-brand: #ef2d2d;
+  --color-brand-hot: #ff4747;
+  --color-brand-deep: #b81e1e;
+
+  /* ─── Fonts ─── */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-bricolage), ui-serif, Georgia, serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
+html,
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+}
+
+::selection {
+  background: var(--color-brand);
+  color: #fff;
+}
+
+/* ─── Numerical display ─── */
+.numeral {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.06em;
+  line-height: 0.82;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Smooth headings ─── */
+.headline {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+/* ─── Soft red glow per section ─── */
+.glow-soft {
+  background: radial-gradient(60% 50% at 80% 20%, rgba(239, 45, 45, 0.18), transparent 70%);
+}
+
+.glow-bottom {
+  background: radial-gradient(50% 50% at 50% 100%, rgba(239, 45, 45, 0.14), transparent 70%);
+}
+
+/* ─── Eyebrow tag ─── */
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-fg-muted);
+}
+
+/* ─── Marquee ─── */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track { animation: marquee 60s linear infinite; }
+
+/* ─── Soft entrance ─── */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fade-up 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: 0.35; transform: scale(0.6); }
+}
+.pulse-dot { animation: pulse-dot 1.6s ease-in-out infinite; }
+
+@keyframes glow-drift {
+  0%, 100% { transform: translate(0, 0); }
+  50%      { transform: translate(-2%, 3%); }
+}
+.glow-drift { animation: glow-drift 18s ease-in-out infinite; }
+
+.delay-1 { animation-delay: 0.08s; }
+.delay-2 { animation-delay: 0.16s; }
+.delay-3 { animation-delay: 0.24s; }
+.delay-4 { animation-delay: 0.32s; }
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: var(--color-bg); }
+::-webkit-scrollbar-thumb { background: var(--color-line-bright); }
+::-webkit-scrollbar-thumb:hover { background: var(--color-brand); }
+/* ─── Smooth scroll for nav links ─── */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+/* ─── Respect reduced motion preferences ─── */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
