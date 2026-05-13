@@ -1,5 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
+import AuditCTA from "@/src/components/AuditCTA";
+import Services from "@/src/components/Services";
 import FAQ from "@/src/components/FAQ";
 
 const WHATSAPP_NUMBER = "260774668193";
@@ -9,61 +11,6 @@ const WA_MESSAGE = encodeURIComponent(
   "Hi Wiyule Technology — I'd like a free 15-min discovery call about a website / WhatsApp AI for my business."
 );
 const WA_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${WA_MESSAGE}`;
-function offerWaUrl(offerName: string) {
-  const text = encodeURIComponent(
-    `Hi Wiyule Technology — I'm interested in the ${offerName} offer. Can we set up a 15-min discovery call to discuss it?`
-  );
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
-}
-
-const offers = [
-  {
-    title: "Digital Storefront Kit",
-    forWho: "For dealers, retailers, hire companies & service providers",
-    example: "Best for: car dealers, restaurants, equipment hire, retail shops",
-    price: "From $350",
-    bullets: [
-      "Premium business website",
-      "Up to 30 listings (cars, menu items, products, services)",
-      "WhatsApp catalog integration",
-      "Google Business Profile setup",
-      "1 month support after launch",
-    ],
-    delivery: "7–10 days",
-    cta: offerWaUrl("Digital Storefront Kit"),
-  },
-  {
-    title: "Operations OS Lite",
-    forWho: "For businesses managing customers, jobs, or inventory",
-    example: "Best for: workshops, salons, schools, parts shops",
-    price: "From $500",
-    bullets: [
-      "Customer & job database",
-      "Digital service / job cards",
-      "WhatsApp reminders & follow-ups",
-      "Inventory or attendance tracking",
-      "Owner dashboard with insights",
-    ],
-    delivery: "3–4 weeks",
-    cta: offerWaUrl("Operations OS Lite"),
-  },
-  {
-    title: "AutoReply AI",
-    forWho: "For any business losing leads on WhatsApp",
-    example: "Best for: anyone with more inquiries than time to reply",
-    price: "$250 setup · $40/mo",
-    bullets: [
-      "AI assistant trained on your business",
-      "Replies to inquiries 24/7",
-      "Books appointments automatically",
-      "Sends qualified leads to you",
-      "Zambia & Malawi number support",
-    ],
-    delivery: "5–7 days",
-    highlighted: true,
-    cta: offerWaUrl("AutoReply AI"),
-  },
-];
 
 const processSteps = [
   { t: "Discovery", d: "A 15-minute conversation. We learn your business, your customers, and what's actually broken." },
@@ -134,7 +81,7 @@ export default function Home() {
           <p className="mt-8 max-w-2xl text-lg leading-relaxed text-[var(--color-fg-muted)] md:text-xl fade-up delay-2">
             We build websites, booking systems, and AI WhatsApp assistants for
             businesses across Malawi and Zambia — so you never lose another
-            customer to a slow reply. Whatever you sell, we've got you.
+            customer to a slow reply. Whatever you sell, we&rsquo;ve got you.
           </p>
 
           <div className="mt-10 flex flex-col gap-3 sm:flex-row fade-up delay-3">
@@ -196,12 +143,15 @@ export default function Home() {
           <>
             By the time the owner wakes up and replies, the customer has already
             messaged a competitor. Your slowest reply is the one that costs you
-            the sale — whether you're selling cars, food, services, or anything
+            the sale — whether you&rsquo;re selling cars, food, services, or anything
             else. We build the system that replies instantly, even at 3am.
           </>
         }
         align="left"
       />
+
+      {/* ═══════════════ FREE AUDIT CTA ═══════════════ */}
+      <AuditCTA />
 
       {/* ═══════════════ NUMERICAL SECTION 2 — 7 DAYS ═══════════════ */}
       <NumericSection
@@ -219,102 +169,15 @@ export default function Home() {
             Most agencies take three months and then ghost you. We ship in a
             week because we work in fixed scopes, not open-ended retainers. You
             see progress every day. You sign off in real time. You launch
-            before the next month's rent is due.
+            before the next month&rsquo;s rent is due.
           </>
         }
         align="right"
         bg="elev"
       />
 
-      {/* ═══════════════ OFFERS ═══════════════ */}
-      <section id="offers" className="relative border-b border-[var(--color-line)]">
-        <div className="absolute inset-0 glow-soft" />
-        <div className="relative mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32">
-          <div className="mb-16 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
-            <div className="max-w-2xl">
-              <p className="eyebrow mb-4">— Three offers</p>
-              <h2 className="headline text-[clamp(2.5rem,5.5vw,5rem)]">
-                Pick the one <br className="hidden md:block" />
-                that <span className="text-[var(--color-brand)]">fits</span>.
-              </h2>
-            </div>
-            <p className="max-w-md text-base text-[var(--color-fg-muted)]">
-              Fixed scope. Fixed price. Delivered fast. Whatever industry you're
-              in, one of these maps to your business.
-            </p>
-          </div>
-
-          <div className="grid gap-px bg-[var(--color-line)] md:grid-cols-3">
-            {offers.map((o, i) => (
-              <div
-                key={o.title}
-                className={`relative flex flex-col p-9 transition ${
-                  o.highlighted
-                    ? "bg-[var(--color-bg-elev)]"
-                    : "bg-[var(--color-bg-card)] hover:bg-[var(--color-bg-elev)]"
-                }`}
-              >
-                {o.highlighted && (
-                  <div className="absolute right-9 top-9 inline-flex items-center gap-1.5 text-[10px] font-medium uppercase tracking-[0.2em] text-[var(--color-brand)]">
-                    <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-brand)] pulse-dot" />
-                    Recurring
-                  </div>
-                )}
-                <div className="mb-10">
-                  <span className="font-mono text-xs text-[var(--color-fg-faint)]">
-                    0{i + 1}
-                  </span>
-                </div>
-                <h3 className="headline text-3xl">{o.title}</h3>
-                <p className="mt-2 text-sm text-[var(--color-fg-muted)]">
-                  {o.forWho}
-                </p>
-                <p className="mt-1 text-xs text-[var(--color-fg-faint)] italic">
-                  {o.example}
-                </p>
-                <div className="mt-8 mb-8 numeral text-5xl text-[var(--color-fg)]">
-                  {o.price.includes("/mo") ? (
-                    <>
-                      $250
-                      <span className="ml-2 numeral text-2xl text-[var(--color-fg-muted)]">
-                        + $40/mo
-                      </span>
-                    </>
-                  ) : (
-                    o.price
-                  )}
-                </div>
-                <ul className="flex flex-1 flex-col gap-3 text-sm">
-                  {o.bullets.map((b) => (
-                    <li key={b} className="flex gap-3 text-[var(--color-fg)]">
-                      <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--color-brand)]" />
-                      {b}
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href={offerWaUrl(o.title)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`mt-10 inline-flex w-full items-center justify-center gap-2 whitespace-nowrap px-5 py-3.5 text-center text-sm font-medium transition ${
-                    o.highlighted
-                      ? "bg-[var(--color-brand)] text-white hover:bg-[var(--color-brand-hot)]"
-                      : "border border-[var(--color-line-bright)] text-[var(--color-fg)] hover:border-[var(--color-brand)] hover:text-[var(--color-brand)]"
-                  }`}
-                >
-                  <span>Choose this offer</span>
-                  <span aria-hidden>→</span>
-                </Link>
-
-                <div className="mt-5 flex items-center justify-between border-t border-[var(--color-line)] pt-5 text-xs">
-                  <span className="text-[var(--color-fg-muted)]">Delivery</span>
-                  <span className="font-medium text-[var(--color-fg)]">{o.delivery}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ═══════════════ SERVICES (8 PRODUCTS) ═══════════════ */}
+      <Services />
 
       {/* ═══════════════ NUMERICAL SECTION 3 — 24/7 ═══════════════ */}
       <NumericSection
@@ -379,7 +242,7 @@ export default function Home() {
         }
         body={
           <>
-            We're based in Lusaka with roots in Lilongwe — which means we
+            We&rsquo;re based in Lusaka with roots in Lilongwe — which means we
             understand the realities of running a business between two
             currencies, three mobile money services, and customers who switch
             between English and Chichewa mid-sentence. Wiyule was built for
@@ -462,7 +325,7 @@ export default function Home() {
           </h2>
           <p className="mt-8 max-w-xl text-lg text-[var(--color-fg-muted)]">
             15 minutes. No deck. No commitment. Just a real conversation about
-            what's broken in your business and whether we can fix it.
+            what&rsquo;s broken in your business and whether we can fix it.
           </p>
           <div className="mt-12 flex flex-col gap-3 sm:flex-row">
             <Link
