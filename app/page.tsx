@@ -3,6 +3,7 @@ import Link from "next/link";
 import AuditCTA from "@/src/components/AuditCTA";
 import Services from "@/src/components/Services";
 import FAQ from "@/src/components/FAQ";
+import HowWeWork from "@/src/components/HowWeWork";
 
 const WHATSAPP_NUMBER = "260774668193";
 const EMAIL = "wiyuletechnology@gmail.com";
@@ -12,12 +13,6 @@ const WA_MESSAGE = encodeURIComponent(
 );
 const WA_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${WA_MESSAGE}`;
 
-const processSteps = [
-  { t: "Discovery", d: "A 15-minute conversation. We learn your business, your customers, and what's actually broken." },
-  { t: "Build",     d: "We build fast and you see the work mid-way to shape it. No 6-month deathmarches." },
-  { t: "Launch",    d: "We deploy, train your team, and route your first inquiries the day we go live." },
-  { t: "Support",   d: "30 days of free support after launch. Optional monthly retainers from $40." },
-];
 
 export default function Home() {
   return (
@@ -202,32 +197,8 @@ export default function Home() {
         align="left"
       />
 
-      {/* ═══════════════ PROCESS ═══════════════ */}
-      <section id="process" className="relative border-b border-[var(--color-line)] bg-[var(--color-bg-soft)]">
-        <div className="relative mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32">
-          <div className="mb-16 max-w-2xl">
-            <p className="eyebrow mb-4">— How we work</p>
-            <h2 className="headline text-[clamp(2.5rem,5.5vw,5rem)]">
-              Four steps. <br />
-              <span className="text-[var(--color-brand)]">Two weeks.</span>
-            </h2>
-          </div>
-
-          <div className="grid gap-px bg-[var(--color-line)] md:grid-cols-4">
-            {processSteps.map((p, i) => (
-              <div key={p.t} className="bg-[var(--color-bg-soft)] p-8">
-                <div className="numeral mb-8 text-6xl text-[var(--color-brand)]">
-                  0{i + 1}
-                </div>
-                <h3 className="headline text-2xl">{p.t}</h3>
-                <p className="mt-4 text-sm leading-relaxed text-[var(--color-fg-muted)]">
-                  {p.d}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* ═══════════════ HOW WE WORK ═══════════════ */}
+      <HowWeWork />
 
       {/* ═══════════════ NUMERICAL SECTION 4 — 2 ═══════════════ */}
       <NumericSection

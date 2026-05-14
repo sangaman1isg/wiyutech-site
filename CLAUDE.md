@@ -61,6 +61,7 @@ wiyutech-site/
 │   └── components/
 │       ├── AuditCTA.tsx      (Free WhatsApp Audit banner — pulls leads)
 │       ├── Services.tsx      (8-product menu in 3 tiers)
+│       ├── HowWeWork.tsx     (4-step process section — Discovery → Build → Launch → Support)
 │       ├── FAQ.tsx           (accordion FAQ)
 │       └── WhatsAppButton.tsx (floating WA button — sitewide)
 ├── next.config.ts
@@ -150,8 +151,8 @@ The Wiyu workflow is the basis for the **Wiyu Mini** product sold to clients. Ea
 ## 🎯 Project Priorities (Both Build + Improve)
 
 ### What we're actively building:
-- **Wave 2 site upgrades** (next session): "How We Work" section · Live Counter · Testimonial slot
-- **Wave 3 site upgrades** (after Wave 2): Performance polish · OG tags · Schema markup · Lazy load · Favicon
+- **Wave 2** ✅ Complete: HowWeWork component extracted and shipped (Live Counter + Testimonial slot dropped — not needed)
+- **Wave 3 site upgrades** (next): Performance polish · OG tags · Schema markup · Lazy load · Favicon
 - **Future:** Case studies page · Blog/insights · Pricing calculator · Client portal
 
 ### What we're improving:
@@ -190,8 +191,9 @@ But **Wiyule Technology (this project) is the primary focus.** Wiyule Motors has
 - ⚠️ **Case-sensitive on Vercel (Linux).** `services.tsx` will work on Mac but BREAK on production. Always use `Services.tsx`.
 
 ### Imports
-- Always use the `@/` alias for `src/` (e.g., `import Services from "@/components/Services"`)
-- Do NOT write `@/src/components/...` — `@/` already points to `src/`
+- The `@/` alias maps to the project root (confirmed in tsconfig.json: `"@/*": ["./*"]`)
+- Correct import path: `import Services from "@/src/components/Services"`
+- Do NOT write `@/components/...` — components live in `src/components/`, so `@/src/` is required
 - Group imports: external first, then `@/components`, then relative
 
 ### Components
@@ -339,9 +341,9 @@ If a deploy fails:
 
 ## 📍 Where We Are Now (May 2026)
 
-- ✅ Wiyule Tech site live with Wave 1 (AuditCTA + Services grid) shipped
-- ⏳ Wave 2 next: How We Work + Live Counter + Testimonial slot
-- ⏳ Wave 3 after: Performance + SEO + OG polish
+- ✅ Wave 1 shipped: AuditCTA + Services grid
+- ✅ Wave 2 shipped: HowWeWork component (Live Counter + Testimonial dropped)
+- ⏳ Wave 3 next: Performance + SEO + OG polish
 - 🤖 Wiyu AI live on Twilio sandbox (Phase 2 complete)
 - 🎯 Active product menu: 8 SKUs across 3 tiers
 
