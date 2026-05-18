@@ -93,7 +93,6 @@ If hardcoded colors appear (`#EF2D2D`, `#aaaaaa`, etc.), refactor them to use th
 - `.fade-up`, `.delay-1`, `.delay-2`, `.delay-3` — entrance animations
 - `.pulse-dot` — animated dot for "live" indicators
 - `.glow-soft`, `.glow-drift`, `.glow-bottom` — ambient red glow effects
-- `.marquee-track` — horizontal scroll animation
 
 ### Fonts (loaded via next/font in layout.tsx)
 - **Display:** Bricolage Grotesque (headlines)
@@ -107,23 +106,29 @@ If hardcoded colors appear (`#EF2D2D`, `#aaaaaa`, etc.), refactor them to use th
 
 ---
 
-## 💰 Active Products (8-product menu — current state)
+## 💰 Active Products (11-product menu — current state)
 
 This is the canonical list. Pricing reflects the current page.
 
 ### Quick Wins (Tier 1)
 1. **WhatsApp Audit** — FREE, 24h delivery (lead magnet)
-2. **Status Designer Pack** — $60 / or $40/mo, 48h delivery
-3. **Wiyu Mini** — $80 + $25/mo, 24h delivery (FEATURED — Most Popular)
+2. **WhatsApp Catalog Setup** — $60 one-time, 48h delivery
+3. **Status Designer Pack** — $60 / or $40/mo, 48h delivery
+4. **Wiyu Mini** — $80 + $25/mo, 24h delivery (FEATURED — Most Popular)
+5. **Booking Link Setup** — $80 + $15/mo, 24h delivery
 
 ### Growth Products (Tier 2)
-4. **GMB Boost** — $80 + $30/mo, 3-day delivery
-5. **Digital Storefront Kit** — from $350, 7-10 days
+6. **GMB Boost** — $80 + $30/mo, 3-day delivery
+7. **Digital Storefront Kit** — from $350, 7-10 days
+8. **Monthly Content Pack** — $80/mo, ongoing
 
 ### Full Systems (Tier 3)
-6. **AutoReply AI** — $250 + $40/mo, 5-7 days
-7. **Operations OS Lite** — from $500 + $50/mo, 3-4 weeks
-8. **Wiyule Care** — $50/mo retainer
+9. **AutoReply AI** — $250 + $40/mo, 5-7 days
+10. **Operations OS Lite** — from $500 + $50/mo, 3-4 weeks
+11. **Wiyule Care** — $50/mo retainer
+
+### Bundle offer (shown between Tier 1 and Tier 2)
+- **Wiyu Mini + WhatsApp Catalog Setup** — $120 (save $20)
 
 **Don't change pricing without explicit user approval.** These are tested numbers.
 
@@ -151,8 +156,9 @@ The Wiyu workflow is the basis for the **Wiyu Mini** product sold to clients. Ea
 ## 🎯 Project Priorities (Both Build + Improve)
 
 ### What we're actively building:
-- **Wave 2** ✅ Complete: HowWeWork component extracted and shipped (Live Counter + Testimonial slot dropped — not needed)
-- **Wave 3 site upgrades** (next): Performance polish · OG tags · Schema markup · Lazy load · Favicon
+- **Wave 2** ✅ Complete: HowWeWork component extracted and shipped
+- **Wave 3** ✅ Complete: Page declutter (removed marquee + 2 NumericSections, trimmed copy, compressed Founder section, FAQ 6→4) + Services overhaul (11 products, specific CTAs, "Best for:" tags, payment notes, ROI lines, bundle callout)
+- **Wave 4 site upgrades** (next): Performance polish · OG tags · Schema markup · Lazy load · Favicon
 - **Future:** Case studies page · Blog/insights · Pricing calculator · Client portal
 
 ### What we're improving:
@@ -343,9 +349,10 @@ If a deploy fails:
 
 - ✅ Wave 1 shipped: AuditCTA + Services grid
 - ✅ Wave 2 shipped: HowWeWork component (Live Counter + Testimonial dropped)
-- ⏳ Wave 3 next: Performance + SEO + OG polish
+- ✅ Wave 3 shipped: Page declutter + Services overhaul (11 products, specific CTAs, "Best for:" tags, payment notes, ROI lines, bundle callout, 3 new products)
+- ⏳ Wave 4 next: Performance + SEO + OG polish
 - 🤖 Wiyu AI live on Twilio sandbox (Phase 2 complete)
-- 🎯 Active product menu: 8 SKUs across 3 tiers
+- 🎯 Active product menu: 11 SKUs across 3 tiers + 1 bundle offer
 
 ---
 

@@ -21,7 +21,7 @@ export default function HowWeWork() {
   return (
     <section
       id="process"
-      className="relative border-b border-[var(--color-line)] bg-[var(--color-bg-soft)]"
+      className="relative border-b border-(--color-line) bg-(--color-bg-soft)"
     >
       <div className="relative mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32">
         {/* Header */}
@@ -29,19 +29,19 @@ export default function HowWeWork() {
           <p className="eyebrow mb-4">— How we work</p>
           <h2 className="headline text-[clamp(2.5rem,5.5vw,5rem)]">
             Four steps.{" "}
-            <span className="text-[var(--color-brand)]">Two weeks.</span>
+            <span className="text-(--color-brand)">Two weeks.</span>
           </h2>
         </div>
 
         {/* Steps grid — gap-px + bg-[color-line] draws 1px dividers between cards */}
-        <div className="grid gap-px bg-[var(--color-line)] md:grid-cols-4">
+        <div className="grid gap-px bg-(--color-line) md:grid-cols-4">
           {steps.map((step, i) => (
-            <div key={step.title} className="bg-[var(--color-bg-soft)] p-8">
-              <div className="numeral mb-8 text-6xl text-[var(--color-brand)]">
+            <div key={step.title} className="bg-(--color-bg-soft) p-8">
+              <div className="numeral mb-8 text-6xl text-(--color-brand)">
                 0{i + 1}
               </div>
               <h3 className="headline text-2xl">{step.title}</h3>
-              <p className="mt-4 text-sm leading-relaxed text-[var(--color-fg-muted)]">
+              <p className="mt-4 text-sm leading-relaxed text-(--color-fg-muted)">
                 {step.body}
               </p>
             </div>

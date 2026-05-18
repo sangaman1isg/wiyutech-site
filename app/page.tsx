@@ -99,28 +99,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ═══════════════ MARQUEE ═══════════════ */}
-      <section className="relative overflow-hidden border-b border-[var(--color-line)] bg-[var(--color-bg-soft)] py-6">
-        <div className="flex">
-          <div className="marquee-track flex shrink-0 items-center gap-10 whitespace-nowrap pr-10 text-base text-[var(--color-fg-faint)] md:text-lg">
-            {Array.from({ length: 2 }).map((_, i) => (
-              <div key={i} className="flex shrink-0 items-center gap-10">
-                <span>Restaurants</span><Dot />
-                <span>Car dealers</span><Dot />
-                <span>Schools</span><Dot />
-                <span>Workshops</span><Dot />
-                <span>Salons</span><Dot />
-                <span>Retail shops</span><Dot />
-                <span>Logistics</span><Dot />
-                <span>Driving schools</span><Dot />
-                <span>Hotels &amp; lodges</span><Dot />
-                <span>Parts shops</span><Dot />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* ═══════════════ NUMERICAL SECTION 1 — 73% ═══════════════ */}
       <NumericSection
         id="problem"
@@ -136,10 +114,8 @@ export default function Home() {
         }
         body={
           <>
-            By the time the owner wakes up and replies, the customer has already
-            messaged a competitor. Your slowest reply is the one that costs you
-            the sale — whether you&rsquo;re selling cars, food, services, or anything
-            else. We build the system that replies instantly, even at 3am.
+            By the time you wake up and reply, the customer has already messaged
+            a competitor. We build the system that replies instantly — even at 3am.
           </>
         }
         align="left"
@@ -161,10 +137,9 @@ export default function Home() {
         }
         body={
           <>
-            Most agencies take three months and then ghost you. We ship in a
-            week because we work in fixed scopes, not open-ended retainers. You
-            see progress every day. You sign off in real time. You launch
-            before the next month&rsquo;s rent is due.
+            Most agencies take three months and then ghost you. We work in
+            fixed scopes — you see progress every day and launch before next
+            month&rsquo;s rent is due.
           </>
         }
         align="right"
@@ -174,55 +149,8 @@ export default function Home() {
       {/* ═══════════════ SERVICES (8 PRODUCTS) ═══════════════ */}
       <Services />
 
-      {/* ═══════════════ NUMERICAL SECTION 3 — 24/7 ═══════════════ */}
-      <NumericSection
-        eyebrow="What AutoReply does"
-        numeral="24/7"
-        numeralSize="text-[clamp(7rem,22vw,18rem)]"
-        title={
-          <>
-            We replace the receptionist who <span className="text-[var(--color-brand)]">never</span> sleeps.
-          </>
-        }
-        body={
-          <>
-            AutoReply AI is trained on your business — your products, your
-            prices, your opening hours, your tone. It answers customers in
-            plain English or Chichewa, captures their details, and books
-            appointments straight to your calendar. Whether you sell cars,
-            cook food, run classes, or fix anything — you wake up to qualified
-            leads, not 47 unread messages.
-          </>
-        }
-        align="left"
-      />
-
       {/* ═══════════════ HOW WE WORK ═══════════════ */}
       <HowWeWork />
-
-      {/* ═══════════════ NUMERICAL SECTION 4 — 2 ═══════════════ */}
-      <NumericSection
-        eyebrow="Where we work"
-        numeral="2"
-        numeralSuffix="countries"
-        numeralSize="text-[clamp(11rem,34vw,28rem)]"
-        title={
-          <>
-            Currently serving Malawi and Zambia. <span className="text-[var(--color-brand)]">Africa next.</span>
-          </>
-        }
-        body={
-          <>
-            We&rsquo;re based in Lusaka with roots in Lilongwe — which means we
-            understand the realities of running a business between two
-            currencies, three mobile money services, and customers who switch
-            between English and Chichewa mid-sentence. Wiyule was built for
-            that, not retrofitted.
-          </>
-        }
-        align="right"
-        bg="elev"
-      />
 
       {/* ═══════════════ FAQ ═══════════════ */}
       <FAQ />
@@ -239,40 +167,30 @@ export default function Home() {
           <div className="mt-10 grid gap-8 md:grid-cols-[1fr_auto] md:gap-16">
             <div className="space-y-6 text-base leading-relaxed text-[var(--color-fg-muted)] md:text-lg">
               <p>
-                Wiyule Technology was started by a young African founder who
-                grew up inside a real family business — a workshop in Malawi
-                run by a late automotive entrepreneur. From an early age, the
-                conversations at home were about customers, cash flow, lost
-                inquiries, broken systems, and what it actually takes to keep
-                a small business alive in this part of the world.
+                Wiyule was founded by someone who grew up inside a real family
+                business — a workshop in Malawi where the conversations were
+                about customers, cash flow, and what it actually takes to keep
+                a small business alive. That ground-floor exposure is the edge.
+                We&rsquo;re not retrofitted for Africa — we were built here.
               </p>
-              <p>
-                That ground-floor exposure became the company&rsquo;s edge.
-                Wiyule isn&rsquo;t built by people who learned business from a
-                textbook — it&rsquo;s built by people who watched it happen
-                across dinner tables, on workshop floors, and in the long
-                Saturdays small business owners know all too well.
-              </p>
-              <p>
-                Today, Wiyule&rsquo;s ambition is simple but serious: become{" "}
-                <span className="text-[var(--color-fg)]">
-                  one of the most trusted technology companies for small
-                  businesses across Africa
-                </span>
-                — starting with Malawi and Zambia, expanding from there.
-                Restaurants, schools, retail, services, transport, automotive,
-                logistics. If you have customers and you&rsquo;re losing them
-                to slow systems, we want to be the team you call.
-              </p>
-              <p>
-                Right now we&rsquo;re taking on{" "}
-                <span className="text-[var(--color-brand)] font-medium">
-                  3 founding clients
-                </span>{" "}
-                at deeply discounted rates — the businesses we work with at
-                this stage become our long-term partners and the case studies
-                that take Wiyule across the continent.
-              </p>
+              <div className="border border-[var(--color-line-bright)] p-6">
+                <p className="eyebrow mb-3 text-[var(--color-brand)]">— Founding client offer</p>
+                <p className="text-base text-[var(--color-fg)]">
+                  We&rsquo;re taking on{" "}
+                  <span className="font-semibold text-[var(--color-brand)]">3 founding clients</span>{" "}
+                  at deeply discounted rates. The businesses we work with at this
+                  stage become our long-term partners and the case studies that
+                  take Wiyule across the continent.
+                </p>
+                <a
+                  href={WA_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[var(--color-brand)] transition hover:text-[var(--color-brand-hot)]"
+                >
+                  Ask if you qualify →
+                </a>
+              </div>
             </div>
             <div className="flex flex-col gap-4 border-t border-[var(--color-line)] pt-8 md:border-l md:border-t-0 md:pl-12 md:pt-0">
               <Stat label="Founded" value="2026" />
@@ -452,6 +370,3 @@ function Stat({ label, value }: { label: string; value: string }) {
   );
 }
 
-function Dot() {
-  return <span className="text-[var(--color-brand)]">·</span>;
-}
