@@ -59,8 +59,9 @@ wiyutech-site/
 │   │   ├── layout.tsx        (metadata, fonts, root wrapper)
 │   │   └── page.tsx          (homepage — single-page site for now)
 │   └── components/
+│       ├── Nav.tsx           (sticky nav + hamburger mobile drawer — client component)
 │       ├── AuditCTA.tsx      (Free WhatsApp Audit banner — pulls leads)
-│       ├── Services.tsx      (8-product menu in 3 tiers)
+│       ├── Services.tsx      (11-product menu in 3 tiers)
 │       ├── HowWeWork.tsx     (4-step process section — Discovery → Build → Launch → Support)
 │       ├── FAQ.tsx           (accordion FAQ)
 │       └── WhatsAppButton.tsx (floating WA button — sitewide)
@@ -158,7 +159,8 @@ The Wiyu workflow is the basis for the **Wiyu Mini** product sold to clients. Ea
 ### What we're actively building:
 - **Wave 2** ✅ Complete: HowWeWork component extracted and shipped
 - **Wave 3** ✅ Complete: Page declutter (removed marquee + 2 NumericSections, trimmed copy, compressed Founder section, FAQ 6→4) + Services overhaul (11 products, specific CTAs, "Best for:" tags, payment notes, ROI lines, bundle callout)
-- **Wave 4 site upgrades** (next): Performance polish · OG tags · Schema markup · Lazy load · Favicon
+- **Wave 4 mobile** ✅ Complete: Hamburger nav (Nav.tsx), Services grid fix (1-col mobile), section padding reduction (py-24→py-16), AuditCTA button full-width on mobile
+- **Wave 4 remaining** (next): Performance polish · OG tags · Schema markup · Lazy load · Favicon
 - **Future:** Case studies page · Blog/insights · Pricing calculator · Client portal
 
 ### What we're improving:
@@ -350,7 +352,8 @@ If a deploy fails:
 - ✅ Wave 1 shipped: AuditCTA + Services grid
 - ✅ Wave 2 shipped: HowWeWork component (Live Counter + Testimonial dropped)
 - ✅ Wave 3 shipped: Page declutter + Services overhaul (11 products, specific CTAs, "Best for:" tags, payment notes, ROI lines, bundle callout, 3 new products)
-- ⏳ Wave 4 next: Performance + SEO + OG polish
+- ✅ Wave 4 mobile shipped: hamburger nav, Services grid fix, padding reduction, AuditCTA button
+- ⏳ Wave 4 remaining: Performance + OG tags + Schema markup + Favicon
 - 🤖 Wiyu AI live on Twilio sandbox (Phase 2 complete)
 - 🎯 Active product menu: 11 SKUs across 3 tiers + 1 bundle offer
 
