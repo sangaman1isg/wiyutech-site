@@ -160,7 +160,7 @@ The Wiyu workflow is the basis for the **Wiyu Mini** product sold to clients. Ea
 - **Wave 2** ✅ Complete: HowWeWork component extracted and shipped
 - **Wave 3** ✅ Complete: Page declutter (removed marquee + 2 NumericSections, trimmed copy, compressed Founder section, FAQ 6→4) + Services overhaul (11 products, specific CTAs, "Best for:" tags, payment notes, ROI lines, bundle callout)
 - **Wave 4 mobile** ✅ Complete: Hamburger nav (Nav.tsx), Services grid fix (1-col mobile), section padding reduction (py-24→py-16), AuditCTA button full-width on mobile
-- **Wave 4 remaining** (next): Performance polish · OG tags · Schema markup · Lazy load · Favicon
+- **Wave 4** ✅ Complete: Mobile nav + grid fix + padding (mobile commit) · OG image (opengraph-image.tsx) · Favicon (icon.tsx) · Lazy load (Next.js default) · LocalBusiness JSON-LD schema markup
 - **Future:** Case studies page · Blog/insights · Pricing calculator · Client portal
 
 ### What we're improving:
@@ -352,8 +352,8 @@ If a deploy fails:
 - ✅ Wave 1 shipped: AuditCTA + Services grid
 - ✅ Wave 2 shipped: HowWeWork component (Live Counter + Testimonial dropped)
 - ✅ Wave 3 shipped: Page declutter + Services overhaul (11 products, specific CTAs, "Best for:" tags, payment notes, ROI lines, bundle callout, 3 new products)
-- ✅ Wave 4 mobile shipped: hamburger nav, Services grid fix, padding reduction, AuditCTA button
-- ⏳ Wave 4 remaining: Performance + OG tags + Schema markup + Favicon
+- ✅ Wave 4 fully shipped: mobile nav · grid fix · padding · OG image · favicon · lazy load · JSON-LD schema
+- ⏳ Wave 5 next: Case studies page · Testimonials · Pricing calculator · Client portal
 - 🤖 Wiyu AI live on Twilio sandbox (Phase 2 complete)
 - 🎯 Active product menu: 11 SKUs across 3 tiers + 1 bundle offer
 
