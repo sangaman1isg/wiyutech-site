@@ -12,7 +12,7 @@ export default function AuditCTA() {
   return (
     <section className="relative overflow-hidden border-b border-[var(--color-line)] bg-[var(--color-bg-soft)]">
       <div className="absolute inset-0 glow-soft" />
-      <div className="relative mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-24">
+      <div className="relative mx-auto max-w-7xl px-6 py-14 md:px-10 md:py-24">
         <div className="grid items-center gap-12 md:grid-cols-[1.4fr_1fr]">
           <div>
             <div className="mb-6 inline-flex items-center gap-2">
@@ -40,7 +40,7 @@ export default function AuditCTA() {
               href={AUDIT_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand)] px-7 py-4 text-sm font-medium text-white transition hover:bg-[var(--color-brand-hot)]"
+              className="inline-flex w-full items-center justify-center gap-2 bg-[var(--color-brand)] px-7 py-4 text-sm font-medium text-white transition hover:bg-[var(--color-brand-hot)] sm:w-auto"
             >
               Claim my free audit →
             </Link>

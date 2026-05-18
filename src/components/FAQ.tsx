@@ -26,7 +26,7 @@ export default function FAQ() {
 
   return (
     <section id="faq" className="relative border-b border-(--color-line) bg-(--color-bg-soft)">
-      <div className="relative mx-auto max-w-5xl px-6 py-24 md:px-10 md:py-32">
+      <div className="relative mx-auto max-w-5xl px-6 py-16 md:px-10 md:py-32">
         <div className="mb-16 max-w-2xl">
           <p className="eyebrow mb-4">— Real questions</p>
           <h2 className="headline text-[clamp(2.5rem,5.5vw,5rem)]">

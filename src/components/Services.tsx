@@ -177,7 +177,7 @@ export default function Services() {
   return (
     <section id="offers" className="relative border-b border-[var(--color-line)]">
       <div className="absolute inset-0 glow-soft" />
-      <div className="relative mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32">
+      <div className="relative mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-32">
         {/* Section header */}
         <div className="mb-16 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div className="max-w-2xl">
@@ -237,7 +237,7 @@ export default function Services() {
               <div
                 className={`grid gap-px bg-[var(--color-line)] ${
                   tier.products.length >= 4
-                    ? "grid-cols-2 md:grid-cols-3"
+                    ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
                     : tier.products.length === 3
                     ? "md:grid-cols-3"
                     : "md:grid-cols-2"

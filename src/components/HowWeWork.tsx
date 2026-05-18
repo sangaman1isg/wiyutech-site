@@ -23,7 +23,7 @@ export default function HowWeWork() {
       id="process"
       className="relative border-b border-(--color-line) bg-(--color-bg-soft)"
     >
-      <div className="relative mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32">
+      <div className="relative mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-32">
         {/* Header */}
         <div className="mb-16 max-w-2xl">
           <p className="eyebrow mb-4">— How we work</p>

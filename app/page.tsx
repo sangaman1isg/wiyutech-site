@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import Nav from "@/src/components/Nav";
 import AuditCTA from "@/src/components/AuditCTA";
 import Services from "@/src/components/Services";
 import FAQ from "@/src/components/FAQ";
@@ -18,42 +19,7 @@ export default function Home() {
   return (
     <main className="relative min-h-screen overflow-x-hidden bg-[var(--color-bg)]">
       {/* ─── NAV ─── */}
-      <header className="relative z-30 border-b border-[var(--color-line)]">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 md:px-10">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="relative h-7 w-7 overflow-hidden">
-              <Image
-                src="/wiyule-mark.jpg"
-                alt="Wiyule Technology"
-                fill
-                sizes="28px"
-                className="object-contain"
-                priority
-              />
-            </div>
-            <span className="text-sm font-semibold tracking-wide">
-              Wiyule <span className="text-[var(--color-fg-muted)]">Technology</span>
-            </span>
-          </Link>
-
-          <nav className="hidden items-center gap-9 text-sm text-[var(--color-fg-muted)] md:flex">
-            <Link href="#problem" className="transition hover:text-[var(--color-fg)]">The problem</Link>
-            <Link href="#offers" className="transition hover:text-[var(--color-fg)]">Offers</Link>
-            <Link href="#process" className="transition hover:text-[var(--color-fg)]">Process</Link>
-            <Link href="#faq" className="transition hover:text-[var(--color-fg)]">FAQ</Link>
-            <Link href="#founder" className="transition hover:text-[var(--color-fg)]">Origin</Link>
-          </nav>
-
-          <Link
-            href={WA_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden items-center gap-2 bg-[var(--color-brand)] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[var(--color-brand-hot)] md:inline-flex"
-          >
-            Book a call →
-          </Link>
-        </div>
-      </header>
+      <Nav />
 
       {/* ═══════════════ HERO ═══════════════ */}
       <section className="relative overflow-hidden border-b border-[var(--color-line)]">
@@ -158,7 +124,7 @@ export default function Home() {
       {/* ═══════════════ FOUNDER / ORIGIN ═══════════════ */}
       <section id="founder" className="relative border-b border-[var(--color-line)]">
         <div className="absolute inset-0 glow-bottom glow-drift" />
-        <div className="relative mx-auto max-w-5xl px-6 py-24 md:px-10 md:py-32">
+        <div className="relative mx-auto max-w-5xl px-6 py-16 md:px-10 md:py-32">
           <p className="eyebrow mb-4">— Our origin</p>
           <h2 className="headline text-[clamp(2rem,4.5vw,3.75rem)]">
             Wiyule was built on a <span className="text-[var(--color-brand)]">workshop floor</span> — not in a co-working space.
@@ -205,7 +171,7 @@ export default function Home() {
       {/* ═══════════════ FINAL CTA ═══════════════ */}
       <section className="relative overflow-hidden border-b border-[var(--color-line)]">
         <div className="absolute inset-0 glow-soft glow-drift" />
-        <div className="relative mx-auto max-w-7xl px-6 py-28 md:px-10 md:py-44">
+        <div className="relative mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-44">
           <p className="eyebrow mb-4">— Ready when you are</p>
           <h2 className="headline text-[clamp(2.75rem,7vw,6rem)]">
             Ready to <span className="text-[var(--color-brand)]">grow</span>{" "}
@@ -324,7 +290,7 @@ function NumericSection({
 
   return (
     <section id={id} className={`relative overflow-hidden border-b border-[var(--color-line)] ${bgClass}`}>
-      <div className="relative mx-auto max-w-7xl px-6 py-24 md:px-10 md:py-32">
+      <div className="relative mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-32">
         <div
           className={`flex items-end ${
             align === "right" ? "justify-end" : "justify-start"
