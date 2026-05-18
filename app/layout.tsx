@@ -73,6 +73,39 @@ export const metadata: Metadata = {
   category: "technology",
 };
 
+const schema = {
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  name: "Wiyule Technology",
+  description:
+    "Wiyule Technology builds websites, booking systems and AI WhatsApp assistants for small businesses in Malawi and Zambia. Stop losing customers to slow replies. Launch in 7 days.",
+  url: "https://wiyutech.com",
+  telephone: "+260774668193",
+  email: "wiyuletechnology@gmail.com",
+  foundingDate: "2026",
+  founder: {
+    "@type": "Person",
+    name: "Tamsanga Kayuni",
+  },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Lusaka",
+    addressCountry: "ZM",
+  },
+  areaServed: [
+    { "@type": "Country", name: "Zambia" },
+    { "@type": "Country", name: "Malawi" },
+  ],
+  sameAs: ["https://instagram.com/wiyutechafrica"],
+  knowsAbout: [
+    "Web Development",
+    "AI WhatsApp Assistants",
+    "Business Automation",
+    "Digital Marketing",
+    "Google Business Profile",
+  ],
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -81,6 +114,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${bricolage.variable} antialiased`}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
         {children}
         <WhatsAppButton />
       </body>
