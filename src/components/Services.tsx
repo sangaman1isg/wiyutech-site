@@ -25,6 +25,7 @@ type Addon = {
 
 type Product = {
   index: number;
+  slug: string;
   title: string;
   subtitle: string;
   tagline: string;
@@ -62,6 +63,7 @@ const CURRENCY_SYMBOLS: Record<Currency, string> = {
 const PRODUCTS: Product[] = [
   {
     index: 1,
+    slug: "autoreply-ai",
     title: "AutoReply AI",
     subtitle: "AI WhatsApp Assistant",
     tagline: "Your business never sleeps. AI replies on WhatsApp — 24/7.",
@@ -99,6 +101,7 @@ const PRODUCTS: Product[] = [
   },
   {
     index: 2,
+    slug: "storefront-kit",
     title: "Digital Storefront Kit",
     subtitle: "Website + WhatsApp + Google",
     tagline: "A website that works while you work. Built for Zambian & Malawian businesses.",
@@ -134,6 +137,7 @@ const PRODUCTS: Product[] = [
   },
   {
     index: 3,
+    slug: "content-pack",
     title: "Monthly Content Pack",
     subtitle: "Done-for-you content",
     tagline: "We post. You profit. Done.",
@@ -390,6 +394,9 @@ function ProductCard({
   currency: Currency;
 }) {
   const sym = CURRENCY_SYMBOLS[currency];
+  // USD can't be collected online — checkout defaults to ZMW for USD viewers
+  const checkoutCurrency = currency === "MWK" ? "MWK" : "ZMW";
+  const checkoutHref = `/checkout?product=${product.slug}&currency=${checkoutCurrency}`;
 
   return (
     <div
@@ -501,9 +508,7 @@ function ProductCard({
 
       {/* CTA */}
       <Link
-        href={waUrl(product.title)}
-        target="_blank"
-        rel="noopener noreferrer"
+        href={checkoutHref}
         className={`inline-flex w-full items-center justify-center gap-2 whitespace-nowrap px-5 py-3.5 text-center text-sm font-medium transition ${
           product.highlighted
             ? "bg-[var(--color-brand)] text-white hover:bg-[var(--color-brand-hot)]"
