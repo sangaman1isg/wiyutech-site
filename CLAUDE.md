@@ -178,7 +178,15 @@ The Wiyu workflow is the basis for the **Wiyu Mini** product sold to clients. Ea
 - Pricing on existing 8 products
 
 ---
+## 🔗 Sister Project — Wiyule Cargo
 
+Wiyule Cargo is a separate venture launching in Blantyre as Wiyule 
+Technology's first operational child business — a kabaza courier 
+network. Currently in Phase 0 (2-week validation sprint).
+
+DO NOT modify Wiyule Cargo assets from this codebase. It has its 
+own project chat and its own (future) codebase for tracking pages, 
+admin dashboards, and rider apps.
 ## 🔗 Sister Project — Wiyule Motors (REFERENCE ONLY)
 
 Wiyule Motors is a **separate automotive listings/services project** that exists outside this folder. **DO NOT modify anything related to Wiyule Motors from this codebase.**

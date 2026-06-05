@@ -1,266 +1,373 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 
+/* ─── Constants ─────────────────────────────────────────────── */
 const WHATSAPP_NUMBER = "260774668193";
+const CURRENCIES: Currency[] = ["MWK", "ZMW", "USD"];
 
-function offerWaUrl(name: string) {
+function waUrl(label: string) {
   const text = encodeURIComponent(
-    `Hi Wiyule — I'm interested in the ${name} offer. Can we set up a 15-min discovery call?`
+    `Hi Wiyule — I want to learn more about ${label}. Can we set up a quick call?`
   );
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
 }
 
-type Product = {
-  title: string;
-  price: string;
-  priceSub?: string;
-  delivery: string;
-  outcome: string;
-  bullets: string[];
-  cta: string;
-  bestFor: string;
-  paymentNote?: string;
-  roi?: string;
-  highlighted?: boolean;
-};
+/* ─── Types ─────────────────────────────────────────────────── */
+type Currency = "MWK" | "ZMW" | "USD";
+type PriceData = Record<Currency, string>;
 
-type Tier = {
+type Addon = {
   label: string;
-  sublabel: string;
-  products: Product[];
+  price: PriceData;
 };
 
-const tiers: Tier[] = [
+type Product = {
+  index: number;
+  title: string;
+  subtitle: string;
+  tagline: string;
+  highlighted?: boolean;
+  priceType: "setup+monthly" | "onetime" | "monthly";
+  setup?: PriceData;
+  monthly?: PriceData;
+  oneTime?: PriceData;
+  plan3?: PriceData;
+  quarterly?: PriceData;
+  quarterlySave?: PriceData;
+  delivery: string;
+  features: string[];
+  roi: PriceData;
+  bestFor: string;
+  guarantee: string;
+  addons: Addon[];
+  cta: string;
+};
+
+type ComparisonRow = {
+  label: string;
+  ai: boolean | string;
+  storefront: boolean | string;
+  content: boolean | string;
+};
+
+/* ─── Data ──────────────────────────────────────────────────── */
+const CURRENCY_SYMBOLS: Record<Currency, string> = {
+  MWK: "MWK ",
+  ZMW: "ZMW ",
+  USD: "$",
+};
+
+const PRODUCTS: Product[] = [
   {
-    label: "Quick wins",
-    sublabel: "Start fast. Test the water.",
-    products: [
+    index: 1,
+    title: "AutoReply AI",
+    subtitle: "AI WhatsApp Assistant",
+    tagline: "Your business never sleeps. AI replies on WhatsApp — 24/7.",
+    highlighted: true,
+    priceType: "setup+monthly",
+    setup: { MWK: "699,000", ZMW: "11,199", USD: "400" },
+    monthly: { MWK: "124,999", ZMW: "1,999", USD: "70" },
+    plan3: { MWK: "249,999", ZMW: "3,999", USD: "139" },
+    delivery: "7 days",
+    features: [
+      "AI trained on your exact business",
+      "Replies in under 3 seconds — even at 2am",
+      "Books appointments automatically",
+      "Captures lead details while you sleep",
+      "English + Chichewa / Bemba support",
+    ],
+    roi: {
+      MWK: "Catch 2 missed leads/month = MWK 50,000–100,000 extra. Monthly fee covered in month 1.",
+      ZMW: "Catch 2 missed leads/month = ZMW 800–1,600 extra. Monthly fee covered in month 1.",
+      USD: "Catch 2 missed leads/month = $30–$56 extra. Monthly fee covered in month 1.",
+    },
+    bestFor: "Salons, clinics, driving schools, lodges",
+    guarantee: "Live in 7 days or we refund your full setup fee. No forms, no arguments.",
+    addons: [
       {
-        title: "WhatsApp Audit",
-        price: "FREE",
-        priceSub: "limited slots",
-        delivery: "24 hours",
-        outcome: "A 3-minute video showing exactly what to fix in your WhatsApp setup.",
-        bullets: ["Live screen walkthrough", "What's broken & why", "What we'd fix first"],
-        cta: "Claim my free audit",
-        bestFor: "Any business on WhatsApp",
+        label: "CRM sync (Google Sheets / Notion)",
+        price: { MWK: "124,999", ZMW: "1,999", USD: "70" },
       },
       {
-        title: "WhatsApp Catalog Setup",
-        price: "$60",
-        priceSub: "one-time",
-        delivery: "48 hours",
-        outcome: "Your products listed inside WhatsApp — customers browse and order without leaving the chat.",
-        bullets: ["Up to 30 products with photos", "Prices & descriptions written", "Shareable catalog link"],
-        cta: "List my products",
-        bestFor: "Retail shops, restaurants, parts dealers",
-        paymentNote: "50% to start · 50% on delivery",
-      },
-      {
-        title: "Status Designer Pack",
-        price: "$60",
-        priceSub: "or $40/mo",
-        delivery: "48 hours",
-        outcome: "20 branded WhatsApp Status templates that stop the scroll.",
-        bullets: ["Promo & hours templates", "Daily specials format", "Fully editable in Canva"],
-        cta: "Get my templates",
-        bestFor: "Restaurants, retail, salons",
-        paymentNote: "50% to start · 50% on delivery",
-      },
-      {
-        title: "Wiyu Mini",
-        price: "$80",
-        priceSub: "+ $25/mo",
-        delivery: "24 hours",
-        outcome: "AI auto-reply on WhatsApp — 24/7. Even at 2am.",
-        bullets: ["Answers FAQs instantly", "Captures lead details", "Sends qualified leads to you"],
-        cta: "Start replying 24/7",
-        bestFor: "Any business missing after-hours leads",
-        paymentNote: "50% to start · 50% on launch",
-        highlighted: true,
-      },
-      {
-        title: "Booking Link Setup",
-        price: "$80",
-        priceSub: "+ $15/mo",
-        delivery: "24 hours",
-        outcome: "A branded appointment booking page linked straight from your WhatsApp.",
-        bullets: ["Custom booking page", "Auto-confirmation message", "No more back-and-forth scheduling"],
-        cta: "Set up my bookings",
-        bestFor: "Salons, clinics, driving schools, lodges",
-        paymentNote: "50% to start · 50% on launch",
+        label: "Monthly AI tune-up & report",
+        price: { MWK: "62,499", ZMW: "999", USD: "36" },
       },
     ],
+    cta: "Start replying 24/7",
   },
   {
-    label: "Growth products",
-    sublabel: "When the basics aren&rsquo;t enough.",
-    products: [
+    index: 2,
+    title: "Digital Storefront Kit",
+    subtitle: "Website + WhatsApp + Google",
+    tagline: "A website that works while you work. Built for Zambian & Malawian businesses.",
+    priceType: "onetime",
+    oneTime: { MWK: "1,224,999", ZMW: "19,499", USD: "700" },
+    plan3: { MWK: "429,999", ZMW: "6,999", USD: "239" },
+    delivery: "10 days",
+    features: [
+      "Mobile-fast website — up to 8 pages",
+      "WhatsApp catalog (up to 30 products)",
+      "Google Business Profile set up & verified",
+      "1 month AutoReply AI included FREE",
+      "Shows up on Google searches in your area",
+    ],
+    roi: {
+      MWK: "3–5 new enquiries/month from Google + WhatsApp. At MWK 30,000 avg = MWK 90,000–150,000 extra monthly.",
+      ZMW: "3–5 new enquiries/month. At ZMW 480 avg = ZMW 1,440–2,400 extra monthly.",
+      USD: "3–5 new enquiries/month. At $17 avg = $51–$85 extra monthly.",
+    },
+    bestFor: "Retail shops, car dealers, lodges, schools, restaurants",
+    guarantee: "Not live in 10 days? We refund 25% of what you paid. No questions, no delays.",
+    addons: [
       {
-        title: "GMB Boost",
-        price: "$80",
-        priceSub: "+ $30/mo",
-        delivery: "3 days",
-        outcome: "Get found on Google Maps. Fix your listing, photos, and reviews.",
-        bullets: ["Full profile build", "Photos & description", "First 5 reviews managed"],
-        cta: "Boost my listing",
-        bestFor: "Shops, workshops, schools, lodges",
-        paymentNote: "50% to start · 50% on launch",
+        label: "Online ordering / e-commerce",
+        price: { MWK: "312,499", ZMW: "4,999", USD: "178" },
       },
       {
-        title: "Digital Storefront Kit",
-        price: "from $350",
-        priceSub: "one-time",
-        delivery: "7–10 days",
-        outcome: "A real website built to convert. Mobile-fast, clean, conversion-built.",
-        bullets: ["Up to 30 listings", "WhatsApp catalog", "Google Business Profile"],
-        cta: "Build my site",
-        bestFor: "Retail, car dealers, lodges, schools",
-        paymentNote: "50% to start · 50% on launch",
-      },
-      {
-        title: "Monthly Content Pack",
-        price: "$80",
-        priceSub: "/mo",
-        delivery: "Monthly",
-        outcome: "Done-for-you content — we post so you don&apos;t have to think about it.",
-        bullets: ["12 WhatsApp Status posts/mo", "4 Facebook posts/mo", "Promos, specials & announcements"],
-        cta: "Start my content",
-        bestFor: "Restaurants, salons, retail, any busy owner",
+        label: "Extra pages (per 5 pages)",
+        price: { MWK: "156,249", ZMW: "2,499", USD: "89" },
       },
     ],
+    cta: "Build my storefront",
   },
   {
-    label: "Full systems",
-    sublabel: "For when you&rsquo;re ready to scale.",
-    products: [
+    index: 3,
+    title: "Monthly Content Pack",
+    subtitle: "Done-for-you content",
+    tagline: "We post. You profit. Done.",
+    priceType: "monthly",
+    monthly: { MWK: "174,999", ZMW: "2,799", USD: "100" },
+    quarterly: { MWK: "499,999", ZMW: "7,999", USD: "289" },
+    quarterlySave: { MWK: "24,999", ZMW: "398", USD: "11" },
+    delivery: "Monthly",
+    features: [
+      "12 branded WhatsApp Status posts/month",
+      "4 Facebook posts/month",
+      "1 promotional graphic/month",
+      "Content calendar delivered every Monday",
+      "Zero effort on your end",
+    ],
+    roi: {
+      MWK: "1 new customer/month from consistent posting = MWK 15,000–50,000 extra. Pack pays for itself.",
+      ZMW: "1 new customer/month from consistent posting = ZMW 240–800 extra. Pack pays for itself.",
+      USD: "1 new customer/month from consistent posting = $8–$29 extra. Pack pays for itself.",
+    },
+    bestFor: "Restaurants, salons, retail, any busy owner not posting consistently",
+    guarantee: "Not happy with month 1? We redo it free or refund in full. Simple.",
+    addons: [
       {
-        title: "AutoReply AI",
-        price: "$250",
-        priceSub: "+ $40/mo",
-        delivery: "5–7 days",
-        outcome: "Full AI WhatsApp: replies, books, takes payments, routes leads.",
-        bullets: ["Trained on your business", "EN + Chichewa support", "Live in a week"],
-        cta: "Get my AI assistant",
-        bestFor: "Salons, clinics, driving schools, logistics",
-        paymentNote: "50% to start · 50% on launch",
-        roi: "Close 2 extra leads/month from WhatsApp — this pays for itself.",
+        label: "2 Instagram/Facebook reels/month",
+        price: { MWK: "93,749", ZMW: "1,499", USD: "54" },
       },
       {
-        title: "Operations OS Lite",
-        price: "from $500",
-        priceSub: "+ $50/mo",
-        delivery: "3–4 weeks",
-        outcome: "Full business backend. Dashboard, jobs, customers, automation.",
-        bullets: ["Customer & job DB", "Owner dashboard", "WhatsApp reminders"],
-        cta: "Build my system",
-        bestFor: "Workshops, logistics, multi-staff businesses",
-        paymentNote: "50% to start · 50% on launch",
-        roi: "One recovered job or client pays this back. Most businesses see it in month one.",
-      },
-      {
-        title: "Wiyule Care",
-        price: "$50/mo",
-        priceSub: "ongoing",
-        delivery: "Always-on",
-        outcome: "Your tech team on call. Updates, fixes, monthly reports.",
-        bullets: ["Priority WhatsApp line", "Monthly performance report", "Free minor updates"],
-        cta: "Get ongoing support",
-        bestFor: "Any business that already has a Wiyule product",
+        label: "Photography session (Lusaka or Blantyre)",
+        price: { MWK: "187,499", ZMW: "2,999", USD: "107" },
       },
     ],
+    cta: "Start my content",
   },
 ];
 
+const COMPARISON: ComparisonRow[] = [
+  { label: "AI WhatsApp replies",        ai: true,      storefront: "1 mo free", content: false },
+  { label: "Website (up to 8 pages)",    ai: false,     storefront: true,        content: false },
+  { label: "WhatsApp catalog",           ai: false,     storefront: true,        content: false },
+  { label: "Google Business Profile",    ai: false,     storefront: true,        content: false },
+  { label: "Social media posts",         ai: false,     storefront: false,       content: true  },
+  { label: "WhatsApp Status graphics",   ai: false,     storefront: false,       content: true  },
+  { label: "One-time setup fee",         ai: true,      storefront: true,        content: false },
+  { label: "Monthly subscription",       ai: true,      storefront: false,       content: true  },
+  { label: "3-month payment plan",       ai: true,      storefront: true,        content: true  },
+  { label: "Delivery",                   ai: "7 days",  storefront: "10 days",   content: "Monthly" },
+];
+
+const FAQS: Array<{ q: string; a: string }> = [
+  {
+    q: "Is this affordable for a small business in Malawi or Zambia?",
+    a: "Yes — that's exactly why we price in local currency. AutoReply AI at MWK 124,999/month works out to less than a part-time employee's daily wage — and it works 24 hours, 7 days a week.",
+  },
+  {
+    q: "What if I can't pay everything upfront?",
+    a: "Every product has a 3-month payment plan. You pay a small premium for the flexibility — no hidden interest, no credit check. Just tell us when you sign up.",
+  },
+  {
+    q: "How do I know this will actually work for my business?",
+    a: "Every product comes with a delivery guarantee. If it's not live on time, you get money back. We don't just say 'trust us' — we put cash on it.",
+  },
+  {
+    q: "Do I need to be tech-savvy to use any of this?",
+    a: "No. We handle the entire setup. You get a working product and a 15-minute handover call. If something breaks after launch, that's on us — not you.",
+  },
+];
+
+const TRUST_BADGES = [
+  "7-day delivery guarantee",
+  "Pay in 3 installments",
+  "No hidden fees",
+  "African-built & priced",
+];
+
+/* ─── Section ───────────────────────────────────────────────── */
 export default function Services() {
+  const [currency, setCurrency] = useState<Currency>("MWK");
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const currencyIdx = CURRENCIES.indexOf(currency);
+
   return (
     <section id="offers" className="relative border-b border-[var(--color-line)]">
       <div className="absolute inset-0 glow-soft" />
       <div className="relative mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-32">
-        {/* Section header */}
-        <div className="mb-16 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+
+        {/* Header */}
+        <div className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div className="max-w-2xl">
-            <p className="eyebrow mb-4">— Eleven products</p>
+            <p className="eyebrow mb-4">— Three products</p>
             <h2 className="headline text-[clamp(2.5rem,5.5vw,5rem)]">
-              Real prices. <br className="hidden md:block" />
+              Real prices.<br className="hidden md:block" />
               Real <span className="text-[var(--color-brand)]">products</span>.
             </h2>
           </div>
           <p className="max-w-md text-base text-[var(--color-fg-muted)]">
-            No mystery quotes. No retainers you don&rsquo;t need. Pick the size
+            No mystery quotes. No retainers you don&rsquo;t need. Pick the one
             that fits — we ship.
           </p>
         </div>
 
-        {/* Tiers */}
-        <div className="space-y-16">
-          {tiers.map((tier, ti) => (
-            <div key={tier.label}>
-              {/* Bundle callout — shown after Quick Wins (index 0) */}
-              {ti === 1 && (
-                <div className="mb-16 flex flex-col items-start justify-between gap-4 border border-[var(--color-line-bright)] p-6 sm:flex-row sm:items-center">
-                  <div>
-                    <p className="eyebrow mb-1 text-[var(--color-brand)]">— Popular together</p>
-                    <p className="text-base font-medium text-[var(--color-fg)]">
-                      Wiyu Mini + WhatsApp Catalog Setup
-                      <span className="ml-3 numeral text-xl text-[var(--color-fg)]">$120</span>
-                      <span className="ml-2 text-sm text-[var(--color-fg-muted)] line-through">$140</span>
-                      <span className="ml-2 text-sm font-medium text-[var(--color-brand)]">save $20</span>
-                    </p>
-                    <p className="mt-1 text-sm text-[var(--color-fg-muted)]">
-                      AI replies + a full product catalog — your WhatsApp does the selling.
-                    </p>
-                  </div>
-                  <Link
-                    href={offerWaUrl("the Wiyu Mini + Catalog bundle")}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="shrink-0 inline-flex items-center gap-2 border border-[var(--color-brand)] px-5 py-3 text-sm font-medium text-[var(--color-brand)] transition hover:bg-[var(--color-brand)] hover:text-white"
-                  >
-                    Get the bundle →
-                  </Link>
-                </div>
-              )}
-              {/* Tier divider */}
-              <div className="mb-6 flex items-baseline justify-between gap-4 border-b border-[var(--color-line)] pb-4">
-                <h3 className="numeral text-xl text-[var(--color-fg)] md:text-2xl">
-                  {tier.label}
-                </h3>
-                <p
-                  className="hidden text-sm italic text-[var(--color-fg-faint)] md:block"
-                  dangerouslySetInnerHTML={{ __html: tier.sublabel }}
-                />
-              </div>
-
-              {/* Cards grid */}
-              <div
-                className={`grid gap-px bg-[var(--color-line)] ${
-                  tier.products.length >= 4
-                    ? "grid-cols-1 sm:grid-cols-2 md:grid-cols-3"
-                    : tier.products.length === 3
-                    ? "md:grid-cols-3"
-                    : "md:grid-cols-2"
-                }`}
+        {/* Trust badges + Currency toggle */}
+        <div className="mb-12 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap gap-2">
+            {TRUST_BADGES.map((b) => (
+              <span
+                key={b}
+                className="border border-[var(--color-line)] px-3 py-1.5 text-xs text-[var(--color-fg-muted)]"
               >
-                {tier.products.map((p, i) => (
-                  <ProductCard
-                    key={p.title}
-                    product={p}
-                    index={ti * 3 + i + 1}
-                  />
-                ))}
-              </div>
+                {b}
+              </span>
+            ))}
+          </div>
+
+          <div className="flex flex-col items-start gap-1.5 sm:items-end">
+            <p className="text-xs text-[var(--color-fg-faint)]">Show prices in:</p>
+            <div className="relative inline-flex overflow-hidden rounded-full border border-[var(--color-line-bright)]">
+              {/* Sliding pill */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-y-0 bg-[var(--color-brand)]"
+                style={{
+                  width: "33.333%",
+                  transform: `translateX(${currencyIdx * 100}%)`,
+                  transition: "transform 220ms ease-in-out",
+                }}
+              />
+              {CURRENCIES.map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setCurrency(c)}
+                  className={`relative z-10 flex-1 px-6 py-2.5 text-sm font-medium transition-colors duration-200 ${
+                    currency === c
+                      ? "text-white"
+                      : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
             </div>
+          </div>
+        </div>
+
+        {/* Product cards */}
+        <div className="grid grid-cols-1 gap-px bg-[var(--color-line)] md:grid-cols-3">
+          {PRODUCTS.map((p) => (
+            <ProductCard key={p.title} product={p} currency={currency} />
           ))}
         </div>
 
-        {/* Bottom note */}
+        {/* Comparison table */}
+        <div className="mt-20">
+          <h3 className="headline mb-8 text-2xl">What&apos;s included</h3>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse text-sm">
+              <thead>
+                <tr className="border-b border-[var(--color-line)]">
+                  <th className="w-2/5 py-4 pr-6 text-left font-normal text-[var(--color-fg-muted)]">
+                    Feature
+                  </th>
+                  <th className="px-4 py-4 text-center font-medium text-[var(--color-fg)]">
+                    AutoReply AI
+                  </th>
+                  <th className="px-4 py-4 text-center font-medium text-[var(--color-fg)]">
+                    Storefront Kit
+                  </th>
+                  <th className="px-4 py-4 text-center font-medium text-[var(--color-fg)]">
+                    Content Pack
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {COMPARISON.map((row, i) => (
+                  <tr
+                    key={row.label}
+                    className={`border-b border-[var(--color-line)] ${
+                      i % 2 === 0 ? "bg-[var(--color-bg-soft)]" : ""
+                    }`}
+                  >
+                    <td className="py-3.5 pr-6 text-[var(--color-fg-muted)]">
+                      {row.label}
+                    </td>
+                    <td className="px-4 py-3.5 text-center">
+                      <ComparisonCell value={row.ai} />
+                    </td>
+                    <td className="px-4 py-3.5 text-center">
+                      <ComparisonCell value={row.storefront} />
+                    </td>
+                    <td className="px-4 py-3.5 text-center">
+                      <ComparisonCell value={row.content} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Pricing FAQ */}
+        <div className="mt-20">
+          <h3 className="headline mb-8 text-2xl">Pricing questions</h3>
+          <div className="divide-y divide-[var(--color-line)] border-b border-t border-[var(--color-line)]">
+            {FAQS.map((faq, i) => (
+              <div key={i}>
+                <button
+                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
+                  className="flex w-full items-center justify-between gap-4 py-5 text-left text-base font-medium text-[var(--color-fg)]"
+                >
+                  <span>{faq.q}</span>
+                  <span
+                    className={`shrink-0 text-xl text-[var(--color-brand)] transition-transform duration-200 ${
+                      openFaq === i ? "rotate-45" : ""
+                    }`}
+                  >
+                    +
+                  </span>
+                </button>
+                {openFaq === i && (
+                  <p className="pb-5 text-sm leading-relaxed text-[var(--color-fg-muted)]">
+                    {faq.a}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Bottom CTA */}
         <div className="mt-16 text-center">
           <p className="text-sm text-[var(--color-fg-muted)]">
             Custom project? Different problem?{" "}
             <Link
-              href={offerWaUrl("a custom project")}
+              href={waUrl("a custom project")}
               target="_blank"
               rel="noopener noreferrer"
               className="font-medium text-[var(--color-brand)] transition hover:text-[var(--color-brand-hot)]"
@@ -274,13 +381,16 @@ export default function Services() {
   );
 }
 
+/* ─── ProductCard ───────────────────────────────────────────── */
 function ProductCard({
   product,
-  index,
+  currency,
 }: {
   product: Product;
-  index: number;
+  currency: Currency;
 }) {
+  const sym = CURRENCY_SYMBOLS[currency];
+
   return (
     <div
       className={`relative flex flex-col p-7 transition md:p-8 ${
@@ -298,47 +408,100 @@ function ProductCard({
 
       <div className="mb-6">
         <span className="font-mono text-xs text-[var(--color-fg-faint)]">
-          0{index}
+          0{product.index}
         </span>
       </div>
 
       <h4 className="headline text-2xl">{product.title}</h4>
-      <p className="mt-1.5 text-xs text-[var(--color-fg-faint)]">
-        Best for: {product.bestFor}
+      <p className="mt-1 text-xs text-[var(--color-fg-faint)]">{product.subtitle}</p>
+      <p className="mt-3 text-sm leading-relaxed text-[var(--color-fg-muted)]">
+        {product.tagline}
       </p>
 
-      <div className="mt-5 mb-6">
-        <span className="numeral text-4xl text-[var(--color-fg)]">
-          {product.price}
-        </span>
-        {product.priceSub && (
-          <span className="ml-2 numeral text-base text-[var(--color-fg-muted)]">
-            {product.priceSub}
-          </span>
+      {/* Price */}
+      <div className="mt-6 mb-1">
+        {product.priceType === "setup+monthly" &&
+          product.setup &&
+          product.monthly && (
+            <>
+              <div className="flex items-baseline gap-2">
+                <span className="numeral text-3xl text-[var(--color-fg)]">
+                  {sym}{product.setup[currency]}
+                </span>
+                <span className="text-sm text-[var(--color-fg-muted)]">setup</span>
+              </div>
+              <div className="mt-1 flex items-baseline gap-2">
+                <span className="numeral text-xl text-[var(--color-fg)]">
+                  + {sym}{product.monthly[currency]}
+                </span>
+                <span className="text-sm text-[var(--color-fg-muted)]">/mo</span>
+              </div>
+            </>
+          )}
+
+        {product.priceType === "onetime" && product.oneTime && (
+          <div className="flex items-baseline gap-2">
+            <span className="numeral text-3xl text-[var(--color-fg)]">
+              {sym}{product.oneTime[currency]}
+            </span>
+            <span className="text-sm text-[var(--color-fg-muted)]">one-time</span>
+          </div>
+        )}
+
+        {product.priceType === "monthly" && product.monthly && (
+          <div className="flex items-baseline gap-2">
+            <span className="numeral text-3xl text-[var(--color-fg)]">
+              {sym}{product.monthly[currency]}
+            </span>
+            <span className="text-sm text-[var(--color-fg-muted)]">/mo</span>
+          </div>
         )}
       </div>
 
-      {product.roi && (
-        <p className="mb-3 text-xs italic text-[var(--color-brand)]">
-          {product.roi}
-        </p>
-      )}
+      {/* Payment plan note */}
+      {(product.priceType === "setup+monthly" || product.priceType === "onetime") &&
+        product.plan3 && (
+          <p className="mb-4 text-xs text-[var(--color-fg-faint)]">
+            or {sym}{product.plan3[currency]}/mo for 3 months
+          </p>
+        )}
+      {product.priceType === "monthly" &&
+        product.quarterly &&
+        product.quarterlySave && (
+          <p className="mb-4 text-xs text-[var(--color-fg-faint)]">
+            or {sym}{product.quarterly[currency]} quarterly — save {sym}
+            {product.quarterlySave[currency]}
+          </p>
+        )}
 
-      <p className="mb-5 text-sm leading-relaxed text-[var(--color-fg-muted)]">
-        {product.outcome}
+      {/* ROI */}
+      <p className="mb-5 text-xs italic text-[var(--color-brand)]">
+        {product.roi[currency]}
       </p>
 
-      <ul className="mb-7 flex flex-1 flex-col gap-2.5 text-sm">
-        {product.bullets.map((b) => (
-          <li key={b} className="flex gap-3 text-[var(--color-fg)]">
+      {/* Features */}
+      <ul className="mb-6 flex flex-1 flex-col gap-2.5 text-sm">
+        {product.features.map((f) => (
+          <li key={f} className="flex gap-3 text-[var(--color-fg)]">
             <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-[var(--color-brand)]" />
-            {b}
+            {f}
           </li>
         ))}
       </ul>
 
+      {/* Guarantee */}
+      <p className="mb-5 border-l-2 border-[var(--color-line-bright)] pl-3 text-[11px] text-[var(--color-fg-faint)]">
+        {product.guarantee}
+      </p>
+
+      {/* Best for */}
+      <p className="mb-6 text-xs text-[var(--color-fg-faint)]">
+        Best for: {product.bestFor}
+      </p>
+
+      {/* CTA */}
       <Link
-        href={offerWaUrl(product.title)}
+        href={waUrl(product.title)}
         target="_blank"
         rel="noopener noreferrer"
         className={`inline-flex w-full items-center justify-center gap-2 whitespace-nowrap px-5 py-3.5 text-center text-sm font-medium transition ${
@@ -351,18 +514,40 @@ function ProductCard({
         <span aria-hidden>→</span>
       </Link>
 
-      {product.paymentNote && (
-        <p className="mt-2.5 text-center text-[11px] text-[var(--color-fg-faint)]">
-          {product.paymentNote}
-        </p>
-      )}
-
+      {/* Delivery */}
       <div className="mt-5 flex items-center justify-between border-t border-[var(--color-line)] pt-5 text-xs">
         <span className="text-[var(--color-fg-muted)]">Delivery</span>
-        <span className="font-medium text-[var(--color-fg)]">
-          {product.delivery}
-        </span>
+        <span className="font-medium text-[var(--color-fg)]">{product.delivery}</span>
+      </div>
+
+      {/* Add-ons */}
+      <div className="mt-4 border-t border-[var(--color-line)] pt-4">
+        <p className="mb-2 text-[10px] uppercase tracking-[0.15em] text-[var(--color-fg-faint)]">
+          Optional add-ons
+        </p>
+        <ul className="flex flex-col gap-1.5">
+          {product.addons.map((a) => (
+            <li
+              key={a.label}
+              className="flex items-start justify-between gap-3 text-xs"
+            >
+              <span className="text-[var(--color-fg-muted)]">{a.label}</span>
+              <span className="shrink-0 font-medium text-[var(--color-fg)]">
+                +{sym}{a.price[currency]}
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
+}
+
+/* ─── ComparisonCell ────────────────────────────────────────── */
+function ComparisonCell({ value }: { value: boolean | string }) {
+  if (value === true)
+    return <span className="font-medium text-[var(--color-brand)]">✓</span>;
+  if (value === false)
+    return <span className="text-[var(--color-fg-faint)]">—</span>;
+  return <span className="text-[var(--color-fg-muted)]">{value}</span>;
 }
