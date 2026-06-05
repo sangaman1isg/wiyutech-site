@@ -121,53 +121,6 @@ export default function Home() {
       {/* ═══════════════ FAQ ═══════════════ */}
       <FAQ />
 
-      {/* ═══════════════ FOUNDER / ORIGIN ═══════════════ */}
-      <section id="founder" className="relative border-b border-[var(--color-line)]">
-        <div className="absolute inset-0 glow-bottom glow-drift" />
-        <div className="relative mx-auto max-w-5xl px-6 py-16 md:px-10 md:py-32">
-          <p className="eyebrow mb-4">— Our origin</p>
-          <h2 className="headline text-[clamp(2rem,4.5vw,3.75rem)]">
-            Wiyule was built on a <span className="text-[var(--color-brand)]">workshop floor</span> — not in a co-working space.
-          </h2>
-
-          <div className="mt-10 grid gap-8 md:grid-cols-[1fr_auto] md:gap-16">
-            <div className="space-y-6 text-base leading-relaxed text-[var(--color-fg-muted)] md:text-lg">
-              <p>
-                Wiyule was founded by someone who grew up inside a real family
-                business — a workshop in Malawi where the conversations were
-                about customers, cash flow, and what it actually takes to keep
-                a small business alive. That ground-floor exposure is the edge.
-                We&rsquo;re not retrofitted for Africa — we were built here.
-              </p>
-              <div className="border border-[var(--color-line-bright)] p-6">
-                <p className="eyebrow mb-3 text-[var(--color-brand)]">— Founding client offer</p>
-                <p className="text-base text-[var(--color-fg)]">
-                  We&rsquo;re taking on{" "}
-                  <span className="font-semibold text-[var(--color-brand)]">3 founding clients</span>{" "}
-                  at deeply discounted rates. The businesses we work with at this
-                  stage become our long-term partners and the case studies that
-                  take Wiyule across the continent.
-                </p>
-                <a
-                  href={WA_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-[var(--color-brand)] transition hover:text-[var(--color-brand-hot)]"
-                >
-                  Ask if you qualify →
-                </a>
-              </div>
-            </div>
-            <div className="flex flex-col gap-4 border-t border-[var(--color-line)] pt-8 md:border-l md:border-t-0 md:pl-12 md:pt-0">
-              <Stat label="Founded" value="2026" />
-              <Stat label="Based in" value="Lusaka, ZM" />
-              <Stat label="Roots in" value="Malawi" />
-              <Stat label="Languages" value="EN · CH" />
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* ═══════════════ FINAL CTA ═══════════════ */}
       <section className="relative overflow-hidden border-b border-[var(--color-line)]">
         <div className="absolute inset-0 glow-soft glow-drift" />
@@ -251,9 +204,17 @@ export default function Home() {
               </div>
               <span>© {new Date().getFullYear()} Wiyule Technology · Built in Lusaka</span>
             </div>
-            <span className="text-[var(--color-fg-faint)]">
-              Made for businesses in MW × ZM
-            </span>
+            <div className="flex items-center gap-6">
+              <Link
+                href="/about"
+                className="text-[var(--color-fg-faint)] transition hover:text-[var(--color-fg)]"
+              >
+                Our origin
+              </Link>
+              <span className="text-[var(--color-fg-faint)]">
+                Made for businesses in MW × ZM
+              </span>
+            </div>
           </div>
         </div>
       </footer>
