@@ -13,7 +13,7 @@ export default function AuditCTA() {
     <section className="relative overflow-hidden border-b border-[var(--color-line)] bg-[var(--color-bg-soft)]">
       <div className="absolute inset-0 glow-soft" />
       <div className="relative mx-auto max-w-7xl px-6 py-14 md:px-10 md:py-24">
-        <div className="grid items-center gap-12 md:grid-cols-[1.4fr_1fr]">
+        <div data-animate="fade-up" className="grid items-center gap-12 md:grid-cols-[1.4fr_1fr]">
           <div>
             <div className="mb-6 inline-flex items-center gap-2">
               <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-brand)] pulse-dot" />

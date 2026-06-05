@@ -25,7 +25,7 @@ export default function HowWeWork() {
     >
       <div className="relative mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-32">
         {/* Header */}
-        <div className="mb-16 max-w-2xl">
+        <div data-animate="fade-up" className="mb-16 max-w-2xl">
           <p className="eyebrow mb-4">— How we work</p>
           <h2 className="headline text-[clamp(2.5rem,5.5vw,5rem)]">
             Four steps.{" "}
@@ -36,7 +36,12 @@ export default function HowWeWork() {
         {/* Steps grid — gap-px + bg-[color-line] draws 1px dividers between cards */}
         <div className="grid gap-px bg-(--color-line) md:grid-cols-4">
           {steps.map((step, i) => (
-            <div key={step.title} className="bg-(--color-bg-soft) p-8">
+            <div
+              key={step.title}
+              data-animate="fade-up"
+              data-delay={i > 0 ? String(i * 100) : undefined}
+              className="bg-(--color-bg-soft) p-8"
+            >
               <div className="numeral mb-8 text-6xl text-(--color-brand)">
                 0{i + 1}
               </div>

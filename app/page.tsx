@@ -124,7 +124,7 @@ export default function Home() {
       {/* ═══════════════ FINAL CTA ═══════════════ */}
       <section className="relative overflow-hidden border-b border-[var(--color-line)]">
         <div className="absolute inset-0 glow-soft glow-drift" />
-        <div className="relative mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-44">
+        <div data-animate="fade-up" className="relative mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-44">
           <p className="eyebrow mb-4">— Ready when you are</p>
           <h2 className="headline text-[clamp(2.75rem,7vw,6rem)]">
             Ready to <span className="text-[var(--color-brand)]">grow</span>{" "}
@@ -257,7 +257,10 @@ function NumericSection({
             align === "right" ? "justify-end" : "justify-start"
           }`}
         >
-          <div className="flex items-end gap-4 md:gap-6">
+          <div
+            data-animate={align === "right" ? "slide-right" : "slide-left"}
+            className="flex items-end gap-4 md:gap-6"
+          >
             <span
               className={`numeral text-[var(--color-brand)] ${numeralSize}`}
               style={{ textShadow: "0 0 80px rgba(239, 45, 45, 0.25)" }}
@@ -273,6 +276,8 @@ function NumericSection({
         </div>
 
         <div
+          data-animate="fade-up"
+          data-delay="150"
           className={`mt-12 max-w-3xl ${
             align === "right" ? "ml-auto md:text-right" : ""
           }`}

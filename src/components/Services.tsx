@@ -225,7 +225,7 @@ export default function Services() {
       <div className="relative mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-32">
 
         {/* Header */}
-        <div className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
+        <div data-animate="fade-up" className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div className="max-w-2xl">
             <p className="eyebrow mb-4">— Three products</p>
             <h2 className="headline text-[clamp(2.5rem,5.5vw,5rem)]">
@@ -284,8 +284,13 @@ export default function Services() {
 
         {/* Product cards */}
         <div className="grid grid-cols-1 gap-px bg-[var(--color-line)] md:grid-cols-3">
-          {PRODUCTS.map((p) => (
-            <ProductCard key={p.title} product={p} currency={currency} />
+          {PRODUCTS.map((p, i) => (
+            <ProductCard
+              key={p.title}
+              product={p}
+              currency={currency}
+              animDelay={i * 150}
+            />
           ))}
         </div>
 
@@ -389,9 +394,11 @@ export default function Services() {
 function ProductCard({
   product,
   currency,
+  animDelay = 0,
 }: {
   product: Product;
   currency: Currency;
+  animDelay?: number;
 }) {
   const sym = CURRENCY_SYMBOLS[currency];
   // USD can't be collected online — checkout defaults to ZMW for USD viewers
@@ -400,6 +407,8 @@ function ProductCard({
 
   return (
     <div
+      data-animate="fade-up"
+      data-delay={animDelay > 0 ? String(animDelay) : undefined}
       className={`relative flex flex-col p-7 transition md:p-8 ${
         product.highlighted
           ? "bg-[var(--color-bg-elev)]"
