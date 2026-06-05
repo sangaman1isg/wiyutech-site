@@ -51,24 +51,31 @@ We build websites, AI WhatsApp assistants, and operations systems for SMEs in Ma
 ### Folder structure
 wiyutech-site/
 ├── public/
-│   ├── wiyule-mark.jpg       (square logo — 28x28 nav, 20x20 footer)
-│   └── wiyule-logo.jpg       (horizontal wordmark)
+│   ├── wiyule-mark.jpg           (square logo — 28x28 nav, 20x20 footer)
+│   └── wiyule-logo.jpg           (horizontal wordmark)
+├── app/                          (Next.js App Router — routes live here)
+│   ├── globals.css               (design tokens, animations, brand colors)
+│   ├── layout.tsx                (metadata, fonts, JSON-LD schema, root wrapper)
+│   ├── page.tsx                  (homepage)
+│   ├── about/
+│   │   └── page.tsx              (/about — Our Origin story page)
+│   ├── checkout/
+│   │   ├── page.tsx              (/checkout — server wrapper + Suspense boundary)
+│   │   └── CheckoutClient.tsx    (client component — reads URL params, renders payment UI)
+│   ├── opengraph-image.tsx       (auto-generated OG image)
+│   └── icon.tsx                  (auto-generated favicon)
 ├── src/
-│   ├── app/
-│   │   ├── globals.css       (design tokens, animations, brand colors)
-│   │   ├── layout.tsx        (metadata, fonts, root wrapper)
-│   │   └── page.tsx          (homepage — single-page site for now)
 │   └── components/
-│       ├── Nav.tsx           (sticky nav + hamburger mobile drawer — client component)
-│       ├── AuditCTA.tsx      (Free WhatsApp Audit banner — pulls leads)
-│       ├── Services.tsx      (11-product menu in 3 tiers)
-│       ├── HowWeWork.tsx     (4-step process section — Discovery → Build → Launch → Support)
-│       ├── FAQ.tsx           (accordion FAQ)
-│       └── WhatsAppButton.tsx (floating WA button — sitewide)
+│       ├── Nav.tsx               (sticky nav + hamburger mobile drawer — client component)
+│       ├── AuditCTA.tsx          (Free WhatsApp Audit banner — lead magnet)
+│       ├── Services.tsx          (3-product menu with currency switcher + comparison table)
+│       ├── HowWeWork.tsx         (4-step process — Discovery → Build → Launch → Support)
+│       ├── FAQ.tsx               (accordion FAQ)
+│       └── WhatsAppButton.tsx    (floating WA button — sitewide)
 ├── next.config.ts
 ├── tsconfig.json
 ├── package.json
-└── CLAUDE.md                 (this file)
+└── CLAUDE.md                     (this file)
 ---
 
 ## 🎨 Brand System (DO NOT VIOLATE)
@@ -107,31 +114,33 @@ If hardcoded colors appear (`#EF2D2D`, `#aaaaaa`, etc.), refactor them to use th
 
 ---
 
-## 💰 Active Products (11-product menu — current state)
+## 💰 Active Products (3-product menu — current state)
 
-This is the canonical list. Pricing reflects the current page.
+Services.tsx was overhauled in Wave 5. There are now 3 core products with full multi-currency pricing (MWK / ZMW / USD) and a comparison table. **Don't change pricing without explicit user approval.**
 
-### Quick Wins (Tier 1)
-1. **WhatsApp Audit** — FREE, 24h delivery (lead magnet)
-2. **WhatsApp Catalog Setup** — $60 one-time, 48h delivery
-3. **Status Designer Pack** — $60 / or $40/mo, 48h delivery
-4. **Wiyu Mini** — $80 + $25/mo, 24h delivery (FEATURED — Most Popular)
-5. **Booking Link Setup** — $80 + $15/mo, 24h delivery
+### 1. AutoReply AI ⭐ Featured
+- Setup: MWK 699,000 / ZMW 11,199 / $400
+- Monthly: MWK 124,999 / ZMW 1,999 / $70
+- Delivery: 7 days · Guarantee: full refund if not live in 7 days
+- Checkout deposit (50% of setup): MWK 349,500 / ZMW 5,600
 
-### Growth Products (Tier 2)
-6. **GMB Boost** — $80 + $30/mo, 3-day delivery
-7. **Digital Storefront Kit** — from $350, 7-10 days
-8. **Monthly Content Pack** — $80/mo, ongoing
+### 2. Digital Storefront Kit
+- One-time: MWK 1,224,999 / ZMW 19,499 / $700
+- Delivery: 10 days · Guarantee: 25% refund if not live in 10 days
+- Checkout deposit (50%): MWK 612,500 / ZMW 9,750
 
-### Full Systems (Tier 3)
-9. **AutoReply AI** — $250 + $40/mo, 5-7 days
-10. **Operations OS Lite** — from $500 + $50/mo, 3-4 weeks
-11. **Wiyule Care** — $50/mo retainer
+### 3. Monthly Content Pack
+- Monthly: MWK 174,999 / ZMW 2,799 / $100
+- Quarterly: MWK 499,999 / ZMW 7,999 / $289
+- Delivery: ongoing · Guarantee: full refund if not happy with month 1
+- Checkout: full first month upfront (MWK 174,999 / ZMW 2,799)
 
-### Bundle offer (shown between Tier 1 and Tier 2)
-- **Wiyu Mini + WhatsApp Catalog Setup** — $120 (save $20)
-
-**Don't change pricing without explicit user approval.** These are tested numbers.
+### Payment collection
+- **Zambia (ZMW):** Airtel Money — 0774 668 193
+- **Malawi (MWK):** TNM Mpamba — 0893 306 186
+- USD is cash-only (no online USD collection yet — no business registration)
+- Checkout page: `/checkout?product=[slug]&currency=[ZMW|MWK]`
+- Slugs: `autoreply-ai` · `storefront-kit` · `content-pack`
 
 ---
 
@@ -158,11 +167,10 @@ The Wiyu workflow is the basis for the **Wiyu Mini** product sold to clients. Ea
 
 ### What we're actively building:
 - **Wave 2** ✅ Complete: HowWeWork component extracted and shipped
-- **Wave 3** ✅ Complete: Page declutter (removed marquee + 2 NumericSections, trimmed copy, compressed Founder section, FAQ 6→4) + Services overhaul (11 products, specific CTAs, "Best for:" tags, payment notes, ROI lines, bundle callout)
-- **Wave 4 mobile** ✅ Complete: Hamburger nav (Nav.tsx), Services grid fix (1-col mobile), section padding reduction (py-24→py-16), AuditCTA button full-width on mobile
-- **Wave 4** ✅ Complete: Mobile nav + grid fix + padding (mobile commit) · OG image (opengraph-image.tsx) · Favicon (icon.tsx) · Lazy load (Next.js default) · LocalBusiness JSON-LD schema markup
-- **Wave 5 (in progress):** Multi-currency Services overhaul — currency switcher (MWK/ZMW/USD), per-product add-ons, guarantees, payment plan notes, comparison table for Growth tier
-- **Future:** Case studies page · Blog/insights · Pricing calculator · Client portal
+- **Wave 3** ✅ Complete: Page declutter + Services overhaul (11 products, CTAs, "Best for:" tags, ROI lines, bundle callout)
+- **Wave 4** ✅ Complete: Mobile nav · grid fix · padding · OG image · favicon · lazy load · JSON-LD schema
+- **Wave 5** ✅ Complete: Multi-currency Services (MWK/ZMW/USD, 3 products, comparison table) · /about page (founder origin) · AuditCTA moved above FAQ · Mobile money checkout (/checkout) · Domain updated to wiyuletech.com
+- **Wave 6 next:** Case studies page · Testimonials · Blog/insights · Client portal
 
 ### What we're improving:
 - Mobile responsiveness across all sections
@@ -173,10 +181,11 @@ The Wiyu workflow is the basis for the **Wiyu Mini** product sold to clients. Ea
 
 ### What we're NOT touching unless specifically asked:
 - Hero section copy (tested, working)
-- The 4 NumericSection blocks (73%, 7 days, 24/7, 2 countries)
-- The founder/origin section (founder identity stays subtle)
+- The NumericSection blocks (73%, 7 days)
 - Footer (works, looks right)
-- Pricing on existing 8 products
+- Pricing on the 3 active products
+- The /about page copy (founder identity stays subtle)
+- Mobile money numbers (0774 668 193 · 0893 306 186)
 
 ---
 ## 🔗 Sister Project — Wiyule Cargo
@@ -294,16 +303,25 @@ Run through this before suggesting `git push`:
 
 ### Add a new product to Services
 1. Open `src/components/Services.tsx`
-2. Find the `tiers` array
-3. Add new product object matching existing schema: `{ title, price, priceSub, delivery, outcome, bullets, highlighted? }`
-4. Place in the appropriate tier
-5. Test on localhost before commit
+2. Find the `PRODUCTS` array
+3. Add a new product object matching the `Product` type: `{ index, slug, title, subtitle, tagline, priceType, setup?, monthly?, oneTime?, delivery, features, roi, bestFor, guarantee, addons, cta }`
+4. All price fields must have `{ MWK, ZMW, USD }` values
+5. Add the slug to `CHECKOUT_PRODUCTS` in `app/checkout/CheckoutClient.tsx`
+6. Test on localhost before commit
 
 ### Update product pricing
 1. Open `src/components/Services.tsx`
-2. Find the product in `tiers` array
-3. Update `price` and/or `priceSub`
-4. **WAIT** — confirm with user before committing (pricing is strategy, not just code)
+2. Find the product in `PRODUCTS` array
+3. Update the relevant `PriceData` object (`setup`, `monthly`, `oneTime`)
+4. Update matching deposit amounts in `app/checkout/CheckoutClient.tsx`
+5. **WAIT** — confirm with user before committing (pricing is strategy, not just code)
+
+### Update checkout deposit amounts
+1. Open `app/checkout/CheckoutClient.tsx`
+2. Find the product slug in the `PRODUCTS` record
+3. Update `deposit.ZMW` and `deposit.MWK`
+4. Update `balanceNote` to reflect the new balance owed
+5. Confirm with user before committing
 
 ### Add a new homepage section
 1. Decide WHERE in `page.tsx` it goes (between which existing sections)
@@ -359,12 +377,18 @@ If a deploy fails:
 ## 📍 Where We Are Now (June 2026)
 
 - ✅ Wave 1 shipped: AuditCTA + Services grid
-- ✅ Wave 2 shipped: HowWeWork component (Live Counter + Testimonial dropped)
-- ✅ Wave 3 shipped: Page declutter + Services overhaul (11 products, specific CTAs, "Best for:" tags, payment notes, ROI lines, bundle callout, 3 new products)
-- ✅ Wave 4 fully shipped: mobile nav · grid fix · padding · OG image · favicon · lazy load · JSON-LD schema
-- ⏳ Wave 5 in progress: Multi-currency Services (MWK/ZMW/USD switcher, add-ons, guarantees, comparison table) · Case studies · Testimonials · Pricing calculator
+- ✅ Wave 2 shipped: HowWeWork component
+- ✅ Wave 3 shipped: Page declutter + Services overhaul
+- ✅ Wave 4 shipped: Mobile nav · OG image · favicon · JSON-LD schema
+- ✅ Wave 5 shipped (today):
+  - Services rebuilt: 3 products, MWK/ZMW/USD currency switcher, comparison table, add-ons, guarantees
+  - /about page: founder origin story (moved off homepage)
+  - AuditCTA repositioned: now sits above FAQ for better conversion flow
+  - /checkout page: mobile money flow (Airtel ZMW + Mpamba MWK), deposit amounts, WhatsApp confirm CTA
+  - Domain live: wiyuletech.com (fixed typo wiyutech.com → wiyuletech.com in metadata)
+- ⏳ Wave 6 next: Case studies · Testimonials · Blog · Client portal
 - 🤖 Wiyu AI live on Twilio sandbox (Phase 2 complete)
-- 🎯 Active product menu: 11 SKUs across 3 tiers + 1 bundle offer
+- 🎯 Active product menu: 3 core products · mobile money checkout live · no payment gateway yet (pending business registration)
 
 ---
 
@@ -378,4 +402,4 @@ If a deploy fails:
 
 ---
 
-_Last updated: June 2026. Maintained by Tamsanga + Claude (the assistant in claude.ai)._
+_Last updated: 5 June 2026. Maintained by Tamsanga + Claude (the assistant in claude.ai)._
