@@ -121,7 +121,7 @@ export default function OpengraphImage() {
             </div>
             Wiyule Technology
           </div>
-          <div>wiyutech.com</div>
+          <div>wiyuletech.com</div>
         </div>
       </div>
     ),

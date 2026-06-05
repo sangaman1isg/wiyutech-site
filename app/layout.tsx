@@ -18,7 +18,7 @@ const bricolage = Bricolage_Grotesque({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://wiyutech.com"),
+  metadataBase: new URL("https://wiyuletech.com"),
   title: {
     default:
       "Wiyule Technology — Websites & AI WhatsApp Assistants for Businesses in Malawi & Zambia",
@@ -79,7 +79,7 @@ const schema = {
   name: "Wiyule Technology",
   description:
     "Wiyule Technology builds websites, booking systems and AI WhatsApp assistants for small businesses in Malawi and Zambia. Stop losing customers to slow replies. Launch in 7 days.",
-  url: "https://wiyutech.com",
+  url: "https://wiyuletech.com",
   telephone: "+260774668193",
   email: "wiyuletechnology@gmail.com",
   foundingDate: "2026",

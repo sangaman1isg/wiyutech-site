@@ -23,7 +23,7 @@
 - **Type:** African IT & AI agency website (B2B services + AI products)
 - **Founder:** Tamsanga Kayuni
 - **Markets:** Malawi & Zambia (expanding across Africa)
-- **Live URL:** https://wiyuletech.vercel.app
+- **Live URL:** https://wiyuletech.com
 - **GitHub:** https://github.com/sangaman1isg/wiyutech-site
 - **Local path:** ~/Desktop/wiyule technology/wiyutech-site/
 
