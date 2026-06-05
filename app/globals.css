@@ -134,6 +134,38 @@ body {
 [data-delay="300"] { transition-delay: 300ms; }
 [data-delay="400"] { transition-delay: 400ms; }
 
+/* ─── Button shine sweep ─────────────────────────────────────── */
+/* Add data-shine to any button/link to get the sweep effect      */
+[data-shine] {
+  position: relative;
+  overflow: hidden;
+}
+[data-shine]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.18) 50%,
+    transparent 65%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.55s ease;
+}
+[data-shine]:hover::after {
+  transform: translateX(150%);
+}
+
+/* ─── Featured card border pulse ────────────────────────────── */
+@keyframes border-pulse {
+  0%, 100% { box-shadow: 0 0 0 1px var(--color-brand), 0 0 24px rgba(239,45,45,0.18); }
+  50%       { box-shadow: 0 0 0 1px var(--color-brand), 0 0 48px rgba(239,45,45,0.38); }
+}
+[data-featured] {
+  animation: border-pulse 3s ease-in-out infinite;
+}
+
 /* ─── Scrollbar ─── */
 ::-webkit-scrollbar { width: 10px; height: 10px; }
 ::-webkit-scrollbar-track { background: var(--color-bg); }

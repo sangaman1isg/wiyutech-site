@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { motion } from "framer-motion";
 import Link from "next/link";
 
 /* ─── Constants ─────────────────────────────────────────────── */
@@ -406,10 +407,21 @@ function ProductCard({
   const checkoutHref = `/checkout?product=${product.slug}&currency=${checkoutCurrency}`;
 
   return (
-    <div
-      data-animate="fade-up"
-      data-delay={animDelay > 0 ? String(animDelay) : undefined}
-      className={`relative flex flex-col p-7 transition md:p-8 ${
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "0px 0px -80px 0px" }}
+      transition={{
+        duration: 0.6,
+        ease: [0.2, 0.8, 0.2, 1],
+        delay: animDelay / 1000,
+      }}
+      whileHover={{
+        y: -8,
+        transition: { type: "spring", stiffness: 350, damping: 22 },
+      }}
+      {...(product.highlighted ? { "data-featured": "" } : {})}
+      className={`relative flex flex-col p-7 md:p-8 ${
         product.highlighted
           ? "bg-[var(--color-bg-elev)]"
           : "bg-[var(--color-bg-card)] hover:bg-[var(--color-bg-elev)]"
@@ -553,7 +565,7 @@ function ProductCard({
           ))}
         </ul>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

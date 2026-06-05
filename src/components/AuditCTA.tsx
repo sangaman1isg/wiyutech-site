@@ -37,6 +37,7 @@ export default function AuditCTA() {
 
           <div className="flex flex-col gap-4 md:items-end">
             <Link
+              data-shine
               href={AUDIT_URL}
               target="_blank"
               rel="noopener noreferrer"

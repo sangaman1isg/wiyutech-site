@@ -5,6 +5,7 @@ import AuditCTA from "@/src/components/AuditCTA";
 import Services from "@/src/components/Services";
 import FAQ from "@/src/components/FAQ";
 import HowWeWork from "@/src/components/HowWeWork";
+import AnimatedNumber from "@/src/components/AnimatedNumber";
 
 const WHATSAPP_NUMBER = "260774668193";
 const EMAIL = "wiyuletechnology@gmail.com";
@@ -47,6 +48,7 @@ export default function Home() {
 
           <div className="mt-10 flex flex-col gap-3 sm:flex-row fade-up delay-3">
             <Link
+              data-shine
               href={WA_URL}
               target="_blank"
               rel="noopener noreferrer"
@@ -69,7 +71,8 @@ export default function Home() {
       <NumericSection
         id="problem"
         eyebrow="The problem"
-        numeral="73%"
+        numeral={73}
+        numeralSuffix="%"
         numeralSize="text-[clamp(8rem,28vw,22rem)]"
         title={
           <>
@@ -90,7 +93,7 @@ export default function Home() {
       {/* ═══════════════ NUMERICAL SECTION 2 — 7 DAYS ═══════════════ */}
       <NumericSection
         eyebrow="Our pace"
-        numeral="7"
+        numeral={7}
         numeralSuffix="days"
         numeralSize="text-[clamp(10rem,32vw,26rem)]"
         title={
@@ -137,6 +140,7 @@ export default function Home() {
           </p>
           <div className="mt-12 flex flex-col gap-3 sm:flex-row">
             <Link
+              data-shine
               href={WA_URL}
               target="_blank"
               rel="noopener noreferrer"
@@ -238,7 +242,7 @@ function NumericSection({
 }: {
   id?: string;
   eyebrow: string;
-  numeral: string;
+  numeral: number;
   numeralSuffix?: string;
   numeralSize: string;
   title: React.ReactNode;
@@ -261,12 +265,12 @@ function NumericSection({
             data-animate={align === "right" ? "slide-right" : "slide-left"}
             className="flex items-end gap-4 md:gap-6"
           >
-            <span
+            <AnimatedNumber
+              to={numeral}
+              suffix={numeralSuffix && align !== "right" ? "" : ""}
+              duration={numeral > 20 ? 2.2 : 1.4}
               className={`numeral text-[var(--color-brand)] ${numeralSize}`}
-              style={{ textShadow: "0 0 80px rgba(239, 45, 45, 0.25)" }}
-            >
-              {numeral}
-            </span>
+            />
             {numeralSuffix && (
               <span className="mb-3 text-lg font-medium text-[var(--color-fg-muted)] md:mb-6 md:text-2xl">
                 {numeralSuffix}

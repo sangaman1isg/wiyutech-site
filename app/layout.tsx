@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import WhatsAppButton from "@/src/components/WhatsAppButton";
 import AnimationObserver from "@/src/components/AnimationObserver";
+import CursorGlow from "@/src/components/CursorGlow";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -122,6 +123,7 @@ export default function RootLayout({
         {children}
         <WhatsAppButton />
         <AnimationObserver />
+        <CursorGlow />
       </body>
     </html>
   );
