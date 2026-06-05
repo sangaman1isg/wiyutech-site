@@ -87,9 +87,6 @@ export default function Home() {
         align="left"
       />
 
-      {/* ═══════════════ FREE AUDIT CTA ═══════════════ */}
-      <AuditCTA />
-
       {/* ═══════════════ NUMERICAL SECTION 2 — 7 DAYS ═══════════════ */}
       <NumericSection
         eyebrow="Our pace"
@@ -117,6 +114,9 @@ export default function Home() {
 
       {/* ═══════════════ HOW WE WORK ═══════════════ */}
       <HowWeWork />
+
+      {/* ═══════════════ FREE AUDIT CTA ═══════════════ */}
+      <AuditCTA />
 
       {/* ═══════════════ FAQ ═══════════════ */}
       <FAQ />
