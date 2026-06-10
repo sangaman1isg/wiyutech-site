@@ -6,6 +6,7 @@ import Services from "@/src/components/Services";
 import FAQ from "@/src/components/FAQ";
 import HowWeWork from "@/src/components/HowWeWork";
 import AnimatedNumber from "@/src/components/AnimatedNumber";
+import HeroBuildBackground from "@/src/components/HeroBuildBackground";
 
 const WHATSAPP_NUMBER = "260774668193";
 const EMAIL = "wiyuletechnology@gmail.com";
@@ -25,6 +26,7 @@ export default function Home() {
       {/* ═══════════════ HERO ═══════════════ */}
       <section className="relative overflow-hidden border-b border-[var(--color-line)]">
         <div className="absolute inset-0 glow-soft glow-drift" />
+        <HeroBuildBackground />
 
         <div className="relative mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-32 lg:py-40">
           <div className="flex items-center gap-3 fade-up">
