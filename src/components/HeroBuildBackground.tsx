@@ -43,8 +43,11 @@ export default function HeroBuildBackground() {
       className="pointer-events-none absolute inset-0 overflow-hidden"
     >
       {/* The mock browser window — pushed to the right so hero text stays clear.
-          Faded heavily so it reads as ambient, never competes with the copy. */}
-      <div className="absolute right-[-8%] top-1/2 hidden w-[46rem] max-w-[60vw] -translate-y-1/2 opacity-[0.22] md:block lg:opacity-30">
+          Faded heavily so it reads as ambient, never competes with the copy.
+          Mobile: smaller + fainter, tucked into the bottom-right corner so it
+          peeks behind the CTAs without crowding the headline.
+          md+: larger, centred vertically on the right. */}
+      <div className="absolute bottom-[-6%] right-[-28%] w-[30rem] max-w-[115vw] opacity-[0.08] md:inset-y-0 md:bottom-auto md:right-[-8%] md:top-1/2 md:w-[46rem] md:max-w-[60vw] md:-translate-y-1/2 md:opacity-[0.22] lg:opacity-30">
         <div className="rounded-xl border border-[var(--color-line-bright)] bg-[var(--color-bg-elev)] shadow-2xl">
           {/* Browser chrome bar */}
           <motion.div

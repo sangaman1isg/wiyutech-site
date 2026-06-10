@@ -28,7 +28,7 @@ export default function Home() {
         <div className="absolute inset-0 glow-soft glow-drift" />
         <HeroBuildBackground />
 
-        <div className="relative mx-auto max-w-7xl px-6 py-20 md:px-10 md:py-32 lg:py-40">
+        <div className="relative mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-32 lg:py-40">
           <div className="flex items-center gap-3 fade-up">
             <span className="flex items-center gap-2 text-xs text-[var(--color-fg-muted)]">
               <span className="h-1.5 w-1.5 rounded-full bg-[var(--color-brand)] pulse-dot" />
@@ -54,14 +54,14 @@ export default function Home() {
               href={WA_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand)] px-7 py-4 text-sm font-medium text-white transition hover:bg-[var(--color-brand-hot)]"
+              className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand)] px-7 py-4 text-sm font-medium text-white transition hover:bg-[var(--color-brand-hot)] active:scale-[0.98] active:bg-[var(--color-brand-hot)]"
             >
               Book a free 15-min call
               <span aria-hidden>→</span>
             </Link>
             <Link
               href="#offers"
-              className="inline-flex items-center justify-center gap-2 border border-[var(--color-line-bright)] px-7 py-4 text-sm font-medium text-[var(--color-fg)] transition hover:border-[var(--color-brand)] hover:text-[var(--color-brand)]"
+              className="inline-flex items-center justify-center gap-2 border border-[var(--color-line-bright)] px-7 py-4 text-sm font-medium text-[var(--color-fg)] transition hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] active:scale-[0.98] active:border-[var(--color-brand)] active:text-[var(--color-brand)]"
             >
               View our offers
             </Link>
@@ -146,13 +146,13 @@ export default function Home() {
               href={WA_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand)] px-8 py-4 text-sm font-medium text-white transition hover:bg-[var(--color-brand-hot)]"
+              className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand)] px-8 py-4 text-sm font-medium text-white transition hover:bg-[var(--color-brand-hot)] active:scale-[0.98] active:bg-[var(--color-brand-hot)]"
             >
               Message us on WhatsApp →
             </Link>
             <Link
               href={`mailto:${EMAIL}`}
-              className="inline-flex items-center justify-center gap-2 border border-[var(--color-line-bright)] px-8 py-4 text-sm font-medium text-[var(--color-fg)] transition hover:border-[var(--color-brand)] hover:text-[var(--color-brand)]"
+              className="inline-flex items-center justify-center gap-2 border border-[var(--color-line-bright)] px-8 py-4 text-sm font-medium text-[var(--color-fg)] transition hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] active:scale-[0.98] active:border-[var(--color-brand)] active:text-[var(--color-brand)]"
             >
               Send us an email
             </Link>

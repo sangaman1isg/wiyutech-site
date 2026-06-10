@@ -13,7 +13,7 @@ export default function WhatsAppButton() {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat with Wiyule Technology on WhatsApp"
-      className="group fixed bottom-5 right-5 z-50 flex items-center gap-3 bg-[var(--color-brand)] px-4 py-3 text-sm font-medium text-white shadow-lg shadow-[var(--color-brand)]/30 transition hover:bg-[var(--color-brand-hot)] md:bottom-8 md:right-8 md:px-5 md:py-3.5"
+      className="group fixed bottom-5 right-5 z-50 hidden items-center gap-3 bg-[var(--color-brand)] px-4 py-3 text-sm font-medium text-white shadow-lg shadow-[var(--color-brand)]/30 transition hover:bg-[var(--color-brand-hot)] md:flex md:bottom-8 md:right-8 md:px-5 md:py-3.5"
     >
       <svg
         width="22"

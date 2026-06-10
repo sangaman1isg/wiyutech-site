@@ -84,7 +84,7 @@ export default function Nav() {
           <button
             type="button"
             onClick={() => setIsOpen((prev) => !prev)}
-            className="flex h-10 w-10 items-center justify-center text-[var(--color-fg)] transition md:hidden"
+            className="-mr-2 flex h-11 w-11 items-center justify-center text-[var(--color-fg)] transition md:hidden"
             aria-label={isOpen ? "Close menu" : "Open menu"}
             aria-expanded={isOpen}
           >
@@ -120,52 +120,51 @@ export default function Nav() {
             )}
           </button>
         </div>
-      </header>
 
-      {/* ─── MOBILE MENU DRAWER ─── */}
-      {/*
-        Positioned fixed, starting exactly below the nav bar (top-[69px]).
-        Fills the rest of the viewport height.
-        Fades + slides in when open, fades + slides out when closed.
-        pointer-events-none when closed so nothing below is blocked.
-      */}
-      <div
-        className={`fixed inset-x-0 top-[69px] z-40 flex h-[calc(100vh-69px)] flex-col bg-[var(--color-bg)] transition-all duration-300 md:hidden ${
-          isOpen
-            ? "translate-y-0 opacity-100 pointer-events-auto"
-            : "-translate-y-2 opacity-0 pointer-events-none"
-        }`}
-      >
-        {/* Section links */}
-        <nav className="flex flex-1 flex-col overflow-y-auto px-6 pt-4">
-          {navLinks.map((link) => (
+        {/* ─── MOBILE MENU DRAWER ───
+            Rendered as an absolute child of the (sticky) header, so it anchors to
+            the header's bottom edge automatically (top-full) — no hardcoded pixel
+            offset to drift out of sync. Height uses 100dvh (dynamic viewport
+            height), so the bottom CTA never hides behind the mobile browser's
+            address bar the way 100vh would. */}
+        <div
+          className={`absolute inset-x-0 top-full flex h-[calc(100dvh-100%)] flex-col bg-[var(--color-bg)] transition-all duration-300 md:hidden ${
+            isOpen
+              ? "translate-y-0 opacity-100 pointer-events-auto"
+              : "-translate-y-2 opacity-0 pointer-events-none"
+          }`}
+        >
+          {/* Section links */}
+          <nav className="flex flex-1 flex-col overflow-y-auto px-6 pt-4">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsOpen(false)}
+                className="flex items-center border-b border-[var(--color-line)] py-5 text-xl font-medium text-[var(--color-fg)] transition hover:translate-x-1 hover:text-[var(--color-brand)]"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* CTA pinned to the bottom */}
+          <div className="px-6 pb-10 pt-6">
             <Link
-              key={link.href}
-              href={link.href}
+              href={WA_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setIsOpen(false)}
-              className="flex items-center border-b border-[var(--color-line)] py-5 text-xl font-medium text-[var(--color-fg)] transition hover:translate-x-1 hover:text-[var(--color-brand)]"
+              className="flex w-full items-center justify-center gap-2 bg-[var(--color-brand)] py-4 text-base font-semibold text-white transition hover:bg-[var(--color-brand-hot)] active:scale-[0.98] active:bg-[var(--color-brand-hot)]"
             >
-              {link.label}
+              Book a free 15-min call →
             </Link>
-          ))}
-        </nav>
-
-        {/* CTA pinned to the bottom */}
-        <div className="px-6 pb-10 pt-6">
-          <Link
-            href={WA_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => setIsOpen(false)}
-            className="flex w-full items-center justify-center gap-2 bg-[var(--color-brand)] py-4 text-base font-semibold text-white transition hover:bg-[var(--color-brand-hot)]"
-          >
-            Book a free 15-min call →
-          </Link>
-          <p className="mt-3 text-center text-xs text-[var(--color-fg-faint)]">
-            No commitment. Just a real conversation.
-          </p>
+            <p className="mt-3 text-center text-xs text-[var(--color-fg-faint)]">
+              No commitment. Just a real conversation.
+            </p>
+          </div>
         </div>
-      </div>
+      </header>
     </>
   );
 }

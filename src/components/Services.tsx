@@ -188,6 +188,16 @@ const COMPARISON: ComparisonRow[] = [
   { label: "Delivery",                   ai: "7 days",  storefront: "10 days",   content: "Monthly" },
 ];
 
+// Column map for the mobile stacked view (one card per product).
+const COMPARISON_COLS: Array<{
+  title: string;
+  key: "ai" | "storefront" | "content";
+}> = [
+  { title: "AutoReply AI", key: "ai" },
+  { title: "Storefront Kit", key: "storefront" },
+  { title: "Content Pack", key: "content" },
+];
+
 const FAQS: Array<{ q: string; a: string }> = [
   {
     q: "Is this affordable for a small business in Malawi or Zambia?",
@@ -298,7 +308,8 @@ export default function Services() {
         {/* Comparison table */}
         <div className="mt-20">
           <h3 className="headline mb-8 text-2xl">What&apos;s included</h3>
-          <div className="overflow-x-auto">
+          {/* Desktop: full comparison table */}
+          <div className="hidden overflow-x-auto md:block">
             <table className="w-full border-collapse text-sm">
               <thead>
                 <tr className="border-b border-[var(--color-line)]">
@@ -340,6 +351,37 @@ export default function Services() {
                 ))}
               </tbody>
             </table>
+          </div>
+
+          {/* Mobile: stacked per-product cards — no horizontal scroll, so the
+              whole "what's included" story is visible on a phone. Each card lists
+              only what that product actually includes (false rows are skipped). */}
+          <div className="flex flex-col gap-4 md:hidden">
+            {COMPARISON_COLS.map(({ title, key }) => (
+              <div
+                key={key}
+                className="border border-[var(--color-line)] bg-[var(--color-bg-card)] p-5"
+              >
+                <h4 className="headline mb-4 text-lg">{title}</h4>
+                <ul className="flex flex-col gap-2.5 text-sm">
+                  {COMPARISON.filter((r) => r[key] !== false).map((r) => (
+                    <li
+                      key={r.label}
+                      className="flex items-center justify-between gap-3 border-b border-[var(--color-line)] pb-2.5 last:border-0 last:pb-0"
+                    >
+                      <span className="text-[var(--color-fg-muted)]">{r.label}</span>
+                      <span className="shrink-0 text-right font-medium text-[var(--color-fg)]">
+                        {r[key] === true ? (
+                          <span className="text-[var(--color-brand)]">✓</span>
+                        ) : (
+                          r[key]
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -518,7 +560,7 @@ function ProductCard({
       </ul>
 
       {/* Guarantee */}
-      <p className="mb-5 border-l-2 border-[var(--color-line-bright)] pl-3 text-[11px] text-[var(--color-fg-faint)]">
+      <p className="mb-5 border-l-2 border-[var(--color-line-bright)] pl-3 text-xs leading-relaxed text-[var(--color-fg-faint)]">
         {product.guarantee}
       </p>
 
@@ -530,10 +572,10 @@ function ProductCard({
       {/* CTA */}
       <Link
         href={checkoutHref}
-        className={`inline-flex w-full items-center justify-center gap-2 whitespace-nowrap px-5 py-3.5 text-center text-sm font-medium transition ${
+        className={`inline-flex w-full items-center justify-center gap-2 whitespace-nowrap px-5 py-3.5 text-center text-sm font-medium transition active:scale-[0.98] ${
           product.highlighted
-            ? "bg-[var(--color-brand)] text-white hover:bg-[var(--color-brand-hot)]"
-            : "border border-[var(--color-line-bright)] text-[var(--color-fg)] hover:border-[var(--color-brand)] hover:text-[var(--color-brand)]"
+            ? "bg-[var(--color-brand)] text-white hover:bg-[var(--color-brand-hot)] active:bg-[var(--color-brand-hot)]"
+            : "border border-[var(--color-line-bright)] text-[var(--color-fg)] hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] active:border-[var(--color-brand)] active:text-[var(--color-brand)]"
         }`}
       >
         <span>{product.cta}</span>
@@ -548,7 +590,7 @@ function ProductCard({
 
       {/* Add-ons */}
       <div className="mt-4 border-t border-[var(--color-line)] pt-4">
-        <p className="mb-2 text-[10px] uppercase tracking-[0.15em] text-[var(--color-fg-faint)]">
+        <p className="mb-2 text-[11px] uppercase tracking-[0.15em] text-[var(--color-fg-faint)]">
           Optional add-ons
         </p>
         <ul className="flex flex-col gap-1.5">
