@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
 import WhatsAppButton from "@/src/components/WhatsAppButton";
-import MobileStickyCTA from "@/src/components/MobileStickyCTA";
 import AnimationObserver from "@/src/components/AnimationObserver";
 import CursorGlow from "@/src/components/CursorGlow";
 
@@ -126,7 +125,6 @@ export default function RootLayout({
         />
         {children}
         <WhatsAppButton />
-        <MobileStickyCTA />
         <AnimationObserver />
         <CursorGlow />
       </body>
