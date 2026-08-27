@@ -183,10 +183,10 @@ export default function CheckoutClient() {
 
           {/* Amount + currency toggle */}
           <div className="border border-[var(--color-line-bright)] p-6">
-            <div className="mb-5 flex items-start justify-between gap-4">
-              <div>
+            <div className="mb-5 flex flex-wrap items-start justify-between gap-x-4 gap-y-3">
+              <div className="min-w-0">
                 <p className="eyebrow mb-1 text-[var(--color-brand)]">— {product.depositLabel}</p>
-                <p className="numeral text-4xl text-[var(--color-fg)]">
+                <p className="numeral text-[clamp(1.75rem,8vw,2.25rem)] text-[var(--color-fg)]">
                   {sym}{amount}
                 </p>
               </div>
@@ -222,7 +222,7 @@ export default function CheckoutClient() {
             <p className="eyebrow mb-5">— How to pay</p>
             <ol className="flex flex-col gap-5">
               {/* Step 1 */}
-              <li className="flex gap-4">
+              <li className="flex gap-3 sm:gap-4">
                 <span className="numeral flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--color-brand)] text-sm text-[var(--color-brand)]">
                   1
                 </span>
@@ -248,17 +248,17 @@ export default function CheckoutClient() {
                     </p>
                     <dl className="flex flex-col gap-1 text-xs">
                       <div className="flex justify-between gap-3">
-                        <dt className="text-[var(--color-fg-faint)]">Account name</dt>
-                        <dd className="text-right text-[var(--color-fg)]">{bank.account}</dd>
+                        <dt className="shrink-0 text-[var(--color-fg-faint)]">Account name</dt>
+                        <dd className="min-w-0 text-right text-[var(--color-fg)]">{bank.account}</dd>
                       </div>
                       <div className="flex justify-between gap-3">
-                        <dt className="text-[var(--color-fg-faint)]">Account no.</dt>
-                        <dd className="text-right font-mono text-[var(--color-fg)]">{bank.number}</dd>
+                        <dt className="shrink-0 text-[var(--color-fg-faint)]">Account no.</dt>
+                        <dd className="min-w-0 text-right font-mono text-[var(--color-fg)]">{bank.number}</dd>
                       </div>
                       {bank.branch && (
                         <div className="flex justify-between gap-3">
-                          <dt className="text-[var(--color-fg-faint)]">Branch</dt>
-                          <dd className="text-right text-[var(--color-fg)]">{bank.branch}</dd>
+                          <dt className="shrink-0 text-[var(--color-fg-faint)]">Branch</dt>
+                          <dd className="min-w-0 text-right text-[var(--color-fg)]">{bank.branch}</dd>
                         </div>
                       )}
                     </dl>
@@ -271,7 +271,7 @@ export default function CheckoutClient() {
               </li>
 
               {/* Step 2 */}
-              <li className="flex gap-4">
+              <li className="flex gap-3 sm:gap-4">
                 <span className="numeral flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--color-brand)] text-sm text-[var(--color-brand)]">
                   2
                 </span>
@@ -286,7 +286,7 @@ export default function CheckoutClient() {
               </li>
 
               {/* Step 3 */}
-              <li className="flex gap-4">
+              <li className="flex gap-3 sm:gap-4">
                 <span className="numeral flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--color-brand)] text-sm text-[var(--color-brand)]">
                   3
                 </span>
