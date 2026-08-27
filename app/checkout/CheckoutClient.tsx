@@ -81,6 +81,27 @@ const MOMO = {
   MWK: { provider: "TNM Mpamba",   number: "0893 306 186", country: "Malawi" },
 };
 
+/* ─── Bank transfer details ──────────────────────────────────── */
+type BankDetails = {
+  name: string;
+  account: string;
+  number: string;
+  branch?: string;
+};
+const BANK: Record<PayCurrency, BankDetails> = {
+  ZMW: {
+    name: "FNB",
+    account: "TAMSANGA KAYUNI",
+    number: "63212718449",
+    branch: "Acacia Premier Branch",
+  },
+  MWK: {
+    name: "National Bank",
+    account: "TAMSANGA KAYUNI",
+    number: "1010466567",
+  },
+};
+
 /* ─── Component ──────────────────────────────────────────────── */
 export default function CheckoutClient() {
   const params = useSearchParams();
@@ -110,11 +131,12 @@ export default function CheckoutClient() {
   }
 
   const momo = MOMO[currency];
+  const bank = BANK[currency];
   const sym = currency === "ZMW" ? "ZMW " : "MWK ";
   const amount = product.deposit[currency];
 
   const waText = encodeURIComponent(
-    `Hi Wiyule — I just sent ${sym}${amount} (${product.depositLabel}) for ${product.name} via ${momo.provider}. I'm attaching my payment screenshot now.`
+    `Hi Wiyule — I just sent ${sym}${amount} (${product.depositLabel}) for ${product.name}. I'm attaching my payment screenshot now.`
   );
   const waUrl = `https://wa.me/260774668193?text=${waText}`;
 
@@ -195,7 +217,7 @@ export default function CheckoutClient() {
             </p>
           </div>
 
-          {/* Steps */}
+          {/* Manual payment */}
           <div className="border border-[var(--color-line)] p-6">
             <p className="eyebrow mb-5">— How to pay</p>
             <ol className="flex flex-col gap-5">
@@ -204,14 +226,45 @@ export default function CheckoutClient() {
                 <span className="numeral flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--color-brand)] text-sm text-[var(--color-brand)]">
                   1
                 </span>
-                <div>
+                <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium text-[var(--color-fg)]">
-                    Send {sym}{amount} via {momo.provider}
+                    Send {sym}{amount} — pick one:
                   </p>
-                  <p className="mt-1 font-mono text-base text-[var(--color-fg)]">
-                    {momo.number}
-                  </p>
-                  <p className="mt-0.5 text-xs text-[var(--color-fg-faint)]">
+
+                  {/* Mobile money */}
+                  <div className="mt-3 border border-[var(--color-line)] p-3">
+                    <p className="eyebrow mb-1 text-[var(--color-fg-muted)]">
+                      — {momo.provider}
+                    </p>
+                    <p className="font-mono text-base text-[var(--color-fg)]">
+                      {momo.number}
+                    </p>
+                  </div>
+
+                  {/* Bank transfer */}
+                  <div className="mt-2 border border-[var(--color-line)] p-3">
+                    <p className="eyebrow mb-2 text-[var(--color-fg-muted)]">
+                      — {bank.name} (bank transfer)
+                    </p>
+                    <dl className="flex flex-col gap-1 text-xs">
+                      <div className="flex justify-between gap-3">
+                        <dt className="text-[var(--color-fg-faint)]">Account name</dt>
+                        <dd className="text-right text-[var(--color-fg)]">{bank.account}</dd>
+                      </div>
+                      <div className="flex justify-between gap-3">
+                        <dt className="text-[var(--color-fg-faint)]">Account no.</dt>
+                        <dd className="text-right font-mono text-[var(--color-fg)]">{bank.number}</dd>
+                      </div>
+                      {bank.branch && (
+                        <div className="flex justify-between gap-3">
+                          <dt className="text-[var(--color-fg-faint)]">Branch</dt>
+                          <dd className="text-right text-[var(--color-fg)]">{bank.branch}</dd>
+                        </div>
+                      )}
+                    </dl>
+                  </div>
+
+                  <p className="mt-2 text-xs text-[var(--color-fg-faint)]">
                     Use your name as the payment reference
                   </p>
                 </div>
