@@ -43,7 +43,8 @@ We build websites, AI WhatsApp assistants, and operations systems for SMEs in Ma
 - **Framework:** Next.js 16 (App Router, Turbopack)
 - **Language:** TypeScript (strict)
 - **Styling:** Tailwind CSS v4 (CSS variables, not config-based)
-- **Hosting:** Vercel (auto-deploy on push to `main`)
+- **Animations:** Framer Motion (`framer-motion ^12.40.0`) — the only runtime dep beyond Next/React
+- **Hosting:** Netlify (auto-deploy on push to `main`)
 - **Repo:** GitHub (private until further notice)
 - **Package manager:** npm
 - **Node:** v20+
@@ -62,6 +63,13 @@ wiyutech-site/
 │   ├── checkout/
 │   │   ├── page.tsx              (/checkout — server wrapper + Suspense boundary)
 │   │   └── CheckoutClient.tsx    (client component — reads URL params, renders payment UI)
+│   ├── portal/                   (client portal — link-based, no auth, no DB)
+│   │   ├── clients.ts            (typed client data — THE only file you edit per client)
+│   │   ├── page.tsx              (/portal — "ask for your link" landing, noindex)
+│   │   └── [code]/page.tsx       (/portal/[code] — private status page, noindex)
+│   ├── template.tsx              (Framer Motion page-transition wrapper)
+│   ├── sitemap.ts                (auto-generates /sitemap.xml — home, about, checkout)
+│   ├── robots.ts                 (auto-generates /robots.txt — allows crawlers + sitemap)
 │   ├── opengraph-image.tsx       (auto-generated OG image)
 │   └── icon.tsx                  (auto-generated favicon)
 ├── src/
@@ -71,6 +79,9 @@ wiyutech-site/
 │       ├── Services.tsx          (3-product menu with currency switcher + comparison table)
 │       ├── HowWeWork.tsx         (4-step process — Discovery → Build → Launch → Support)
 │       ├── FAQ.tsx               (accordion FAQ)
+│       ├── AnimatedNumber.tsx    (Framer Motion count-up numerals)
+│       ├── AnimationObserver.tsx (scroll-reveal observer — mounted in layout)
+│       ├── CursorGlow.tsx        (ambient cursor-follow glow — mounted in layout)
 │       └── WhatsAppButton.tsx    (floating WA button — sitewide)
 ├── next.config.ts
 ├── tsconfig.json
@@ -170,14 +181,18 @@ The Wiyu workflow is the basis for the **Wiyu Mini** product sold to clients. Ea
 - **Wave 3** ✅ Complete: Page declutter + Services overhaul (11 products, CTAs, "Best for:" tags, ROI lines, bundle callout)
 - **Wave 4** ✅ Complete: Mobile nav · grid fix · padding · OG image · favicon · lazy load · JSON-LD schema
 - **Wave 5** ✅ Complete: Multi-currency Services (MWK/ZMW/USD, 3 products, comparison table) · /about page (founder origin) · AuditCTA moved above FAQ · Mobile money checkout (/checkout) · Domain updated to wiyuletech.com
-- **Wave 6 next:** Case studies page · Testimonials · Blog/insights · Client portal
+- **Wave 6** 🔄 In progress:
+  - ✅ Framer Motion animations (count-up numerals, scroll reveal, cursor glow, page transitions)
+  - ✅ SEO: sitemap.xml + robots.txt (native Next MetadataRoute files) · Google Search Console verified on www.wiyuletech.com (meta-tag method)
+  - ✅ Client portal (link-based, no auth/DB — /portal/[code] status pages off app/portal/clients.ts)
+  - ⏳ Still open: Case studies page · Testimonials · Blog/insights
 
 ### What we're improving:
 - Mobile responsiveness across all sections
 - Performance (Lighthouse target: 95+ on all metrics)
 - Conversion optimization (track which CTAs perform)
 - Accessibility (a11y audit pass)
-- SEO (structured data, sitemap, robots.txt)
+- SEO (structured data ✅, sitemap ✅, robots.txt ✅ — all live as of Wave 6)
 
 ### What we're NOT touching unless specifically asked:
 - Hero section copy (tested, working)
@@ -214,7 +229,7 @@ But **Wiyule Technology (this project) is the primary focus.** Wiyule Motors has
 
 ### File naming
 - Components: `PascalCase.tsx` (e.g., `AuditCTA.tsx`, `Services.tsx`)
-- ⚠️ **Case-sensitive on Vercel (Linux).** `services.tsx` will work on Mac but BREAK on production. Always use `Services.tsx`.
+- ⚠️ **Case-sensitive on Netlify (Linux).** `services.tsx` will work on Mac but BREAK on production. Always use `Services.tsx`.
 
 ### Imports
 - The `@/` alias maps to the project root (confirmed in tsconfig.json: `"@/*": ["./*"]`)
@@ -274,7 +289,7 @@ Run through this before suggesting `git push`:
 ## 🚨 Things to NEVER Do
 
 - ❌ Hardcode colors (`#EF2D2D` etc.) — always use CSS variables
-- ❌ Use lowercase component filenames (breaks on Vercel)
+- ❌ Use lowercase component filenames (breaks on Netlify)
 - ❌ Skip the local dev test before pushing to GitHub
 - ❌ Modify the brand colors in `globals.css` without explicit user approval
 - ❌ Change the WhatsApp number (+260 774 668 193) — that's Tamsanga's real number
@@ -338,7 +353,7 @@ Run through this before suggesting `git push`:
 
 ### Test before deploy
 ```bash
-npm run build    # Catches Vercel-style build errors locally
+npm run build    # Catches build errors locally (same as Netlify CI)
 npm run dev      # Visual check at localhost:3000
 ```
 
@@ -348,14 +363,15 @@ If `npm run build` errors, DO NOT push. Fix locally first.
 
 ## 🌐 Deployment
 
-- **Auto-deploys** from GitHub `main` branch to Vercel
+- **Auto-deploys** from GitHub `main` branch to Netlify
 - **Wait time:** ~60-90 seconds after `git push`
-- **Check deploy status:** https://vercel.com/dashboard → wiyutech-site → Deployments
+- **Check deploy status:** https://app.netlify.com → wiyutech-site → Deploys
+- **Config file:** `netlify.toml` in project root
 - **Cache busting on live site:** Hard refresh (Cmd+Shift+R on Mac) or open in incognito
 
 If a deploy fails:
-1. Open the failed deployment in Vercel dashboard
-2. Click "View build logs"
+1. Open the failed deploy in Netlify dashboard
+2. Click "View build log"
 3. Read the error — almost always: missing import, case mismatch, or TS error
 4. Fix locally → `npm run build` → if clean → push again
 
@@ -380,15 +396,18 @@ If a deploy fails:
 - ✅ Wave 2 shipped: HowWeWork component
 - ✅ Wave 3 shipped: Page declutter + Services overhaul
 - ✅ Wave 4 shipped: Mobile nav · OG image · favicon · JSON-LD schema
-- ✅ Wave 5 shipped (today):
-  - Services rebuilt: 3 products, MWK/ZMW/USD currency switcher, comparison table, add-ons, guarantees
-  - /about page: founder origin story (moved off homepage)
-  - AuditCTA repositioned: now sits above FAQ for better conversion flow
-  - /checkout page: mobile money flow (Airtel ZMW + Mpamba MWK), deposit amounts, WhatsApp confirm CTA
-  - Domain live: wiyuletech.com (fixed typo wiyutech.com → wiyuletech.com in metadata)
-- ⏳ Wave 6 next: Case studies · Testimonials · Blog · Client portal
+- ✅ Wave 5 shipped: Multi-currency Services · /about page · AuditCTA above FAQ · mobile money /checkout · domain wiyuletech.com
+- 🔄 Wave 6 in progress (latest, 10 June 2026):
+  - Framer Motion animations (count-up numerals, scroll reveal, cursor glow, page transitions)
+  - SEO live: `/sitemap.xml` + `/robots.txt` · Google Search Console verified (www.wiyuletech.com, meta-tag method) · sitemap submitted
+  - Client portal live: `/portal/[code]` private status pages (no auth/DB) off `app/portal/clients.ts` — CLIENTS array currently EMPTY (add real clients here)
+  - Still open: Case studies · Testimonials · Blog
 - 🤖 Wiyu AI live on Twilio sandbox (Phase 2 complete)
 - 🎯 Active product menu: 3 core products · mobile money checkout live · no payment gateway yet (pending business registration)
+
+### ⚠️ Known issues / tech debt (clean up later)
+- **Canonical host mismatch:** Netlify serves canonical on `www.wiyuletech.com` (apex 301-redirects to www), but `metadataBase`, sitemap, and robots all point to the bare apex `https://wiyuletech.com`. Clean 301 so Google consolidates fine, but for perfectly consistent signals, align all three to the www host.
+- **`&apos;` inside `encodeURIComponent`:** `app/about/page.tsx:16` builds a WhatsApp prefill with `&apos;` — that ships the literal text "&apos;" to WhatsApp. Use a real apostrophe in JS string literals (only escape inside JSX *display* text). New portal files already use plain apostrophes.
 
 ---
 
@@ -402,4 +421,4 @@ If a deploy fails:
 
 ---
 
-_Last updated: 5 June 2026. Maintained by Tamsanga + Claude (the assistant in claude.ai)._
+_Last updated: 10 June 2026. Maintained by Tamsanga + Claude (the assistant in claude.ai)._
