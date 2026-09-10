@@ -11,26 +11,42 @@ type CheckoutProduct = {
   name: string;
   subtitle: string;
   depositLabel: string;
-  deposit: Record<PayCurrency, string>;
-  balanceNote: Record<PayCurrency, string>;
+  // Amounts are NUMBERS, not formatted strings — so we can do maths
+  // (discounts) on them. We format with commas only at display time.
+  deposit: Record<PayCurrency, number>;
+  // Fixed balance due later (null = subscription, no one-off balance).
+  balance: Record<PayCurrency, number> | null;
+  // For products WITH a balance: the "...is due WHEN" phrase.
+  // For subscriptions (balance = null): the full standalone note.
+  balanceNote: string;
   features: string[];
   delivery: string;
   guarantee: string;
 };
 
+/* ─── Promo code (WIYULE30 — 30% off, expires end of Oct 2026) ─── */
+const PROMO_CODE = "WIYULE30";
+const PROMO_RATE = 0.3; // 30% off
+// Valid through 31 Oct 2026; dies at midnight 1 Nov (CAT, +02:00).
+const PROMO_EXPIRES = new Date("2026-11-01T00:00:00+02:00");
+const PROMO_IS_LIVE = new Date() < PROMO_EXPIRES;
+
+/** Format a number as "5,600". */
+function fmt(n: number): string {
+  return Math.round(n).toLocaleString("en-US");
+}
+
 /* ─── Product data ───────────────────────────────────────────── */
-// Deposit amounts match 50% of setup fee (AutoReply AI, Storefront Kit)
+// Deposit = 50% of setup fee (AutoReply AI, Storefront Kit)
 // or full first month (Content Pack).
 const PRODUCTS: Record<string, CheckoutProduct> = {
   "autoreply-ai": {
     name: "AutoReply AI",
     subtitle: "AI WhatsApp Assistant",
     depositLabel: "50% deposit to start",
-    deposit: { ZMW: "5,600", MWK: "349,500" },
-    balanceNote: {
-      ZMW: "Balance of ZMW 5,599 is due when your AI goes live (7 days).",
-      MWK: "Balance of MWK 349,500 is due when your AI goes live (7 days).",
-    },
+    deposit: { ZMW: 5600, MWK: 349500 },
+    balance: { ZMW: 5599, MWK: 349500 },
+    balanceNote: "is due when your AI goes live (7 days).",
     features: [
       "AI trained on your exact business",
       "Replies in under 3 seconds — even at 2am",
@@ -43,11 +59,9 @@ const PRODUCTS: Record<string, CheckoutProduct> = {
     name: "Digital Storefront Kit",
     subtitle: "Website + WhatsApp + Google",
     depositLabel: "50% deposit to start",
-    deposit: { ZMW: "9,750", MWK: "612,500" },
-    balanceNote: {
-      ZMW: "Balance of ZMW 9,749 is due on your launch day.",
-      MWK: "Balance of MWK 612,499 is due on your launch day.",
-    },
+    deposit: { ZMW: 9750, MWK: 612500 },
+    balance: { ZMW: 9749, MWK: 612499 },
+    balanceNote: "is due on your launch day.",
     features: [
       "Mobile-fast website — up to 8 pages",
       "WhatsApp catalog + Google Business Profile",
@@ -60,11 +74,9 @@ const PRODUCTS: Record<string, CheckoutProduct> = {
     name: "Monthly Content Pack",
     subtitle: "Done-for-you content",
     depositLabel: "First month upfront",
-    deposit: { ZMW: "2,799", MWK: "174,999" },
-    balanceNote: {
-      ZMW: "Renews monthly. Cancel anytime with 7 days' notice.",
-      MWK: "Renews monthly. Cancel anytime with 7 days' notice.",
-    },
+    deposit: { ZMW: 2799, MWK: 174999 },
+    balance: null,
+    balanceNote: "Renews monthly. Cancel anytime with 7 days' notice.",
     features: [
       "12 branded WhatsApp Status posts/month",
       "4 Facebook posts + 1 promo graphic",
@@ -112,6 +124,11 @@ export default function CheckoutClient() {
   const initial: PayCurrency = rawCurrency === "MWK" ? "MWK" : "ZMW";
   const [currency, setCurrency] = useState<PayCurrency>(initial);
 
+  // Discount-code state
+  const [codeInput, setCodeInput] = useState("");
+  const [promoApplied, setPromoApplied] = useState(false);
+  const [codeError, setCodeError] = useState("");
+
   const product = PRODUCTS[slug];
 
   /* ── Not found ── */
@@ -130,13 +147,50 @@ export default function CheckoutClient() {
     );
   }
 
+  /* ── Discount code handlers ── */
+  function applyCode() {
+    const entered = codeInput.trim().toUpperCase();
+    if (entered !== PROMO_CODE) {
+      setPromoApplied(false);
+      setCodeError("That code isn't valid. Double-check and try again.");
+      return;
+    }
+    if (!PROMO_IS_LIVE) {
+      setPromoApplied(false);
+      setCodeError("This code expired on 31 October. Message us for current offers.");
+      return;
+    }
+    setPromoApplied(true);
+    setCodeError("");
+  }
+
+  function removeCode() {
+    setPromoApplied(false);
+    setCodeInput("");
+    setCodeError("");
+  }
+
   const momo = MOMO[currency];
   const bank = BANK[currency];
   const sym = currency === "ZMW" ? "ZMW " : "MWK ";
-  const amount = product.deposit[currency];
+
+  // Apply the 30% discount to every amount when the code is active.
+  const mult = promoApplied ? 1 - PROMO_RATE : 1;
+
+  const rawDeposit = product.deposit[currency];
+  const depositStr = fmt(rawDeposit * mult);
+  const rawDepositStr = fmt(rawDeposit);
+
+  // Build the balance line. Products with a fixed balance get the
+  // discounted number injected; subscriptions show their note as-is.
+  const balanceText = product.balance
+    ? `Balance of ${sym}${fmt(product.balance[currency] * mult)} ${product.balanceNote}`
+    : product.balanceNote;
 
   const waText = encodeURIComponent(
-    `Hi Wiyule — I just sent ${sym}${amount} (${product.depositLabel}) for ${product.name}. I'm attaching my payment screenshot now.`
+    `Hi Wiyule — I just sent ${sym}${depositStr} (${product.depositLabel}${
+      promoApplied ? ", code WIYULE30 applied − 30% off" : ""
+    }) for ${product.name}. I'm attaching my payment screenshot now.`
   );
   const waUrl = `https://wa.me/260774668193?text=${waText}`;
 
@@ -187,7 +241,12 @@ export default function CheckoutClient() {
               <div className="min-w-0">
                 <p className="eyebrow mb-1 text-[var(--color-brand)]">— {product.depositLabel}</p>
                 <p className="numeral text-[clamp(1.75rem,8vw,2.25rem)] text-[var(--color-fg)]">
-                  {sym}{amount}
+                  {promoApplied && (
+                    <span className="mr-2 align-middle text-[0.55em] text-[var(--color-fg-faint)] line-through">
+                      {sym}{rawDepositStr}
+                    </span>
+                  )}
+                  {sym}{depositStr}
                 </p>
               </div>
 
@@ -213,8 +272,54 @@ export default function CheckoutClient() {
             </div>
 
             <p className="text-xs text-[var(--color-fg-faint)]">
-              {product.balanceNote[currency]}
+              {balanceText}
             </p>
+
+            {/* Discount code — only while the promo is live */}
+            {PROMO_IS_LIVE && (
+              <div className="mt-5 border-t border-[var(--color-line)] pt-5">
+                {promoApplied ? (
+                  <div className="flex items-center justify-between gap-3">
+                    <p className="text-xs font-medium text-[var(--color-brand)]">
+                      ✓ WIYULE30 applied — 30% off
+                    </p>
+                    <button
+                      onClick={removeCode}
+                      className="text-xs text-[var(--color-fg-faint)] underline underline-offset-2 transition hover:text-[var(--color-fg)]"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ) : (
+                  <div>
+                    <label className="eyebrow mb-2 block text-[var(--color-fg-muted)]">
+                      — Have a discount code?
+                    </label>
+                    <div className="flex gap-2">
+                      <input
+                        value={codeInput}
+                        onChange={(e) => setCodeInput(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") applyCode();
+                        }}
+                        placeholder="WIYULE30"
+                        aria-label="Discount code"
+                        className="min-w-0 flex-1 border border-[var(--color-line-bright)] bg-transparent px-3 py-2 text-sm uppercase text-[var(--color-fg)] placeholder:text-[var(--color-fg-faint)] focus:border-[var(--color-brand)] focus:outline-none"
+                      />
+                      <button
+                        onClick={applyCode}
+                        className="shrink-0 border border-[var(--color-line-bright)] px-4 py-2 text-sm font-medium text-[var(--color-fg)] transition hover:border-[var(--color-brand)] hover:text-[var(--color-brand)]"
+                      >
+                        Apply
+                      </button>
+                    </div>
+                    {codeError && (
+                      <p className="mt-2 text-xs text-[var(--color-brand)]">{codeError}</p>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Manual payment */}
@@ -228,7 +333,7 @@ export default function CheckoutClient() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium text-[var(--color-fg)]">
-                    Send {sym}{amount} — pick one:
+                    Send {sym}{depositStr} — pick one:
                   </p>
 
                   {/* Mobile money */}
