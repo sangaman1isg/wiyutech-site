@@ -4,6 +4,7 @@ import "./globals.css";
 import WhatsAppButton from "@/src/components/WhatsAppButton";
 import AnimationObserver from "@/src/components/AnimationObserver";
 import CursorGlow from "@/src/components/CursorGlow";
+import PromoBanner from "@/src/components/PromoBanner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -123,6 +124,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
+        <PromoBanner />
         {children}
         <WhatsAppButton />
         <AnimationObserver />
