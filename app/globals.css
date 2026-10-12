@@ -355,11 +355,21 @@ html {
 }
 
 /* ─── Respect reduced motion preferences ─── */
+/* NOTE: iOS forces this ON in Low Power Mode. So instead of killing ALL
+   motion (which made the whole site look dead on a battery-saving phone),
+   we keep the signature one-shot motion — transitions, scroll reveals, the
+   hamburger morph, button press, heading reveals — and switch OFF only the
+   forever-looping / ambient effects, which are the real battery + nausea
+   offenders. */
 @media (prefers-reduced-motion: reduce) {
-  html { scroll-behavior: auto; }
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  html {
+    scroll-behavior: auto;
+  }
+  .marquee-track,
+  .glow-drift,
+  .pulse-dot,
+  [data-featured],
+  .beam::before {
+    animation: none !important;
   }
 }

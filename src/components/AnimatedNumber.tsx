@@ -21,11 +21,6 @@ export default function AnimatedNumber({
 
   useEffect(() => {
     if (!isInView) return;
-    // Honour reduced-motion: jump straight to the final value, no counting.
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setDisplay(to);
-      return;
-    }
     setDisplay(0); // reset so it visibly counts up again on re-entry
     const controls = animate(0, to, {
       duration,

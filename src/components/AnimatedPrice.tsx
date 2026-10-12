@@ -20,11 +20,6 @@ export default function AnimatedPrice({
   const [display, setDisplay] = useState(0);
 
   useEffect(() => {
-    // Honour reduced-motion: show the final price without the count.
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setDisplay(target);
-      return;
-    }
     const controls = animate(0, target, {
       duration: 0.5,
       ease: [0.16, 1, 0.3, 1], // expo-out: fast, then settles
