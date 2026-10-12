@@ -368,8 +368,7 @@ html {
   .marquee-track,
   .glow-drift,
   .pulse-dot,
-  [data-featured],
-  .beam::before {
+  [data-featured] {
     animation: none !important;
   }
 }
