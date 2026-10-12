@@ -69,7 +69,7 @@ const PRODUCTS: Record<string, CheckoutProduct> = {
       "1 month AutoReply AI included FREE",
     ],
     delivery: "10 days",
-    guarantee: "Not live in 10 days? We refund 25%, no questions.",
+    guarantee: "Guaranteed live in 10 days, or we refund 25%.",
   },
   "content-pack": {
     name: "Content & Design Pack",
@@ -84,7 +84,7 @@ const PRODUCTS: Record<string, CheckoutProduct> = {
       "Content calendar delivered every Monday",
     ],
     delivery: "Ongoing",
-    guarantee: "Not happy with month 1? Full refund.",
+    guarantee: "Full money-back guarantee on your first month.",
   },
 };
 
@@ -205,9 +205,9 @@ export default function CheckoutClient() {
       {/* Back link */}
       <Link
         href="/#offers"
-        className="mb-10 inline-flex items-center gap-2 text-xs text-[var(--color-fg-faint)] transition hover:text-[var(--color-fg)]"
+        className="press mb-10 inline-flex items-center gap-2 rounded-full border border-[var(--color-line-bright)] px-4 py-2 text-sm font-medium text-[var(--color-fg-muted)] transition hover:border-[var(--color-brand)] hover:text-[var(--color-fg)]"
       >
-        ← Back to services
+        <span aria-hidden>←</span> Back to services
       </Link>
 
       {/* Header — always first, so there's context before the payment card */}
@@ -233,7 +233,8 @@ export default function CheckoutClient() {
             <span className="font-medium text-[var(--color-fg)]">{product.delivery}</span>
           </div>
 
-          <p className="mt-6 border-l-2 border-[var(--color-line-bright)] pl-4 text-xs text-[var(--color-fg-faint)]">
+          <p className="mt-6 flex gap-2 border-l-2 border-[var(--color-brand)] pl-4 text-xs text-[var(--color-fg-muted)]">
+            <span className="text-[var(--color-brand)]">✓</span>
             {product.guarantee}
           </p>
         </div>
