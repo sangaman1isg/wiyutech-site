@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import AnimatedPrice from "@/src/components/AnimatedPrice";
 
 /* ─── Types ─────────────────────────────────────────────────── */
 type PayCurrency = "ZMW" | "MWK";
@@ -129,6 +130,9 @@ export default function CheckoutClient() {
   const [promoApplied, setPromoApplied] = useState(false);
   const [codeError, setCodeError] = useState("");
 
+  // Which manual payment method the visitor is viewing
+  const [payMethod, setPayMethod] = useState<"momo" | "bank">("momo");
+
   const product = PRODUCTS[slug];
 
   /* ── Not found ── */
@@ -180,6 +184,7 @@ export default function CheckoutClient() {
   const rawDeposit = product.deposit[currency];
   const depositStr = fmt(rawDeposit * mult);
   const rawDepositStr = fmt(rawDeposit);
+  const depositPlain = String(Math.round(rawDeposit * mult)); // plain digits for copy
 
   // Build the balance line. Products with a fixed balance get the
   // discounted number injected; subscriptions show their note as-is.
@@ -205,15 +210,16 @@ export default function CheckoutClient() {
         ← Back to services
       </Link>
 
-      <div className="grid gap-12 md:grid-cols-[1fr_400px]">
+      {/* Header — always first, so there's context before the payment card */}
+      <p className="eyebrow mb-3">— Checkout</p>
+      <h1 className="headline text-[clamp(2rem,4vw,3.5rem)]">{product.name}</h1>
+      <p className="mt-1 text-sm text-[var(--color-fg-faint)]">{product.subtitle}</p>
 
-        {/* ── Left: product summary ── */}
-        <div>
-          <p className="eyebrow mb-3">— Checkout</p>
-          <h1 className="headline text-[clamp(2rem,4vw,3.5rem)]">{product.name}</h1>
-          <p className="mt-1 text-sm text-[var(--color-fg-faint)]">{product.subtitle}</p>
+      <div className="mt-10 grid gap-10 md:grid-cols-[1fr_400px] md:gap-12">
 
-          <ul className="mt-8 flex flex-col gap-3">
+        {/* ── Summary (drops below the payment card on mobile) ── */}
+        <div className="order-2 md:order-1">
+          <ul className="flex flex-col gap-3">
             {product.features.map((f) => (
               <li key={f} className="flex gap-3 text-sm text-[var(--color-fg-muted)]">
                 <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-brand)]" />
@@ -232,22 +238,24 @@ export default function CheckoutClient() {
           </p>
         </div>
 
-        {/* ── Right: payment card ── */}
-        <div className="flex flex-col gap-6">
+        {/* ── Payment (first on mobile) ── */}
+        <div className="order-1 md:order-2 flex flex-col gap-6">
 
           {/* Amount + currency toggle */}
           <div className="border border-[var(--color-line-bright)] p-6">
             <div className="mb-5 flex flex-wrap items-start justify-between gap-x-4 gap-y-3">
               <div className="min-w-0">
                 <p className="eyebrow mb-1 text-[var(--color-brand)]">— {product.depositLabel}</p>
-                <p className="numeral text-[clamp(1.75rem,8vw,2.25rem)] text-[var(--color-fg)]">
-                  {promoApplied && (
-                    <span className="mr-2 align-middle text-[0.55em] text-[var(--color-fg-faint)] line-through">
-                      {sym}{rawDepositStr}
-                    </span>
-                  )}
-                  {sym}{depositStr}
-                </p>
+                {promoApplied && (
+                  <p className="text-sm text-[var(--color-fg-faint)] line-through">
+                    {sym}{rawDepositStr}
+                  </p>
+                )}
+                <AnimatedPrice
+                  symbol={sym}
+                  value={depositStr}
+                  className="numeral block text-[clamp(1.75rem,8vw,2.25rem)] text-[var(--color-fg)]"
+                />
               </div>
 
               {/* ZMW / MWK toggle */}
@@ -332,42 +340,81 @@ export default function CheckoutClient() {
                   1
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-[var(--color-fg)]">
-                    Send {sym}{depositStr}, pick one:
-                  </p>
-
-                  {/* Mobile money */}
-                  <div className="mt-3 border border-[var(--color-line)] p-3">
-                    <p className="eyebrow mb-1 text-[var(--color-fg-muted)]">
-                      — {momo.provider}
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <p className="text-sm font-medium text-[var(--color-fg)]">
+                      Send {sym}{depositStr}
                     </p>
-                    <p className="font-mono text-base text-[var(--color-fg)]">
-                      {momo.number}
-                    </p>
+                    <CopyButton value={depositPlain} srLabel="amount" />
                   </div>
 
-                  {/* Bank transfer */}
-                  <div className="mt-2 border border-[var(--color-line)] p-3">
-                    <p className="eyebrow mb-2 text-[var(--color-fg-muted)]">
-                      — {bank.name} (bank transfer)
-                    </p>
-                    <dl className="flex flex-col gap-1 text-xs">
-                      <div className="flex justify-between gap-3">
-                        <dt className="shrink-0 text-[var(--color-fg-faint)]">Account name</dt>
-                        <dd className="min-w-0 text-right text-[var(--color-fg)]">{bank.account}</dd>
+                  {/* Method tabs */}
+                  <div className="mt-3 inline-flex rounded-lg border border-[var(--color-line-bright)] p-0.5 text-xs">
+                    {(
+                      [
+                        ["momo", momo.provider],
+                        ["bank", `${bank.name} transfer`],
+                      ] as const
+                    ).map(([key, label]) => (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => setPayMethod(key)}
+                        className={`rounded-md px-3 py-1.5 font-medium transition ${
+                          payMethod === key
+                            ? "bg-[var(--color-brand)] text-white"
+                            : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+
+                  {/* Mobile money panel */}
+                  {payMethod === "momo" && (
+                    <div className="mt-3 border border-[var(--color-line)] p-3">
+                      <p className="eyebrow mb-1 text-[var(--color-fg-muted)]">
+                        — {momo.provider}
+                      </p>
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="font-mono text-base text-[var(--color-fg)]">
+                          {momo.number}
+                        </p>
+                        <CopyButton
+                          value={momo.number.replace(/\s/g, "")}
+                          srLabel="mobile money number"
+                        />
                       </div>
-                      <div className="flex justify-between gap-3">
-                        <dt className="shrink-0 text-[var(--color-fg-faint)]">Account no.</dt>
-                        <dd className="min-w-0 text-right font-mono text-[var(--color-fg)]">{bank.number}</dd>
-                      </div>
-                      {bank.branch && (
+                    </div>
+                  )}
+
+                  {/* Bank transfer panel */}
+                  {payMethod === "bank" && (
+                    <div className="mt-3 border border-[var(--color-line)] p-3">
+                      <p className="eyebrow mb-2 text-[var(--color-fg-muted)]">
+                        — {bank.name} (bank transfer)
+                      </p>
+                      <dl className="flex flex-col gap-1.5 text-xs">
                         <div className="flex justify-between gap-3">
-                          <dt className="shrink-0 text-[var(--color-fg-faint)]">Branch</dt>
-                          <dd className="min-w-0 text-right text-[var(--color-fg)]">{bank.branch}</dd>
+                          <dt className="shrink-0 text-[var(--color-fg-faint)]">Account name</dt>
+                          <dd className="min-w-0 text-right text-[var(--color-fg)]">{bank.account}</dd>
                         </div>
-                      )}
-                    </dl>
-                  </div>
+                        <div className="flex items-center justify-between gap-3">
+                          <dt className="shrink-0 text-[var(--color-fg-faint)]">Account no.</dt>
+                          <dd className="flex min-w-0 items-center gap-2">
+                            <span className="font-mono text-[var(--color-fg)]">{bank.number}</span>
+                            <CopyButton value={bank.number} srLabel="account number" />
+                          </dd>
+                        </div>
+                        {bank.branch && (
+                          <div className="flex justify-between gap-3">
+                            <dt className="shrink-0 text-[var(--color-fg-faint)]">Branch</dt>
+                            <dd className="min-w-0 text-right text-[var(--color-fg)]">{bank.branch}</dd>
+                          </div>
+                        )}
+                      </dl>
+                    </div>
+                  )}
 
                   <p className="mt-2 text-xs text-[var(--color-fg-faint)]">
                     Use your name as the payment reference
@@ -407,6 +454,13 @@ export default function CheckoutClient() {
             </ol>
           </div>
 
+          {/* Trust strip */}
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-[var(--color-fg-faint)]">
+            <span>✓ Confirmed within 1 hour</span>
+            <span>✓ Money-back guarantee</span>
+            <span>✓ Founder-run</span>
+          </div>
+
           {/* WhatsApp confirm button */}
           <a
             href={waUrl}
@@ -431,5 +485,28 @@ export default function CheckoutClient() {
         </div>
       </div>
     </div>
+  );
+}
+
+/* ─── CopyButton ─────────────────────────────────────────────── */
+function CopyButton({ value, srLabel }: { value: string; srLabel: string }) {
+  const [done, setDone] = useState(false);
+  return (
+    <button
+      type="button"
+      onClick={() => {
+        navigator.clipboard
+          ?.writeText(value)
+          .then(() => {
+            setDone(true);
+            setTimeout(() => setDone(false), 1500);
+          })
+          .catch(() => {});
+      }}
+      aria-label={`Copy ${srLabel}`}
+      className="press inline-flex shrink-0 items-center gap-1 rounded-md border border-[var(--color-line-bright)] px-2.5 py-1 text-xs font-medium text-[var(--color-fg-muted)] transition hover:border-[var(--color-brand)] hover:text-[var(--color-brand)]"
+    >
+      {done ? "✓ Copied" : "Copy"}
+    </button>
   );
 }
