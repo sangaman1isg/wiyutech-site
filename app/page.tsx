@@ -7,6 +7,7 @@ import HowWeWork from "@/src/components/HowWeWork";
 import AnimatedNumber from "@/src/components/AnimatedNumber";
 import HeroBuildBackground from "@/src/components/HeroBuildBackground";
 import Magnetic from "@/src/components/Magnetic";
+import WiyuDemo from "@/src/components/WiyuDemo";
 
 const WHATSAPP_NUMBER = "260774668193";
 const EMAIL = "wiyuletechnology@gmail.com";
@@ -124,6 +125,32 @@ export default function Home() {
 
       {/* ═══════════════ HOW WE WORK ═══════════════ */}
       <HowWeWork />
+
+      {/* ═══════════════ MEET WIYU — LIVE AI DEMO ═══════════════ */}
+      <section
+        id="wiyu"
+        className="relative overflow-hidden border-b border-[var(--color-line)]"
+      >
+        <div className="absolute inset-0 glow-soft glow-drift" />
+        <div className="relative mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-32">
+          <div className="grid items-center gap-12 md:grid-cols-[1fr_1.1fr] md:gap-16">
+            <div data-animate="slide-left">
+              <p className="eyebrow mb-4">— Meet Wiyu</p>
+              <h2 className="headline text-[clamp(2.5rem,5.5vw,5rem)]">
+                Talk to our AI, <span className="text-[var(--color-brand)]">live</span>.
+              </h2>
+              <p className="mt-8 max-w-md text-lg text-[var(--color-fg-muted)]">
+                This is the same assistant we build for your business. Ask it
+                anything and it replies in seconds. Yours would answer your
+                customers on WhatsApp, around the clock.
+              </p>
+            </div>
+            <div data-animate="slide-right">
+              <WiyuDemo />
+            </div>
+          </div>
+        </div>
+      </section>
 
       {/* ═══════════════ FREE AUDIT CTA ═══════════════ */}
       <AuditCTA />
