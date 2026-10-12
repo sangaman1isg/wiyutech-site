@@ -5,7 +5,6 @@ import WhatsAppButton from "@/src/components/WhatsAppButton";
 import AnimationObserver from "@/src/components/AnimationObserver";
 import CursorGlow from "@/src/components/CursorGlow";
 import CustomCursor from "@/src/components/CustomCursor";
-import MobileStickyCTA from "@/src/components/MobileStickyCTA";
 import MotionProvider from "@/src/components/MotionProvider";
 import PromoBanner from "@/src/components/PromoBanner";
 
@@ -135,7 +134,6 @@ export default function RootLayout({
           <PromoBanner />
           {children}
           <WhatsAppButton />
-          <MobileStickyCTA />
           <AnimationObserver />
           <CursorGlow />
           <CustomCursor />
