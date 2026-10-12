@@ -8,6 +8,7 @@ import AnimatedNumber from "@/src/components/AnimatedNumber";
 import HeroBuildBackground from "@/src/components/HeroBuildBackground";
 import Magnetic from "@/src/components/Magnetic";
 import WiyuDemo from "@/src/components/WiyuDemo";
+import RoiCalculator from "@/src/components/RoiCalculator";
 
 const WHATSAPP_NUMBER = "260774668193";
 const EMAIL = "wiyuletechnology@gmail.com";
@@ -119,6 +120,9 @@ export default function Home() {
         align="right"
         bg="elev"
       />
+
+      {/* ═══════════════ ROI CALCULATOR ═══════════════ */}
+      <RoiCalculator />
 
       {/* ═══════════════ SERVICES (8 PRODUCTS) ═══════════════ */}
       <Services />
