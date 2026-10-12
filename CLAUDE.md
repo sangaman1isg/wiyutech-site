@@ -25,7 +25,7 @@
 - **Markets:** Malawi & Zambia (expanding across Africa)
 - **Live URL:** https://wiyuletech.com
 - **GitHub:** https://github.com/sangaman1isg/wiyutech-site
-- **Local path:** ~/Desktop/wiyule technology/wiyutech-site/
+- **Local path:** ~/Documents/wiyule technology/wiyutech-site/
 
 ### Mission
 We build websites, AI WhatsApp assistants, and operations systems for SMEs in Malawi & Zambia — so they never lose another customer to a slow reply.
@@ -43,7 +43,10 @@ We build websites, AI WhatsApp assistants, and operations systems for SMEs in Ma
 - **Framework:** Next.js 16 (App Router, Turbopack)
 - **Language:** TypeScript (strict)
 - **Styling:** Tailwind CSS v4 (CSS variables, not config-based)
-- **Animations:** Framer Motion (`framer-motion ^12.40.0`) — the only runtime dep beyond Next/React
+- **Animations:** Framer Motion (`framer-motion ^12.40.0`) — still the only runtime dep beyond Next/React. Loaded via `LazyMotion` (`MotionProvider`) + the `m` components to keep the bundle lean. **Use `m.*`, not `motion.*`** (strict mode throws otherwise).
+- **Payments:** PayChangu (MWK) + Pesapal (ZMW) — native `fetch`, no SDK (`src/lib/paychangu.ts`, `src/lib/pesapal.ts`). ⏸️ Built but HELD for KYC.
+- **Orders DB:** Supabase (REST, service-role key, no SDK — `src/lib/orders.ts`)
+- **AI:** Groq (on-site Wiyu via `/api/wiyu`, model `openai/gpt-oss-20b`)
 - **Hosting:** Netlify (auto-deploy on push to `main`)
 - **Repo:** GitHub (private until further notice)
 - **Package manager:** npm
@@ -73,20 +76,41 @@ wiyutech-site/
 │   ├── opengraph-image.tsx       (auto-generated OG image)
 │   └── icon.tsx                  (auto-generated favicon)
 ├── src/
-│   └── components/
-│       ├── Nav.tsx               (sticky nav + hamburger mobile drawer — client component)
-│       ├── AuditCTA.tsx          (Free WhatsApp Audit banner — lead magnet)
-│       ├── Services.tsx          (3-product menu with currency switcher + comparison table)
-│       ├── HowWeWork.tsx         (4-step process — Discovery → Build → Launch → Support)
-│       ├── FAQ.tsx               (accordion FAQ)
-│       ├── AnimatedNumber.tsx    (Framer Motion count-up numerals)
-│       ├── AnimationObserver.tsx (scroll-reveal observer — mounted in layout)
-│       ├── CursorGlow.tsx        (ambient cursor-follow glow — mounted in layout)
-│       └── WhatsAppButton.tsx    (floating WA button — sitewide)
-├── next.config.ts
-├── tsconfig.json
-├── package.json
+│   ├── components/
+│   │   ├── Nav.tsx               (sticky nav + animated hamburger drawer)
+│   │   ├── AuditCTA.tsx          (Free WhatsApp Audit banner — lead magnet)
+│   │   ├── Services.tsx          (3 products · currency switch · "What's included" accordion · beam CTAs)
+│   │   ├── HowWeWork.tsx         (4-step process — swipeable scroll-snap carousel)
+│   │   ├── AnimatedNumber.tsx    (count-up numerals — re-count on scroll in)
+│   │   ├── AnimatedPrice.tsx     (price count-up on scroll-in + currency switch)
+│   │   ├── Magnetic.tsx          (magnetic-hover CTA wrapper — desktop only)
+│   │   ├── CustomCursor.tsx      (Cuberto dot + ring cursor — desktop only)
+│   │   ├── CursorGlow.tsx        (ambient cursor glow — in layout)
+│   │   ├── MotionProvider.tsx    (LazyMotion provider — wraps app)
+│   │   ├── AnimationObserver.tsx (scroll-reveal observer — in layout)
+│   │   ├── PromoBanner.tsx       (sitewide WIYULE30 bar)
+│   │   ├── WiyuChat.tsx          (reusable Wiyu chat UI)
+│   │   ├── WiyuDemo.tsx          (homepage "Meet Wiyu" section)
+│   │   ├── WiyuBubble.tsx        (sitewide floating Wiyu assistant)
+│   │   ├── FAQ.tsx               (DORMANT — removed from homepage)
+│   │   ├── WhatsAppButton.tsx    (DORMANT — replaced by WiyuBubble)
+│   │   └── MobileStickyCTA.tsx   (DORMANT — unmounted)
+│   └── lib/                       (server-only, native fetch, no SDKs)
+│       ├── pricing.ts            (server-side checkout amounts by slug+currency)
+│       ├── orders.ts             (Supabase REST — orders table)
+│       └── pesapal.ts            (Pesapal API 3.0 — ZMW)
+├── app/api/
+│   ├── wiyu/route.ts             (on-site Wiyu → Groq)
+│   ├── checkout/route.ts         (create order → gateway → redirect_url)
+│   ├── webhooks/pesapal/route.ts (Pesapal IPN)
+│   └── pesapal/register-ipn      (one-time IPN setup)
+├── next.config.ts · tsconfig.json · package.json · netlify.toml
 └── CLAUDE.md                     (this file)
+
+⏸️ HELD on branch `wave8-hold` (for KYC, NOT on main):
+   src/lib/paychangu.ts · app/api/webhooks/paychangu · RoiCalculator.tsx ·
+   the "Pay now" form + checkout UX pass in CheckoutClient.tsx ·
+   PayChangu routing in app/api/checkout + /checkout/success · pricing.ts content-pack sync
 ---
 
 ## 🎨 Brand System (DO NOT VIOLATE)
@@ -129,42 +153,52 @@ If hardcoded colors appear (`#EF2D2D`, `#aaaaaa`, etc.), refactor them to use th
 
 Services.tsx was overhauled in Wave 5. There are now 3 core products with full multi-currency pricing (MWK / ZMW / USD) and a comparison table. **Don't change pricing without explicit user approval.**
 
-### 1. AutoReply AI ⭐ Featured
+### 1. Digital Storefront Kit ⭐ Most popular
+- One-time: MWK 1,224,999 / ZMW 19,499 / $700
+- Delivery: 10 days · Guarantee: 25% refund if not live in 10 days
+- Checkout deposit (50%): MWK 612,500 / ZMW 9,750
+- Renders FIRST in Services (sorted by `index`); carries the badge + border beam.
+
+### 2. AutoReply AI
 - Setup: MWK 699,000 / ZMW 11,199 / $400
 - Monthly: MWK 124,999 / ZMW 1,999 / $70
 - Delivery: 7 days · Guarantee: full refund if not live in 7 days
 - Checkout deposit (50% of setup): MWK 349,500 / ZMW 5,600
 
-### 2. Digital Storefront Kit
-- One-time: MWK 1,224,999 / ZMW 19,499 / $700
-- Delivery: 10 days · Guarantee: 25% refund if not live in 10 days
-- Checkout deposit (50%): MWK 612,500 / ZMW 9,750
-
-### 3. Monthly Content Pack
-- Monthly: MWK 174,999 / ZMW 2,799 / $100
-- Quarterly: MWK 499,999 / ZMW 7,999 / $289
+### 3. Content & Design Pack  (renamed from "Monthly Content Pack")
+- **Now INCLUDES graphic design** (posters, flyers) — Wiyule's design service lives here.
+- Monthly: MWK 199,999 / ZMW 3,199 / $115   (bumped +15% when design was added)
+- Quarterly: MWK 569,999 / ZMW 8,999 / $329
 - Delivery: ongoing · Guarantee: full refund if not happy with month 1
-- Checkout: full first month upfront (MWK 174,999 / ZMW 2,799)
+- Checkout: full first month upfront (MWK 199,999 / ZMW 3,199)
 
 ### Payment collection
-- **Zambia (ZMW):** Airtel Money — 0774 668 193
-- **Malawi (MWK):** TNM Mpamba — 0893 306 186
-- USD is cash-only (no online USD collection yet — no business registration)
+- **Automated checkout is BUILT but HELD for KYC** (see "Where We Are Now"):
+  MWK → PayChangu, ZMW → Pesapal, each with a manual mobile-money fallback.
+- Manual mobile money (current live method):
+  - **Zambia (ZMW):** Airtel Money — 0774 668 193
+  - **Malawi (MWK):** TNM Mpamba — 0893 306 186
+- USD is cash-only (no online USD collection)
 - Checkout page: `/checkout?product=[slug]&currency=[ZMW|MWK]`
-- Slugs: `autoreply-ai` · `storefront-kit` · `content-pack`
+- Slugs: `storefront-kit` · `autoreply-ai` · `content-pack`
 
 ---
 
 ## 🤖 Wiyu — Wiyule's Own AI WhatsApp Assistant
 
-Wiyule's WhatsApp number (+260 774 668 193) is powered by an AI assistant called "Wiyu" — built on n8n + Groq (Llama 3.3 70B). It is currently running in **Phase 2 (Twilio sandbox)** mode.
+Wiyule's WhatsApp number (+260 774 668 193) is powered by an AI assistant called "Wiyu" — built on n8n + Groq. It is currently running in **Phase 2 (Twilio sandbox)** mode.
 
 - **Architecture:** WhatsApp → Twilio Sandbox → n8n webhook → Groq HTTP → Twilio Send → WhatsApp reply
 - **Webhook URL:** https://sangaman.app.n8n.cloud/webhook/wiyu-whatsapp
 - **Workflow name in n8n:** "Wiyu — WhatsApp AI"
 - **n8n cloud:** sangaman.app.n8n.cloud
 - **Twilio sandbox number:** +14155238886, code "join close-state"
-- **Model:** llama-3.3-70b-versatile (Groq, free tier)
+- ⚠️ **Model note:** Groq RETIRED `llama-3.3-70b-versatile`. The on-site demo now uses `openai/gpt-oss-20b`. **The n8n WhatsApp Wiyu may still point at the dead model — check/update it or it will silently fail.**
+
+### On-site Wiyu (live, on `main`)
+- **Live chat demo** in the homepage "Meet Wiyu" section + a **sitewide floating Wiyu bubble** (every page, replaced the floating WhatsApp button).
+- **Backend:** `app/api/wiyu/route.ts` → Groq (`openai/gpt-oss-20b`), server-side system prompt with real products/pricing. Needs `GROQ_API_KEY` (in `.env.local` + Netlify).
+- **UI:** `WiyuChat.tsx` (shared) · `WiyuDemo.tsx` (section) · `WiyuBubble.tsx` (floating).
 
 ### Phase 3 plan (future)
 Migrate from Twilio sandbox to a production WhatsApp Business number after first paying client cash lands. Cost will be ~$15-20/mo + Twilio rates.
@@ -282,7 +316,7 @@ Run through this before suggesting `git push`:
 5. ✅ Are all `<a>` and `<Link>` tags properly opened/closed?
 6. ✅ Did you use PascalCase for component filenames?
 7. ✅ No TypeScript errors in terminal?
-8. ✅ All `import` paths use `@/components/` not `@/src/components/`?
+8. ✅ All `import` paths use `@/src/components/` (NOT `@/components/`)?
 
 ---
 
@@ -390,24 +424,25 @@ If a deploy fails:
 
 ---
 
-## 📍 Where We Are Now (June 2026)
+## 📍 Where We Are Now (Oct 2026)
 
-- ✅ Wave 1 shipped: AuditCTA + Services grid
-- ✅ Wave 2 shipped: HowWeWork component
-- ✅ Wave 3 shipped: Page declutter + Services overhaul
-- ✅ Wave 4 shipped: Mobile nav · OG image · favicon · JSON-LD schema
-- ✅ Wave 5 shipped: Multi-currency Services · /about page · AuditCTA above FAQ · mobile money /checkout · domain wiyuletech.com
-- 🔄 Wave 6 in progress (latest, 10 June 2026):
-  - Framer Motion animations (count-up numerals, scroll reveal, cursor glow, page transitions)
-  - SEO live: `/sitemap.xml` + `/robots.txt` · Google Search Console verified (www.wiyuletech.com, meta-tag method) · sitemap submitted
-  - Client portal live: `/portal/[code]` private status pages (no auth/DB) off `app/portal/clients.ts` — CLIENTS array currently EMPTY (add real clients here)
-  - Still open: Case studies · Testimonials · Blog
-- 🤖 Wiyu AI live on Twilio sandbox (Phase 2 complete)
-- 🎯 Active product menu: 3 core products · mobile money checkout live · no payment gateway yet (pending business registration)
+- ✅ Waves 1–6 shipped (see Project Priorities above).
+- ✅ **Wave 7 shipped (premium UI):** Cuberto custom cursor · magnetic CTAs · animated hamburger · `.press` tactile buttons sitewide · border-beam on product CTAs · film grain · heading mask-reveals · count-ups (numbers + prices) that fire on scroll-in · mobile polish (no tap-flash) · LazyMotion perf pass · focus-visible rings · reduced-motion scoped to only kill LOOPING effects · copy rewritten to drop em dashes · Storefront Kit set as #1 · graphic design merged into Content & Design Pack (+15%) · homepage FAQ removed.
+- ✅ **On-site Wiyu:** live chat demo + sitewide floating bubble (`/api/wiyu`, Groq `openai/gpt-oss-20b`).
+- ✅ **On `main` now (Wave 8 partial):** price count-on-scroll + the Wiyu bubble.
 
-### ⚠️ Known issues / tech debt (clean up later)
-- **Canonical host mismatch:** Netlify serves canonical on `www.wiyuletech.com` (apex 301-redirects to www), but `metadataBase`, sitemap, and robots all point to the bare apex `https://wiyuletech.com`. Clean 301 so Google consolidates fine, but for perfectly consistent signals, align all three to the www host.
-- **`&apos;` inside `encodeURIComponent`:** `app/about/page.tsx:16` builds a WhatsApp prefill with `&apos;` — that ships the literal text "&apos;" to WhatsApp. Use a real apostrophe in JS string literals (only escape inside JSX *display* text). New portal files already use plain apostrophes.
+### ⏸️ HELD for KYC — on branch `wave8-hold`, NOT on `main`
+Built, build-clean, verified locally, but NOT deployed — waiting on PayChangu **and** Pesapal business verification:
+- **PayChangu (MWK) + Pesapal (ZMW) automated checkout** — `src/lib/paychangu.ts`, `/api/checkout` currency routing, `/api/webhooks/paychangu`, `/checkout/success` dual-verify, and the "Pay now" form + checkout UX pass (copy buttons, tabs, trust) in `CheckoutClient.tsx`.
+- **ROI calculator** (`RoiCalculator.tsx` — "cost of a slow reply" homepage section).
+- **Go-live steps:** finish KYC on both gateways · add `PAYCHANGU_SECRET_KEY` / `PAYCHANGU_PUBLIC_KEY` / `PAYCHANGU_WEBHOOK_SECRET` + confirm Supabase keys in **Netlify** · switch Pesapal to live base URL (`https://pay.pesapal.com/v3/api`) + live keys + re-register IPN · then merge `wave8-hold` → `main`.
+- **Infra note:** Supabase project `edlqmvmpvnnvcatyxgbp` had PAUSED (free tier) and was restored. The `orders` table is the gateway-agnostic record store.
+
+### ⚠️ Known issues / tech debt
+- **Stale n8n Wiyu model** — the WhatsApp Wiyu likely still points at the retired Llama model (see Wiyu section).
+- **pricing.ts drift on `main`:** `src/lib/pricing.ts` still has the OLD Content Pack name/price; the sync is in `wave8-hold`. Harmless (pricing.ts only feeds the not-yet-wired gateway); fixed when the branch merges.
+- **Canonical host mismatch:** `metadataBase`/sitemap/robots use apex `https://wiyuletech.com` while Netlify canonical is `www`. Clean 301, but align for perfect signals.
+- **`&apos;` inside `encodeURIComponent`:** `app/about/page.tsx` builds a WA prefill with `&apos;` — ships literal "&apos;". Use a real apostrophe in JS strings.
 
 ---
 
@@ -421,4 +456,4 @@ If a deploy fails:
 
 ---
 
-_Last updated: 10 June 2026. Maintained by Tamsanga + Claude (the assistant in claude.ai)._
+_Last updated: 12 Oct 2026. Maintained by Tamsanga + Claude._
