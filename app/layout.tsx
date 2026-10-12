@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Bricolage_Grotesque } from "next/font/google";
 import "./globals.css";
-import WhatsAppButton from "@/src/components/WhatsAppButton";
+import WiyuBubble from "@/src/components/WiyuBubble";
 import AnimationObserver from "@/src/components/AnimationObserver";
 import CursorGlow from "@/src/components/CursorGlow";
 import CustomCursor from "@/src/components/CustomCursor";
@@ -133,7 +133,7 @@ export default function RootLayout({
         <MotionProvider>
           <PromoBanner />
           {children}
-          <WhatsAppButton />
+          <WiyuBubble />
           <AnimationObserver />
           <CursorGlow />
           <CustomCursor />
