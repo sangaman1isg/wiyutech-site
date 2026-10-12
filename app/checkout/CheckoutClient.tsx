@@ -49,7 +49,7 @@ const PRODUCTS: Record<string, CheckoutProduct> = {
     balanceNote: "is due when your AI goes live (7 days).",
     features: [
       "AI trained on your exact business",
-      "Replies in under 3 seconds — even at 2am",
+      "Replies in under 3 seconds, even at 2am",
       "Live in 7 days or full setup refund",
     ],
     delivery: "7 days",
@@ -63,23 +63,23 @@ const PRODUCTS: Record<string, CheckoutProduct> = {
     balance: { ZMW: 9749, MWK: 612499 },
     balanceNote: "is due on your launch day.",
     features: [
-      "Mobile-fast website — up to 8 pages",
+      "Mobile-fast website, up to 8 pages",
       "WhatsApp catalog + Google Business Profile",
       "1 month AutoReply AI included FREE",
     ],
     delivery: "10 days",
-    guarantee: "Not live in 10 days? We refund 25% — no questions.",
+    guarantee: "Not live in 10 days? We refund 25%, no questions.",
   },
   "content-pack": {
-    name: "Monthly Content Pack",
-    subtitle: "Done-for-you content",
+    name: "Content & Design Pack",
+    subtitle: "Social posts + graphic design",
     depositLabel: "First month upfront",
-    deposit: { ZMW: 2799, MWK: 174999 },
+    deposit: { ZMW: 3199, MWK: 199999 },
     balance: null,
     balanceNote: "Renews monthly. Cancel anytime with 7 days' notice.",
     features: [
       "12 branded WhatsApp Status posts/month",
-      "4 Facebook posts + 1 promo graphic",
+      "4 Facebook posts + 2 posters/flyers",
       "Content calendar delivered every Monday",
     ],
     delivery: "Ongoing",
@@ -188,7 +188,7 @@ export default function CheckoutClient() {
     : product.balanceNote;
 
   const waText = encodeURIComponent(
-    `Hi Wiyule — I just sent ${sym}${depositStr} (${product.depositLabel}${
+    `Hi Wiyule, I just sent ${sym}${depositStr} (${product.depositLabel}${
       promoApplied ? ", code WIYULE30 applied − 30% off" : ""
     }) for ${product.name}. I'm attaching my payment screenshot now.`
   );
@@ -281,7 +281,7 @@ export default function CheckoutClient() {
                 {promoApplied ? (
                   <div className="flex items-center justify-between gap-3">
                     <p className="text-xs font-medium text-[var(--color-brand)]">
-                      ✓ WIYULE30 applied — 30% off
+                      ✓ WIYULE30 applied, 30% off
                     </p>
                     <button
                       onClick={removeCode}
@@ -308,7 +308,7 @@ export default function CheckoutClient() {
                       />
                       <button
                         onClick={applyCode}
-                        className="shrink-0 border border-[var(--color-line-bright)] px-4 py-2 text-sm font-medium text-[var(--color-fg)] transition hover:border-[var(--color-brand)] hover:text-[var(--color-brand)]"
+                        className="shrink-0 border border-[var(--color-line-bright)] px-4 py-2 text-sm font-medium text-[var(--color-fg)] press transition hover:border-[var(--color-brand)] hover:text-[var(--color-brand)]"
                       >
                         Apply
                       </button>
@@ -333,7 +333,7 @@ export default function CheckoutClient() {
                 </span>
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-medium text-[var(--color-fg)]">
-                    Send {sym}{depositStr} — pick one:
+                    Send {sym}{depositStr}, pick one:
                   </p>
 
                   {/* Mobile money */}
@@ -412,9 +412,9 @@ export default function CheckoutClient() {
             href={waUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex w-full items-center justify-center gap-2 bg-[var(--color-brand)] px-6 py-4 text-sm font-medium text-white transition hover:bg-[var(--color-brand-hot)]"
+            className="inline-flex w-full items-center justify-center gap-2 bg-[var(--color-brand)] px-6 py-4 text-sm font-medium text-white press transition hover:bg-[var(--color-brand-hot)]"
           >
-            I&apos;ve paid — send confirmation →
+            I&apos;ve paid, send confirmation →
           </a>
 
           <p className="text-center text-xs text-[var(--color-fg-faint)]">

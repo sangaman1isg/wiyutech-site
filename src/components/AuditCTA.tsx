@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const WHATSAPP_NUMBER = "260774668193";
 const AUDIT_MESSAGE = encodeURIComponent(
-  "Hi Wiyule — I'd like my free WhatsApp Business audit. My business number is: "
+  "Hi Wiyule, I'd like my free WhatsApp Business audit. My business number is: "
 );
 const AUDIT_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${AUDIT_MESSAGE}`;
 
@@ -41,7 +41,7 @@ export default function AuditCTA() {
               href={AUDIT_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex w-full items-center justify-center gap-2 bg-[var(--color-brand)] px-7 py-4 text-sm font-medium text-white transition hover:bg-[var(--color-brand-hot)] sm:w-auto"
+              className="inline-flex w-full items-center justify-center gap-2 bg-[var(--color-brand)] px-7 py-4 text-sm font-medium text-white press transition hover:bg-[var(--color-brand-hot)] sm:w-auto"
             >
               Claim my free audit →
             </Link>

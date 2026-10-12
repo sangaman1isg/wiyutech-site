@@ -6,14 +6,14 @@ import Nav from "@/src/components/Nav";
 export const metadata: Metadata = {
   title: "Our Origin",
   description:
-    "Wiyule Technology was built on a workshop floor in Malawi — not in a co-working space. Learn how we got here and why we build for Africa.",
+    "Wiyule Technology was built on a workshop floor in Malawi, not in a co-working space. Learn how we got here and why we build for Africa.",
 };
 
 const WHATSAPP_NUMBER = "260774668193";
 const EMAIL = "wiyuletechnology@gmail.com";
 const INSTAGRAM = "https://instagram.com/wiyutechafrica";
 const WA_MESSAGE = encodeURIComponent(
-  "Hi Wiyule — I read your story and I&apos;d like to apply as a founding client."
+  "Hi Wiyule, I read your story and I&apos;d like to apply as a founding client."
 );
 const WA_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${WA_MESSAGE}`;
 
@@ -29,7 +29,7 @@ export default function AboutPage() {
           <p className="eyebrow mb-4 fade-up">— Our origin</p>
           <h1 className="headline text-[clamp(2.5rem,6vw,5.5rem)] fade-up delay-1">
             Built on a{" "}
-            <span className="text-[var(--color-brand)]">workshop floor</span> —
+            <span className="text-[var(--color-brand)]">workshop floor</span>,
             not in a co-working space.
           </h1>
         </div>
@@ -44,21 +44,21 @@ export default function AboutPage() {
             <div className="space-y-8 text-base leading-relaxed text-[var(--color-fg-muted)] md:text-lg">
               <p>
                 Wiyule was founded by someone who grew up inside a real family
-                business — a workshop in Malawi where the conversations were
+                business, a workshop in Malawi where the conversations were
                 about customers, cash flow, and what it actually takes to keep
                 a small business alive. That ground-floor exposure is the edge.
-                We&rsquo;re not retrofitted for Africa — we were built here.
+                We&rsquo;re not retrofitted for Africa. We were built here.
               </p>
               <p>
                 Every product we sell is a direct answer to a problem we watched
                 real businesses lose money over: unanswered WhatsApp messages at
                 night, no way to take bookings, stock that disappears without a
-                trace. We didn&rsquo;t invent these problems from a pitch deck —
-                we watched them happen in real time.
+                trace. We didn&rsquo;t invent these problems from a pitch deck.
+                We watched them happen in real time.
               </p>
               <p>
                 The name &ldquo;Wiyule&rdquo; comes from a Chichewa word. It
-                means something like <em>that one</em> — the business you point
+                means something like <em>that one</em>, the business you point
                 to and say &ldquo;that&rsquo;s the one that actually does what it
                 promises.&rdquo; That&rsquo;s the standard we hold ourselves to.
               </p>

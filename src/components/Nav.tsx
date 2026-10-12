@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const WHATSAPP_NUMBER = "260774668193";
 const WA_MESSAGE = encodeURIComponent(
-  "Hi Wiyule Technology — I'd like a free 15-min discovery call about a website / WhatsApp AI for my business."
+  "Hi Wiyule Technology, I'd like a free 15-min discovery call about a website / WhatsApp AI for my business."
 );
 const WA_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${WA_MESSAGE}`;
 
@@ -75,7 +75,7 @@ export default function Nav() {
             href={WA_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden items-center gap-2 bg-[var(--color-brand)] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[var(--color-brand-hot)] md:inline-flex"
+            className="hidden items-center gap-2 bg-[var(--color-brand)] px-5 py-2.5 text-sm font-medium text-white press transition hover:bg-[var(--color-brand-hot)] md:inline-flex"
           >
             Book a call →
           </Link>
@@ -88,36 +88,29 @@ export default function Nav() {
             aria-label={isOpen ? "Close menu" : "Open menu"}
             aria-expanded={isOpen}
           >
-            {isOpen ? (
-              /* × close icon */
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              >
-                <line x1="4" y1="4" x2="16" y2="16" />
-                <line x1="16" y1="4" x2="4" y2="16" />
-              </svg>
-            ) : (
-              /* ☰ hamburger icon */
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-              >
-                <line x1="2" y1="5" x2="18" y2="5" />
-                <line x1="2" y1="10" x2="18" y2="10" />
-                <line x1="2" y1="15" x2="18" y2="15" />
-              </svg>
-            )}
+            {/* Three bars that morph into an X. Both states share the same
+                translateY + rotate transform, so it interpolates smoothly. */}
+            <span className="relative block h-6 w-6">
+              <span
+                className={`absolute left-0 top-1/2 h-0.5 w-6 rounded-full bg-current transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${
+                  isOpen
+                    ? "[transform:translateY(0px)_rotate(45deg)]"
+                    : "[transform:translateY(-6px)_rotate(0deg)]"
+                }`}
+              />
+              <span
+                className={`absolute left-0 top-1/2 h-0.5 w-6 rounded-full bg-current transition-opacity duration-200 ${
+                  isOpen ? "opacity-0" : "opacity-100"
+                }`}
+              />
+              <span
+                className={`absolute left-0 top-1/2 h-0.5 w-6 rounded-full bg-current transition-transform duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${
+                  isOpen
+                    ? "[transform:translateY(0px)_rotate(-45deg)]"
+                    : "[transform:translateY(6px)_rotate(0deg)]"
+                }`}
+              />
+            </span>
           </button>
         </div>
 
@@ -155,7 +148,7 @@ export default function Nav() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setIsOpen(false)}
-              className="flex w-full items-center justify-center gap-2 bg-[var(--color-brand)] py-4 text-base font-semibold text-white transition hover:bg-[var(--color-brand-hot)] active:scale-[0.98] active:bg-[var(--color-brand-hot)]"
+              className="flex w-full items-center justify-center gap-2 bg-[var(--color-brand)] py-4 text-base font-semibold text-white press transition hover:bg-[var(--color-brand-hot)] active:bg-[var(--color-brand-hot)]"
             >
               Book a free 15-min call →
             </Link>

@@ -1,7 +1,7 @@
 const steps = [
   {
     title: "Discovery",
-    body: "A 15-minute conversation. We learn your business, your customers, and what\u2019s actually broken.",
+    body: "A 15-minute conversation. We learn your business, your customers, and what’s actually broken.",
   },
   {
     title: "Build",
@@ -25,22 +25,35 @@ export default function HowWeWork() {
     >
       <div className="relative mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-32">
         {/* Header */}
-        <div data-animate="fade-up" className="mb-16 max-w-2xl">
-          <p className="eyebrow mb-4">— How we work</p>
-          <h2 className="headline text-[clamp(2.5rem,5.5vw,5rem)]">
-            Four steps.{" "}
-            <span className="text-(--color-brand)">Two weeks.</span>
-          </h2>
+        <div
+          data-animate="fade-up"
+          className="mb-10 flex items-end justify-between gap-6 md:mb-16"
+        >
+          <div className="max-w-2xl">
+            <p className="eyebrow mb-4">— How we work</p>
+            <h2
+              data-animate="mask"
+              className="headline text-[clamp(2.5rem,5.5vw,5rem)]"
+            >
+              Four steps.{" "}
+              <span className="text-(--color-brand)">Two weeks.</span>
+            </h2>
+          </div>
+          <p className="hidden shrink-0 text-xs text-(--color-fg-faint) md:block">
+            Swipe to explore →
+          </p>
         </div>
 
-        {/* Steps grid — gap-px + bg-[color-line] draws 1px dividers between cards */}
-        <div className="grid gap-px bg-(--color-line) md:grid-cols-4">
+        {/* Carousel — horizontal scroll-snap. Full-bleed on mobile (the
+            -mx-6 / px-6 pair) so it saves vertical space and swipes like a
+            native app; on desktop it lays the four steps out in a row. */}
+        <div className="no-scrollbar -mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 md:mx-0 md:px-0">
           {steps.map((step, i) => (
             <div
               key={step.title}
               data-animate="fade-up"
               data-delay={i > 0 ? String(i * 100) : undefined}
-              className="bg-(--color-bg-soft) p-8"
+              className="w-[78%] shrink-0 snap-start border border-(--color-line) bg-(--color-bg-card) p-8 sm:w-[46%] md:w-[31%] lg:w-[23%]"
             >
               <div className="numeral mb-8 text-6xl text-(--color-brand)">
                 0{i + 1}
@@ -52,6 +65,11 @@ export default function HowWeWork() {
             </div>
           ))}
         </div>
+
+        {/* Swipe hint — mobile only */}
+        <p className="mt-4 text-xs text-(--color-fg-faint) md:hidden">
+          Swipe for more →
+        </p>
       </div>
     </section>
   );

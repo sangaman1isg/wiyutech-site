@@ -15,11 +15,18 @@ export default function AnimatedNumber({
   className?: string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "0px 0px -80px 0px" });
+  // once: false → re-fires every time the number scrolls back into view
+  const isInView = useInView(ref, { once: false, margin: "0px 0px -80px 0px" });
   const [display, setDisplay] = useState(0);
 
   useEffect(() => {
     if (!isInView) return;
+    // Honour reduced-motion: jump straight to the final value, no counting.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setDisplay(to);
+      return;
+    }
+    setDisplay(0); // reset so it visibly counts up again on re-entry
     const controls = animate(0, to, {
       duration,
       ease: [0.16, 1, 0.3, 1], // expo-out: rushes in, slows to stop

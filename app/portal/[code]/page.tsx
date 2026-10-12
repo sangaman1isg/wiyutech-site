@@ -24,7 +24,7 @@ export default async function PortalPage({
 
   const currentIndex = STAGES.indexOf(client.currentStage);
   const waMessage = encodeURIComponent(
-    `Hi Wiyule — it's ${client.clientName}. A question about my ${client.product} project.`
+    `Hi Wiyule, it's ${client.clientName}. A question about my ${client.product} project.`
   );
   const waUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${waMessage}`;
   const updated = new Date(client.updatedAt).toLocaleDateString("en-GB", {
@@ -114,7 +114,7 @@ export default async function PortalPage({
             <Cell label="Current stage" value={`${client.currentStage} · ${client.statusLine}`} />
             <Cell
               label="Payment"
-              value={`${client.paidLabel} ${client.paid ? "✓" : "— pending"}`}
+              value={`${client.paidLabel} ${client.paid ? "✓" : "(pending)"}`}
             />
             <Cell label="Balance" value={client.balanceNote} />
             <Cell label="Next step" value={client.nextStep} />
@@ -125,7 +125,7 @@ export default async function PortalPage({
             href={waUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-10 inline-flex items-center gap-2 border border-[var(--color-brand)] px-6 py-3 text-sm font-medium text-[var(--color-brand)] transition hover:bg-[var(--color-brand)] hover:text-[var(--color-bg)]"
+            className="mt-10 inline-flex items-center gap-2 border border-[var(--color-brand)] px-6 py-3 text-sm font-medium text-[var(--color-brand)] press transition hover:bg-[var(--color-brand)] hover:text-[var(--color-bg)]"
           >
             Message us about this project →
           </a>

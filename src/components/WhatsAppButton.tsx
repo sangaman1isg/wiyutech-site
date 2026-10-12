@@ -2,7 +2,7 @@ import Link from "next/link";
 
 const WHATSAPP_NUMBER = "260774668193";
 const WA_MESSAGE = encodeURIComponent(
-  "Hi Wiyule Technology — I'd like to chat about a website / WhatsApp AI for my business."
+  "Hi Wiyule Technology, I'd like to chat about a website / WhatsApp AI for my business."
 );
 const WA_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${WA_MESSAGE}`;
 

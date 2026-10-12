@@ -4,7 +4,7 @@ import Nav from "@/src/components/Nav";
 
 const WHATSAPP_NUMBER = "260774668193";
 const WA_MESSAGE = encodeURIComponent(
-  "Hi Wiyule — I'm a client and I'd like the link to my project portal."
+  "Hi Wiyule, I'm a client and I'd like the link to my project portal."
 );
 const WA_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${WA_MESSAGE}`;
 
@@ -27,7 +27,7 @@ export default function PortalIndexPage() {
           </h1>
           <p className="mt-6 max-w-xl text-base leading-relaxed text-[var(--color-fg-muted)] md:text-lg fade-up delay-2">
             Every Wiyule client gets a private portal link to follow their
-            build — stage by stage, payment to launch. Check the message we
+            build, stage by stage, from payment to launch. Check the message we
             sent you for your personal link.
           </p>
           <div className="mt-10 fade-up delay-3">
@@ -35,7 +35,7 @@ export default function PortalIndexPage() {
               href={WA_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 border border-[var(--color-brand)] px-6 py-3 text-sm font-medium text-[var(--color-brand)] transition hover:bg-[var(--color-brand)] hover:text-[var(--color-bg)]"
+              className="inline-flex items-center gap-2 border border-[var(--color-brand)] px-6 py-3 text-sm font-medium text-[var(--color-brand)] press transition hover:bg-[var(--color-brand)] hover:text-[var(--color-bg)]"
             >
               Ask us for your portal link →
             </a>

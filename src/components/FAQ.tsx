@@ -4,10 +4,6 @@ import { useState } from "react";
 
 const faqs = [
   {
-    q: "How much does this actually cost?",
-    a: "Our packages start at $350 USD for a Digital Storefront Kit, $500 for Operations OS Lite, and $250 setup + $40/month for AutoReply AI. We accept payment in USD, ZMW, or MWK. Founding clients (our first 3) get deeply discounted founding rates — message us to see if you qualify.",
-  },
-  {
     q: "How do I pay you? I'm in Zambia / Malawi.",
     a: "We accept Airtel Money in both Zambia and Malawi, MTN Mobile Money, FNB and standard Zambian/Malawian bank transfers, plus international transfers (Wise, Payoneer) for diaspora clients. Payment is split into two installments — 50% to start, 50% on launch — so you're never out of pocket before you see results.",
   },

@@ -64,7 +64,7 @@ export default async function CheckoutSuccessPage({
     pending: {
       eyebrow: "— Payment pending",
       title: "Almost there.",
-      body: "Your payment is still processing. This can take a moment for mobile money — refresh in a bit, or message us and we'll confirm.",
+      body: "Your payment is still processing. This can take a moment for mobile money. Refresh in a bit, or message us and we'll confirm.",
     },
     failed: {
       eyebrow: "— Payment not completed",
@@ -74,7 +74,7 @@ export default async function CheckoutSuccessPage({
     error: {
       eyebrow: "— Couldn't confirm",
       title: "We couldn't confirm that yet.",
-      body: "Something went wrong checking your payment status. If money left your account, don't worry — message us and we'll verify it manually.",
+      body: "Something went wrong checking your payment status. If money left your account, don't worry, message us and we'll verify it manually.",
     },
   };
 
@@ -100,13 +100,13 @@ export default async function CheckoutSuccessPage({
             href="https://wa.me/260774668193"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand)] px-7 py-4 text-sm font-medium text-white transition hover:bg-[var(--color-brand-hot)] active:scale-[0.98]"
+            className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand)] px-7 py-4 text-sm font-medium text-white press transition hover:bg-[var(--color-brand-hot)]"
           >
             Message us on WhatsApp →
           </a>
           <Link
             href="/#offers"
-            className="inline-flex items-center justify-center gap-2 border border-[var(--color-line-bright)] px-7 py-4 text-sm font-medium text-[var(--color-fg)] transition hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] active:scale-[0.98]"
+            className="inline-flex items-center justify-center gap-2 border border-[var(--color-line-bright)] px-7 py-4 text-sm font-medium text-[var(--color-fg)] press transition hover:border-[var(--color-brand)] hover:text-[var(--color-brand)]"
           >
             Back to services
           </Link>

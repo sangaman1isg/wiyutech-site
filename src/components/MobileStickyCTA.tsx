@@ -13,7 +13,7 @@ import Link from "next/link";
 
 const WHATSAPP_NUMBER = "260774668193";
 const WA_MESSAGE = encodeURIComponent(
-  "Hi Wiyule Technology — I'd like a free 15-min discovery call about a website / WhatsApp AI for my business."
+  "Hi Wiyule Technology, I'd like a free 15-min discovery call about a website / WhatsApp AI for my business."
 );
 const WA_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${WA_MESSAGE}`;
 
@@ -30,7 +30,7 @@ export default function MobileStickyCTA() {
 
   return (
     <div
-      className={`fixed inset-x-0 bottom-0 z-40 border-t border-[var(--color-line-bright)] bg-[var(--color-bg)]/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur transition-transform duration-300 md:hidden ${
+      className={`fixed inset-x-0 bottom-0 z-40 border-t border-[var(--color-line-bright)] bg-[var(--color-bg)]/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] md:hidden ${
         visible ? "translate-y-0" : "translate-y-full"
       }`}
     >
@@ -38,7 +38,7 @@ export default function MobileStickyCTA() {
         href={WA_URL}
         target="_blank"
         rel="noopener noreferrer"
-        className="flex w-full items-center justify-center gap-2 bg-[var(--color-brand)] py-3.5 text-sm font-semibold text-white transition active:bg-[var(--color-brand-hot)]"
+        className="flex w-full items-center justify-center gap-2 bg-[var(--color-brand)] py-3.5 text-sm font-semibold text-white press transition active:bg-[var(--color-brand-hot)]"
       >
         <svg
           width="18"

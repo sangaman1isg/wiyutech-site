@@ -81,7 +81,7 @@ export default function OpengraphImage() {
               lineHeight: 1.3,
             }}
           >
-            Websites, booking systems & AI WhatsApp assistants — built in Lusaka.
+            Websites, booking systems & AI WhatsApp assistants, built in Lusaka.
           </div>
         </div>
 

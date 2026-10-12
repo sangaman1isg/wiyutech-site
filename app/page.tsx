@@ -3,16 +3,16 @@ import Link from "next/link";
 import Nav from "@/src/components/Nav";
 import AuditCTA from "@/src/components/AuditCTA";
 import Services from "@/src/components/Services";
-import FAQ from "@/src/components/FAQ";
 import HowWeWork from "@/src/components/HowWeWork";
 import AnimatedNumber from "@/src/components/AnimatedNumber";
 import HeroBuildBackground from "@/src/components/HeroBuildBackground";
+import Magnetic from "@/src/components/Magnetic";
 
 const WHATSAPP_NUMBER = "260774668193";
 const EMAIL = "wiyuletechnology@gmail.com";
 const INSTAGRAM = "https://instagram.com/wiyutechafrica";
 const WA_MESSAGE = encodeURIComponent(
-  "Hi Wiyule Technology — I'd like a free 15-min discovery call about a website / WhatsApp AI for my business."
+  "Hi Wiyule Technology, I'd like a free 15-min discovery call about a website / WhatsApp AI for my business."
 );
 const WA_URL = `https://wa.me/${WHATSAPP_NUMBER}?text=${WA_MESSAGE}`;
 
@@ -43,28 +43,33 @@ export default function Home() {
           </h1>
 
           <p className="mt-8 max-w-2xl text-lg leading-relaxed text-[var(--color-fg-muted)] md:text-xl fade-up delay-2">
-            We build websites, booking systems, and AI WhatsApp assistants for
-            businesses across Malawi and Zambia — so you never lose another
-            customer to a slow reply. Whatever you sell, we&rsquo;ve got you.
+            We build websites, booking systems, and AI WhatsApp assistants,
+            plus the posters and flyers that market them, for businesses
+            across Malawi and Zambia, so you never lose another customer to a
+            slow reply. Whatever you sell, we&rsquo;ve got you.
           </p>
 
           <div className="mt-10 flex flex-col gap-3 sm:flex-row fade-up delay-3">
-            <Link
-              data-shine
-              href={WA_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand)] px-7 py-4 text-sm font-medium text-white transition hover:bg-[var(--color-brand-hot)] active:scale-[0.98] active:bg-[var(--color-brand-hot)]"
-            >
-              Book a free 15-min call
-              <span aria-hidden>→</span>
-            </Link>
-            <Link
-              href="#offers"
-              className="inline-flex items-center justify-center gap-2 border border-[var(--color-line-bright)] px-7 py-4 text-sm font-medium text-[var(--color-fg)] transition hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] active:scale-[0.98] active:border-[var(--color-brand)] active:text-[var(--color-brand)]"
-            >
-              View our offers
-            </Link>
+            <Magnetic>
+              <Link
+                data-shine
+                href={WA_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand)] px-7 py-4 text-sm font-medium text-white press transition hover:bg-[var(--color-brand-hot)] active:bg-[var(--color-brand-hot)]"
+              >
+                Book a free 15-min call
+                <span aria-hidden>→</span>
+              </Link>
+            </Magnetic>
+            <Magnetic>
+              <a
+                href="#offers"
+                className="inline-flex items-center justify-center gap-2 border border-[var(--color-line-bright)] px-7 py-4 text-sm font-medium text-[var(--color-fg)] press transition hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] active:border-[var(--color-brand)] active:text-[var(--color-brand)]"
+              >
+                View our offers
+              </a>
+            </Magnetic>
           </div>
         </div>
       </section>
@@ -86,7 +91,7 @@ export default function Home() {
         body={
           <>
             By the time you wake up and reply, the customer has already messaged
-            a competitor. We build the system that replies instantly — even at 3am.
+            a competitor. We build the system that replies instantly, even at 3am.
           </>
         }
         align="left"
@@ -106,7 +111,7 @@ export default function Home() {
         body={
           <>
             Most agencies take three months and then ghost you. We work in
-            fixed scopes — you see progress every day and launch before next
+            fixed scopes. You see progress every day and launch before next
             month&rsquo;s rent is due.
           </>
         }
@@ -123,15 +128,15 @@ export default function Home() {
       {/* ═══════════════ FREE AUDIT CTA ═══════════════ */}
       <AuditCTA />
 
-      {/* ═══════════════ FAQ ═══════════════ */}
-      <FAQ />
-
       {/* ═══════════════ FINAL CTA ═══════════════ */}
       <section className="relative overflow-hidden border-b border-[var(--color-line)]">
         <div className="absolute inset-0 glow-soft glow-drift" />
         <div data-animate="fade-up" className="relative mx-auto max-w-7xl px-6 py-16 md:px-10 md:py-44">
           <p className="eyebrow mb-4">— Ready when you are</p>
-          <h2 className="headline text-[clamp(2.75rem,7vw,6rem)]">
+          <h2
+            data-animate="mask"
+            className="headline text-[clamp(2.75rem,7vw,6rem)]"
+          >
             Ready to <span className="text-[var(--color-brand)]">grow</span>{" "}
             <br className="hidden md:block" />
             your business?
@@ -146,13 +151,13 @@ export default function Home() {
               href={WA_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand)] px-8 py-4 text-sm font-medium text-white transition hover:bg-[var(--color-brand-hot)] active:scale-[0.98] active:bg-[var(--color-brand-hot)]"
+              className="inline-flex items-center justify-center gap-2 bg-[var(--color-brand)] px-8 py-4 text-sm font-medium text-white press transition hover:bg-[var(--color-brand-hot)] active:bg-[var(--color-brand-hot)]"
             >
               Message us on WhatsApp →
             </Link>
             <Link
               href={`mailto:${EMAIL}`}
-              className="inline-flex items-center justify-center gap-2 border border-[var(--color-line-bright)] px-8 py-4 text-sm font-medium text-[var(--color-fg)] transition hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] active:scale-[0.98] active:border-[var(--color-brand)] active:text-[var(--color-brand)]"
+              className="inline-flex items-center justify-center gap-2 border border-[var(--color-line-bright)] px-8 py-4 text-sm font-medium text-[var(--color-fg)] press transition hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] active:border-[var(--color-brand)] active:text-[var(--color-brand)]"
             >
               Send us an email
             </Link>

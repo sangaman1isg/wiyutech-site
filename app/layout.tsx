@@ -4,6 +4,8 @@ import "./globals.css";
 import WhatsAppButton from "@/src/components/WhatsAppButton";
 import AnimationObserver from "@/src/components/AnimationObserver";
 import CursorGlow from "@/src/components/CursorGlow";
+import CustomCursor from "@/src/components/CustomCursor";
+import MobileStickyCTA from "@/src/components/MobileStickyCTA";
 import PromoBanner from "@/src/components/PromoBanner";
 
 const geistSans = Geist({
@@ -28,7 +30,7 @@ export const metadata: Metadata = {
     template: "%s · Wiyule Technology",
   },
   description:
-    "Wiyule Technology builds premium websites, booking systems and AI WhatsApp assistants for small businesses in Malawi and Zambia. Stop losing customers to slow replies. Launch in 7 days.",
+    "Wiyule Technology builds premium websites, booking systems and AI WhatsApp assistants, plus graphic design (posters, flyers and social content), for small businesses in Malawi and Zambia. Stop losing customers to slow replies. Launch in 7 days.",
   keywords: [
     "Wiyule Technology",
     "website developer Lusaka",
@@ -45,6 +47,8 @@ export const metadata: Metadata = {
     "automotive website Zambia",
     "restaurant website Malawi",
     "school website Zambia",
+    "graphic design Zambia",
+    "poster and flyer design Malawi",
   ],
   authors: [{ name: "Wiyule Technology" }],
   creator: "Wiyule Technology",
@@ -108,6 +112,7 @@ const schema = {
     "AI WhatsApp Assistants",
     "Business Automation",
     "Digital Marketing",
+    "Graphic Design",
     "Google Business Profile",
   ],
 };
@@ -127,8 +132,10 @@ export default function RootLayout({
         <PromoBanner />
         {children}
         <WhatsAppButton />
+        <MobileStickyCTA />
         <AnimationObserver />
         <CursorGlow />
+        <CustomCursor />
       </body>
     </html>
   );

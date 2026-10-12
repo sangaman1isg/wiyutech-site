@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
+import AnimatedPrice from "@/src/components/AnimatedPrice";
 
 /* ─── Constants ─────────────────────────────────────────────── */
 const WHATSAPP_NUMBER = "260774668193";
@@ -10,7 +11,7 @@ const CURRENCIES: Currency[] = ["MWK", "ZMW", "USD"];
 
 function waUrl(label: string) {
   const text = encodeURIComponent(
-    `Hi Wiyule — I want to learn more about ${label}. Can we set up a quick call?`
+    `Hi Wiyule, I want to learn more about ${label}. Can we set up a quick call?`
   );
   return `https://wa.me/${WHATSAPP_NUMBER}?text=${text}`;
 }
@@ -63,12 +64,11 @@ const CURRENCY_SYMBOLS: Record<Currency, string> = {
 
 const PRODUCTS: Product[] = [
   {
-    index: 1,
+    index: 2,
     slug: "autoreply-ai",
     title: "AutoReply AI",
     subtitle: "AI WhatsApp Assistant",
-    tagline: "Your business never sleeps. AI replies on WhatsApp — 24/7.",
-    highlighted: true,
+    tagline: "Your business never sleeps. AI replies on WhatsApp, 24/7.",
     priceType: "setup+monthly",
     setup: { MWK: "699,000", ZMW: "11,199", USD: "400" },
     monthly: { MWK: "124,999", ZMW: "1,999", USD: "70" },
@@ -76,7 +76,7 @@ const PRODUCTS: Product[] = [
     delivery: "7 days",
     features: [
       "AI trained on your exact business",
-      "Replies in under 3 seconds — even at 2am",
+      "Replies in under 3 seconds, even at 2am",
       "Books appointments automatically",
       "Captures lead details while you sleep",
       "English + Chichewa / Bemba support",
@@ -101,17 +101,18 @@ const PRODUCTS: Product[] = [
     cta: "Start replying 24/7",
   },
   {
-    index: 2,
+    index: 1,
     slug: "storefront-kit",
     title: "Digital Storefront Kit",
     subtitle: "Website + WhatsApp + Google",
     tagline: "A website that works while you work. Built for Zambian & Malawian businesses.",
+    highlighted: true,
     priceType: "onetime",
     oneTime: { MWK: "1,224,999", ZMW: "19,499", USD: "700" },
     plan3: { MWK: "429,999", ZMW: "6,999", USD: "239" },
     delivery: "10 days",
     features: [
-      "Mobile-fast website — up to 8 pages",
+      "Mobile-fast website, up to 8 pages",
       "WhatsApp catalog (up to 30 products)",
       "Google Business Profile set up & verified",
       "1 month AutoReply AI included FREE",
@@ -139,18 +140,18 @@ const PRODUCTS: Product[] = [
   {
     index: 3,
     slug: "content-pack",
-    title: "Monthly Content Pack",
-    subtitle: "Done-for-you content",
-    tagline: "We post. You profit. Done.",
+    title: "Content & Design Pack",
+    subtitle: "Social posts + graphic design",
+    tagline: "Posters, flyers and posts. All your business design, done monthly.",
     priceType: "monthly",
-    monthly: { MWK: "174,999", ZMW: "2,799", USD: "100" },
-    quarterly: { MWK: "499,999", ZMW: "7,999", USD: "289" },
-    quarterlySave: { MWK: "24,999", ZMW: "398", USD: "11" },
+    monthly: { MWK: "199,999", ZMW: "3,199", USD: "115" },
+    quarterly: { MWK: "569,999", ZMW: "8,999", USD: "329" },
+    quarterlySave: { MWK: "29,998", ZMW: "598", USD: "16" },
     delivery: "Monthly",
     features: [
       "12 branded WhatsApp Status posts/month",
       "4 Facebook posts/month",
-      "1 promotional graphic/month",
+      "2 custom posters or flyers/month",
       "Content calendar delivered every Monday",
       "Zero effort on your end",
     ],
@@ -159,7 +160,7 @@ const PRODUCTS: Product[] = [
       ZMW: "1 new customer/month from consistent posting = ZMW 240–800 extra. Pack pays for itself.",
       USD: "1 new customer/month from consistent posting = $8–$29 extra. Pack pays for itself.",
     },
-    bestFor: "Restaurants, salons, retail, any busy owner not posting consistently",
+    bestFor: "Restaurants, salons, retail and events needing posters, flyers and posts",
     guarantee: "Not happy with month 1? We redo it free or refund in full. Simple.",
     addons: [
       {
@@ -182,6 +183,7 @@ const COMPARISON: ComparisonRow[] = [
   { label: "Google Business Profile",    ai: false,     storefront: true,        content: false },
   { label: "Social media posts",         ai: false,     storefront: false,       content: true  },
   { label: "WhatsApp Status graphics",   ai: false,     storefront: false,       content: true  },
+  { label: "Poster & flyer design",      ai: false,     storefront: false,       content: true  },
   { label: "One-time setup fee",         ai: true,      storefront: true,        content: false },
   { label: "Monthly subscription",       ai: true,      storefront: false,       content: true  },
   { label: "3-month payment plan",       ai: true,      storefront: true,        content: true  },
@@ -193,28 +195,9 @@ const COMPARISON_COLS: Array<{
   title: string;
   key: "ai" | "storefront" | "content";
 }> = [
-  { title: "AutoReply AI", key: "ai" },
   { title: "Storefront Kit", key: "storefront" },
+  { title: "AutoReply AI", key: "ai" },
   { title: "Content Pack", key: "content" },
-];
-
-const FAQS: Array<{ q: string; a: string }> = [
-  {
-    q: "Is this affordable for a small business in Malawi or Zambia?",
-    a: "Yes — that's exactly why we price in local currency. AutoReply AI at MWK 124,999/month works out to less than a part-time employee's daily wage — and it works 24 hours, 7 days a week.",
-  },
-  {
-    q: "What if I can't pay everything upfront?",
-    a: "Every product has a 3-month payment plan. You pay a small premium for the flexibility — no hidden interest, no credit check. Just tell us when you sign up.",
-  },
-  {
-    q: "How do I know this will actually work for my business?",
-    a: "Every product comes with a delivery guarantee. If it's not live on time, you get money back. We don't just say 'trust us' — we put cash on it.",
-  },
-  {
-    q: "Do I need to be tech-savvy to use any of this?",
-    a: "No. We handle the entire setup. You get a working product and a 15-minute handover call. If something breaks after launch, that's on us — not you.",
-  },
 ];
 
 const TRUST_BADGES = [
@@ -227,7 +210,33 @@ const TRUST_BADGES = [
 /* ─── Section ───────────────────────────────────────────────── */
 export default function Services() {
   const [currency, setCurrency] = useState<Currency>("MWK");
-  const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [openInclude, setOpenInclude] = useState<number | null>(null);
+
+  // Remember the visitor's currency choice, and on first visit default to
+  // their country via timezone (Zambia → ZMW, Malawi → MWK).
+  useEffect(() => {
+    const saved = localStorage.getItem("wiyule-currency");
+    if (saved === "MWK" || saved === "ZMW" || saved === "USD") {
+      setCurrency(saved);
+      return;
+    }
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      if (tz === "Africa/Lusaka") setCurrency("ZMW");
+      else if (tz === "Africa/Blantyre") setCurrency("MWK");
+    } catch {
+      /* Intl unavailable — keep the default */
+    }
+  }, []);
+
+  const changeCurrency = (c: Currency) => {
+    setCurrency(c);
+    try {
+      localStorage.setItem("wiyule-currency", c);
+    } catch {
+      /* storage blocked — not critical */
+    }
+  };
   const currencyIdx = CURRENCIES.indexOf(currency);
 
   return (
@@ -239,14 +248,17 @@ export default function Services() {
         <div data-animate="fade-up" className="mb-12 flex flex-col items-start justify-between gap-6 md:flex-row md:items-end">
           <div className="max-w-2xl">
             <p className="eyebrow mb-4">— Three products</p>
-            <h2 className="headline text-[clamp(2.5rem,5.5vw,5rem)]">
+            <h2
+              data-animate="mask"
+              className="headline text-[clamp(2.5rem,5.5vw,5rem)]"
+            >
               Real prices.<br className="hidden md:block" />
               Real <span className="text-[var(--color-brand)]">products</span>.
             </h2>
           </div>
           <p className="max-w-md text-base text-[var(--color-fg-muted)]">
             No mystery quotes. No retainers you don&rsquo;t need. Pick the one
-            that fits — we ship.
+            that fits, and we ship.
           </p>
         </div>
 
@@ -279,7 +291,7 @@ export default function Services() {
               {CURRENCIES.map((c) => (
                 <button
                   key={c}
-                  onClick={() => setCurrency(c)}
+                  onClick={() => changeCurrency(c)}
                   className={`relative z-10 flex-1 px-6 py-2.5 text-sm font-medium transition-colors duration-200 ${
                     currency === c
                       ? "text-white"
@@ -295,7 +307,7 @@ export default function Services() {
 
         {/* Product cards */}
         <div className="grid grid-cols-1 gap-px bg-[var(--color-line)] md:grid-cols-3">
-          {PRODUCTS.map((p, i) => (
+          {[...PRODUCTS].sort((a, b) => a.index - b.index).map((p, i) => (
             <ProductCard
               key={p.title}
               product={p}
@@ -308,109 +320,71 @@ export default function Services() {
         {/* Comparison table */}
         <div className="mt-20">
           <h3 className="headline mb-8 text-2xl">What&apos;s included</h3>
-          {/* Desktop: full comparison table */}
-          <div className="hidden overflow-x-auto md:block">
-            <table className="w-full border-collapse text-sm">
-              <thead>
-                <tr className="border-b border-[var(--color-line)]">
-                  <th className="w-2/5 py-4 pr-6 text-left font-normal text-[var(--color-fg-muted)]">
-                    Feature
-                  </th>
-                  <th className="px-4 py-4 text-center font-medium text-[var(--color-fg)]">
-                    AutoReply AI
-                  </th>
-                  <th className="px-4 py-4 text-center font-medium text-[var(--color-fg)]">
-                    Storefront Kit
-                  </th>
-                  <th className="px-4 py-4 text-center font-medium text-[var(--color-fg)]">
-                    Content Pack
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {COMPARISON.map((row, i) => (
-                  <tr
-                    key={row.label}
-                    className={`border-b border-[var(--color-line)] ${
-                      i % 2 === 0 ? "bg-[var(--color-bg-soft)]" : ""
-                    }`}
-                  >
-                    <td className="py-3.5 pr-6 text-[var(--color-fg-muted)]">
-                      {row.label}
-                    </td>
-                    <td className="px-4 py-3.5 text-center">
-                      <ComparisonCell value={row.ai} />
-                    </td>
-                    <td className="px-4 py-3.5 text-center">
-                      <ComparisonCell value={row.storefront} />
-                    </td>
-                    <td className="px-4 py-3.5 text-center">
-                      <ComparisonCell value={row.content} />
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
 
-          {/* Mobile: stacked per-product cards — no horizontal scroll, so the
-              whole "what's included" story is visible on a phone. Each card lists
-              only what that product actually includes (false rows are skipped). */}
-          <div className="flex flex-col gap-4 md:hidden">
-            {COMPARISON_COLS.map(({ title, key }) => (
-              <div
-                key={key}
-                className="border border-[var(--color-line)] bg-[var(--color-bg-card)] p-5"
-              >
-                <h4 className="headline mb-4 text-lg">{title}</h4>
-                <ul className="flex flex-col gap-2.5 text-sm">
-                  {COMPARISON.filter((r) => r[key] !== false).map((r) => (
-                    <li
-                      key={r.label}
-                      className="flex items-center justify-between gap-3 border-b border-[var(--color-line)] pb-2.5 last:border-0 last:pb-0"
+          {/* Accordion: one dropdown per product. Tapping a product reveals
+              its included items with a smooth height + staggered list animation. */}
+          <div className="border-t border-[var(--color-line)]">
+            {COMPARISON_COLS.map(({ title, key }, i) => {
+              const items = COMPARISON.filter((r) => r[key] !== false);
+              const isOpen = openInclude === i;
+              return (
+                <div key={key} className="border-b border-[var(--color-line)]">
+                  <button
+                    type="button"
+                    onClick={() => setOpenInclude(isOpen ? null : i)}
+                    aria-expanded={isOpen}
+                    className="flex w-full items-center justify-between gap-4 py-5 text-left transition hover:opacity-80"
+                  >
+                    <span className="headline text-lg md:text-xl">{title}</span>
+                    <span
+                      aria-hidden
+                      className={`flex h-8 w-8 shrink-0 items-center justify-center border text-lg font-light transition-all duration-300 ${
+                        isOpen
+                          ? "rotate-45 border-[var(--color-brand)] text-[var(--color-brand)]"
+                          : "border-[var(--color-line-bright)] text-[var(--color-fg-muted)]"
+                      }`}
                     >
-                      <span className="text-[var(--color-fg-muted)]">{r.label}</span>
-                      <span className="shrink-0 text-right font-medium text-[var(--color-fg)]">
-                        {r[key] === true ? (
-                          <span className="text-[var(--color-brand)]">✓</span>
-                        ) : (
-                          r[key]
-                        )}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Pricing FAQ */}
-        <div className="mt-20">
-          <h3 className="headline mb-8 text-2xl">Pricing questions</h3>
-          <div className="divide-y divide-[var(--color-line)] border-b border-t border-[var(--color-line)]">
-            {FAQS.map((faq, i) => (
-              <div key={i}>
-                <button
-                  onClick={() => setOpenFaq(openFaq === i ? null : i)}
-                  className="flex w-full items-center justify-between gap-4 py-5 text-left text-base font-medium text-[var(--color-fg)]"
-                >
-                  <span>{faq.q}</span>
-                  <span
-                    className={`shrink-0 text-xl text-[var(--color-brand)] transition-transform duration-200 ${
-                      openFaq === i ? "rotate-45" : ""
-                    }`}
-                  >
-                    +
-                  </span>
-                </button>
-                {openFaq === i && (
-                  <p className="pb-5 text-sm leading-relaxed text-[var(--color-fg-muted)]">
-                    {faq.a}
-                  </p>
-                )}
-              </div>
-            ))}
+                      +
+                    </span>
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: [0.2, 0.8, 0.2, 1] }}
+                        className="overflow-hidden"
+                      >
+                        <ul className="flex flex-col gap-3 pb-6 text-sm">
+                          {items.map((r, j) => (
+                            <motion.li
+                              key={r.label}
+                              initial={{ opacity: 0, x: -10 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: 0.1 + j * 0.05, duration: 0.3 }}
+                              className="flex items-center justify-between gap-3"
+                            >
+                              <span className="flex items-center gap-3 text-[var(--color-fg-muted)]">
+                                <span className="h-1 w-1 shrink-0 rounded-full bg-[var(--color-brand)]" />
+                                {r.label}
+                              </span>
+                              <span className="shrink-0 font-medium text-[var(--color-fg)]">
+                                {r[key] === true ? (
+                                  <span className="text-[var(--color-brand)]">✓</span>
+                                ) : (
+                                  r[key]
+                                )}
+                              </span>
+                            </motion.li>
+                          ))}
+                        </ul>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
           </div>
         </div>
 
@@ -462,6 +436,7 @@ function ProductCard({
         y: -8,
         transition: { type: "spring", stiffness: 350, damping: 22 },
       }}
+      whileTap={{ scale: 0.985 }}
       {...(product.highlighted ? { "data-featured": "" } : {})}
       className={`relative flex flex-col p-7 md:p-8 ${
         product.highlighted
@@ -495,15 +470,19 @@ function ProductCard({
           product.monthly && (
             <>
               <div className="flex items-baseline gap-2">
-                <span className="numeral text-3xl text-[var(--color-fg)]">
-                  {sym}{product.setup[currency]}
-                </span>
+                <AnimatedPrice
+                  symbol={sym}
+                  value={product.setup[currency]}
+                  className="numeral text-3xl text-[var(--color-fg)]"
+                />
                 <span className="text-sm text-[var(--color-fg-muted)]">setup</span>
               </div>
               <div className="mt-1 flex items-baseline gap-2">
-                <span className="numeral text-xl text-[var(--color-fg)]">
-                  + {sym}{product.monthly[currency]}
-                </span>
+                <AnimatedPrice
+                  symbol={`+ ${sym}`}
+                  value={product.monthly[currency]}
+                  className="numeral text-xl text-[var(--color-fg)]"
+                />
                 <span className="text-sm text-[var(--color-fg-muted)]">/mo</span>
               </div>
             </>
@@ -511,18 +490,22 @@ function ProductCard({
 
         {product.priceType === "onetime" && product.oneTime && (
           <div className="flex items-baseline gap-2">
-            <span className="numeral text-3xl text-[var(--color-fg)]">
-              {sym}{product.oneTime[currency]}
-            </span>
+            <AnimatedPrice
+              symbol={sym}
+              value={product.oneTime[currency]}
+              className="numeral text-3xl text-[var(--color-fg)]"
+            />
             <span className="text-sm text-[var(--color-fg-muted)]">one-time</span>
           </div>
         )}
 
         {product.priceType === "monthly" && product.monthly && (
           <div className="flex items-baseline gap-2">
-            <span className="numeral text-3xl text-[var(--color-fg)]">
-              {sym}{product.monthly[currency]}
-            </span>
+            <AnimatedPrice
+              symbol={sym}
+              value={product.monthly[currency]}
+              className="numeral text-3xl text-[var(--color-fg)]"
+            />
             <span className="text-sm text-[var(--color-fg-muted)]">/mo</span>
           </div>
         )}
@@ -539,7 +522,7 @@ function ProductCard({
         product.quarterly &&
         product.quarterlySave && (
           <p className="mb-4 text-xs text-[var(--color-fg-faint)]">
-            or {sym}{product.quarterly[currency]} quarterly — save {sym}
+            or {sym}{product.quarterly[currency]} quarterly, save {sym}
             {product.quarterlySave[currency]}
           </p>
         )}
@@ -572,10 +555,10 @@ function ProductCard({
       {/* CTA */}
       <Link
         href={checkoutHref}
-        className={`inline-flex w-full items-center justify-center gap-2 whitespace-nowrap px-5 py-3.5 text-center text-sm font-medium transition active:scale-[0.98] ${
+        className={`inline-flex w-full items-center justify-center gap-2 whitespace-nowrap px-5 py-3.5 text-center text-sm font-medium press transition ${
           product.highlighted
             ? "bg-[var(--color-brand)] text-white hover:bg-[var(--color-brand-hot)] active:bg-[var(--color-brand-hot)]"
-            : "border border-[var(--color-line-bright)] text-[var(--color-fg)] hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] active:border-[var(--color-brand)] active:text-[var(--color-brand)]"
+            : "beam border border-[var(--color-line-bright)] text-[var(--color-fg)] hover:border-[var(--color-brand)] hover:text-[var(--color-brand)] active:border-[var(--color-brand)] active:text-[var(--color-brand)]"
         }`}
       >
         <span>{product.cta}</span>
@@ -609,13 +592,4 @@ function ProductCard({
       </div>
     </motion.div>
   );
-}
-
-/* ─── ComparisonCell ────────────────────────────────────────── */
-function ComparisonCell({ value }: { value: boolean | string }) {
-  if (value === true)
-    return <span className="font-medium text-[var(--color-brand)]">✓</span>;
-  if (value === false)
-    return <span className="text-[var(--color-fg-faint)]">—</span>;
-  return <span className="text-[var(--color-fg-muted)]">{value}</span>;
 }

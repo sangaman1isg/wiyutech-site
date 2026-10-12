@@ -29,7 +29,7 @@ export default function PromoBanner() {
       <p className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-x-2 gap-y-1 px-6 py-2 text-center text-xs font-medium md:text-sm">
         <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-white" aria-hidden />
         <span>
-          Limited offer — 30% off any package with code{" "}
+          Limited offer: 30% off any package with code{" "}
           <span className="font-semibold tracking-wide underline underline-offset-2">
             WIYULE30
           </span>
