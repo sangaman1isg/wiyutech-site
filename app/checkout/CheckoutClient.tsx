@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import AnimatedPrice from "@/src/components/AnimatedPrice";
@@ -141,6 +141,18 @@ export default function CheckoutClient() {
   const [payError, setPayError] = useState("");
   const [showManual, setShowManual] = useState(false);
 
+  // Prefill from a previous visit (remember-me)
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem("wiyule-customer") || "{}");
+      if (typeof saved.name === "string") setName(saved.name);
+      if (typeof saved.email === "string") setEmail(saved.email);
+      if (typeof saved.phone === "string") setPhone(saved.phone);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
   const product = PRODUCTS[slug];
 
   /* ── Not found ── */
@@ -189,6 +201,19 @@ export default function CheckoutClient() {
     if (!name.trim() || !email.trim() || !phone.trim()) {
       setPayError("Please add your name, email and phone first.");
       return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setPayError("That email doesn't look right — please check it.");
+      return;
+    }
+    // Remember for next time
+    try {
+      localStorage.setItem(
+        "wiyule-customer",
+        JSON.stringify({ name, email, phone })
+      );
+    } catch {
+      /* ignore */
     }
     setPaying(true);
     try {
@@ -414,13 +439,18 @@ export default function CheckoutClient() {
               disabled={paying}
               className="press mt-4 inline-flex w-full items-center justify-center gap-2 bg-[var(--color-brand)] px-6 py-4 text-sm font-medium text-white transition hover:bg-[var(--color-brand-hot)] disabled:opacity-50"
             >
-              {paying ? "Starting…" : `Pay ${sym}${depositStr} now →`}
+              {paying
+                ? "Taking you to secure checkout…"
+                : `Pay ${sym}${depositStr} now →`}
             </button>
             <div className="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] text-[var(--color-fg-faint)]">
               <span>✓ Confirmed instantly</span>
               <span>✓ Money-back guarantee</span>
-              <span>✓ Secure via {currency === "MWK" ? "PayChangu" : "Pesapal"}</span>
             </div>
+            <p className="mt-2 text-center text-[11px] text-[var(--color-fg-faint)]">
+              🔒 Secured by {currency === "MWK" ? "PayChangu" : "Pesapal"} ·
+              Airtel · Mpamba · Visa · Mastercard
+            </p>
           </div>
 
           {/* ── Or pay manually (fallback) ── */}
