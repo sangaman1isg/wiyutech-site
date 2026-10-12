@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 
 /* ────────────────────────────────────────────────────────────────────────
    HeroBuildBackground
@@ -50,7 +50,7 @@ export default function HeroBuildBackground() {
       <div className="absolute bottom-[-6%] right-[-28%] w-[30rem] max-w-[115vw] opacity-[0.08] md:inset-y-0 md:bottom-auto md:right-[-8%] md:top-1/2 md:w-[46rem] md:max-w-[60vw] md:-translate-y-1/2 md:opacity-[0.22] lg:opacity-30">
         <div className="rounded-xl border border-[var(--color-line-bright)] bg-[var(--color-bg-elev)] shadow-2xl">
           {/* Browser chrome bar */}
-          <motion.div
+          <m.div
             {...block(0.02)}
             className="flex items-center gap-2 border-b border-[var(--color-line)] px-4 py-3"
           >
@@ -58,42 +58,42 @@ export default function HeroBuildBackground() {
             <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-fg-faint)]" />
             <span className="h-2.5 w-2.5 rounded-full bg-[var(--color-fg-faint)]" />
             <span className="ml-3 h-2.5 w-48 rounded bg-[var(--color-line-bright)]" />
-          </motion.div>
+          </m.div>
 
           {/* Page body */}
           <div className="space-y-5 p-6">
             {/* Top nav row */}
-            <motion.div {...block(0.12)} className="flex items-center justify-between">
+            <m.div {...block(0.12)} className="flex items-center justify-between">
               <span className="h-3 w-24 rounded bg-[var(--color-fg-faint)]" />
               <div className="flex gap-3">
                 <span className="h-3 w-12 rounded bg-[var(--color-line-bright)]" />
                 <span className="h-3 w-12 rounded bg-[var(--color-line-bright)]" />
                 <span className="h-3 w-12 rounded bg-[var(--color-line-bright)]" />
               </div>
-            </motion.div>
+            </m.div>
 
             {/* Hero headline lines */}
             <div className="space-y-3 pt-4">
-              <motion.div {...block(0.2)} className="h-6 w-3/4 rounded bg-[var(--color-fg-muted)]" />
-              <motion.div {...block(0.26)} className="h-6 w-2/3 rounded bg-[var(--color-fg-muted)]" />
-              <motion.div {...block(0.32)} className="h-4 w-1/2 rounded bg-[var(--color-fg-faint)]" />
+              <m.div {...block(0.2)} className="h-6 w-3/4 rounded bg-[var(--color-fg-muted)]" />
+              <m.div {...block(0.26)} className="h-6 w-2/3 rounded bg-[var(--color-fg-muted)]" />
+              <m.div {...block(0.32)} className="h-4 w-1/2 rounded bg-[var(--color-fg-faint)]" />
             </div>
 
             {/* CTA button (brand red) */}
-            <motion.div {...block(0.4)} className="h-9 w-40 rounded bg-[var(--color-brand)]" />
+            <m.div {...block(0.4)} className="h-9 w-40 rounded bg-[var(--color-brand)]" />
 
             {/* Card row */}
             <div className="grid grid-cols-3 gap-4 pt-4">
-              <motion.div {...block(0.48)} className="h-24 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-card)]" />
-              <motion.div {...block(0.54)} className="h-24 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-card)]" />
-              <motion.div {...block(0.6)} className="h-24 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-card)]" />
+              <m.div {...block(0.48)} className="h-24 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-card)]" />
+              <m.div {...block(0.54)} className="h-24 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-card)]" />
+              <m.div {...block(0.6)} className="h-24 rounded-lg border border-[var(--color-line)] bg-[var(--color-bg-card)]" />
             </div>
           </div>
 
           {/* Red "scan" sweep — a soft vertical light that passes across as the
               page builds, suggesting active rendering. */}
           {!reduce && (
-            <motion.div
+            <m.div
               className="absolute inset-y-0 w-24 bg-gradient-to-r from-transparent via-[var(--color-brand)] to-transparent"
               style={{ opacity: 0.12 }}
               animate={{ x: ["-20%", "650%"] }}

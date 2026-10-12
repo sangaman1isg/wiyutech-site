@@ -6,6 +6,7 @@ import AnimationObserver from "@/src/components/AnimationObserver";
 import CursorGlow from "@/src/components/CursorGlow";
 import CustomCursor from "@/src/components/CustomCursor";
 import MobileStickyCTA from "@/src/components/MobileStickyCTA";
+import MotionProvider from "@/src/components/MotionProvider";
 import PromoBanner from "@/src/components/PromoBanner";
 
 const geistSans = Geist({
@@ -19,7 +20,8 @@ const geistMono = Geist_Mono({
 const bricolage = Bricolage_Grotesque({
   variable: "--font-bricolage",
   subsets: ["latin"],
-  weight: ["400", "600", "700", "800"],
+  // Only 600 (.headline) and 800 (.numeral) are used — 400/700 were dead weight.
+  weight: ["600", "800"],
 });
 
 export const metadata: Metadata = {
@@ -129,13 +131,15 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
         />
-        <PromoBanner />
-        {children}
-        <WhatsAppButton />
-        <MobileStickyCTA />
-        <AnimationObserver />
-        <CursorGlow />
-        <CustomCursor />
+        <MotionProvider>
+          <PromoBanner />
+          {children}
+          <WhatsAppButton />
+          <MobileStickyCTA />
+          <AnimationObserver />
+          <CursorGlow />
+          <CustomCursor />
+        </MotionProvider>
       </body>
     </html>
   );

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { m, useMotionValue, useSpring } from "framer-motion";
 
 // Cuberto-style custom cursor: an instant dot + a trailing ring.
 // Over anything interactive (links, buttons, [data-cursor]) the ring
@@ -68,7 +68,7 @@ export default function CustomCursor() {
   return (
     <>
       {/* Instant dot */}
-      <motion.div
+      <m.div
         aria-hidden
         className="pointer-events-none fixed top-0 left-0 z-[10000] rounded-full bg-[var(--color-fg)] will-change-transform"
         style={{
@@ -84,7 +84,7 @@ export default function CustomCursor() {
       />
 
       {/* Trailing ring */}
-      <motion.div
+      <m.div
         aria-hidden
         className="pointer-events-none fixed top-0 left-0 z-[10000] rounded-full border will-change-transform"
         style={{

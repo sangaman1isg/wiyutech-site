@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { m, useMotionValue, useSpring } from "framer-motion";
 
 // Wraps a button/link so it gently pulls toward the cursor on hover, then
 // springs back on leave. Desktop only — the handler bails on touch devices,
@@ -38,7 +38,7 @@ export default function Magnetic({
   }
 
   return (
-    <motion.div
+    <m.div
       ref={ref}
       onMouseMove={handleMove}
       onMouseLeave={reset}
@@ -46,6 +46,6 @@ export default function Magnetic({
       className={`inline-block ${className}`}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }

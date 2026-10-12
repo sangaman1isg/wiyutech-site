@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, m } from "framer-motion";
 import Link from "next/link";
 import AnimatedPrice from "@/src/components/AnimatedPrice";
 
@@ -349,7 +349,7 @@ export default function Services() {
                   </button>
                   <AnimatePresence initial={false}>
                     {isOpen && (
-                      <motion.div
+                      <m.div
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
@@ -358,7 +358,7 @@ export default function Services() {
                       >
                         <ul className="flex flex-col gap-3 pb-6 text-sm">
                           {items.map((r, j) => (
-                            <motion.li
+                            <m.li
                               key={r.label}
                               initial={{ opacity: 0, x: -10 }}
                               animate={{ opacity: 1, x: 0 }}
@@ -376,10 +376,10 @@ export default function Services() {
                                   r[key]
                                 )}
                               </span>
-                            </motion.li>
+                            </m.li>
                           ))}
                         </ul>
-                      </motion.div>
+                      </m.div>
                     )}
                   </AnimatePresence>
                 </div>
@@ -423,7 +423,7 @@ function ProductCard({
   const checkoutHref = `/checkout?product=${product.slug}&currency=${checkoutCurrency}`;
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 28 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "0px 0px -80px 0px" }}
@@ -590,6 +590,6 @@ function ProductCard({
           ))}
         </ul>
       </div>
-    </motion.div>
+    </m.div>
   );
 }

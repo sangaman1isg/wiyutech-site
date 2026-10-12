@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { m, useMotionValue, useSpring } from "framer-motion";
 
 // Lazy red glow blob that follows the cursor on desktop.
 // Hidden on touch devices — useEffect only adds the mousemove
@@ -27,7 +27,7 @@ export default function CursorGlow() {
   }, [x, y]);
 
   return (
-    <motion.div
+    <m.div
       aria-hidden
       className="pointer-events-none fixed top-0 left-0 z-[9999]"
       style={{
