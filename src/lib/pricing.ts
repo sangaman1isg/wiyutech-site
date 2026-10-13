@@ -33,9 +33,9 @@ export const CHECKOUT_ITEMS: Record<string, CheckoutItem> = {
   },
   "content-pack": {
     slug: "content-pack",
-    name: "Monthly Content Pack",
+    name: "Content & Design Pack",
     depositLabel: "First month",
-    amount: { ZMW: 2799, MWK: 174999 },
+    amount: { ZMW: 3199, MWK: 199999 },
   },
 };
 

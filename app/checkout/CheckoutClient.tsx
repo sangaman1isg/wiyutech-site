@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import AnimatedPrice from "@/src/components/AnimatedPrice";
@@ -133,6 +133,27 @@ export default function CheckoutClient() {
   // Which manual payment method the visitor is viewing
   const [payMethod, setPayMethod] = useState<"momo" | "bank">("momo");
 
+  // Automated "Pay now" form state — MWK only (PayChangu). ZMW stays manual.
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [paying, setPaying] = useState(false);
+  const [payError, setPayError] = useState("");
+  // On MWK, the manual flow is tucked behind an "Or pay manually" toggle.
+  const [showManual, setShowManual] = useState(false);
+
+  // Prefill from a previous visit (remember-me).
+  useEffect(() => {
+    try {
+      const saved = JSON.parse(localStorage.getItem("wiyule-customer") || "{}");
+      if (typeof saved.name === "string") setName(saved.name);
+      if (typeof saved.email === "string") setEmail(saved.email);
+      if (typeof saved.phone === "string") setPhone(saved.phone);
+    } catch {
+      /* ignore */
+    }
+  }, []);
+
   const product = PRODUCTS[slug];
 
   /* ── Not found ── */
@@ -172,6 +193,56 @@ export default function CheckoutClient() {
     setPromoApplied(false);
     setCodeInput("");
     setCodeError("");
+  }
+
+  // Start an automated payment: price is decided server-side; we just send the
+  // slug, currency, customer details and (optional) promo code, then redirect.
+  async function payNow() {
+    setPayError("");
+    if (!name.trim() || !email.trim() || !phone.trim()) {
+      setPayError("Please add your name, email and phone first.");
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setPayError("That email doesn't look right — please check it.");
+      return;
+    }
+    // Remember for next time.
+    try {
+      localStorage.setItem(
+        "wiyule-customer",
+        JSON.stringify({ name, email, phone })
+      );
+    } catch {
+      /* ignore */
+    }
+    setPaying(true);
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          slug,
+          currency,
+          name,
+          email,
+          phone,
+          code: promoApplied ? PROMO_CODE : undefined,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.redirect_url) {
+        throw new Error(
+          data.error || "Couldn't start the payment. Please try again."
+        );
+      }
+      window.location.href = data.redirect_url;
+    } catch (err) {
+      setPayError(
+        err instanceof Error ? err.message : "Payment failed. Please try again."
+      );
+      setPaying(false);
+    }
   }
 
   const momo = MOMO[currency];
@@ -331,146 +402,117 @@ export default function CheckoutClient() {
             )}
           </div>
 
-          {/* Manual payment */}
+          {/* ── Pay now — MWK only (PayChangu). ZMW stays on manual. ── */}
+          {currency === "MWK" && (
+            <div className="border border-[var(--color-brand)] p-6">
+              <p className="eyebrow mb-1 text-[var(--color-brand)]">— Pay now</p>
+              <p className="mb-4 text-xs text-[var(--color-fg-muted)]">
+                Card or mobile money. Confirmed instantly.
+              </p>
+              <div className="flex flex-col gap-2.5">
+                <input
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Your name"
+                  aria-label="Your name"
+                  className="w-full border border-[var(--color-line-bright)] bg-transparent px-3 py-2.5 text-sm text-[var(--color-fg)] placeholder:text-[var(--color-fg-faint)] focus:border-[var(--color-brand)] focus:outline-none"
+                />
+                <input
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  type="email"
+                  placeholder="Email address"
+                  aria-label="Email address"
+                  className="w-full border border-[var(--color-line-bright)] bg-transparent px-3 py-2.5 text-sm text-[var(--color-fg)] placeholder:text-[var(--color-fg-faint)] focus:border-[var(--color-brand)] focus:outline-none"
+                />
+                <input
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="Phone number"
+                  aria-label="Phone number"
+                  className="w-full border border-[var(--color-line-bright)] bg-transparent px-3 py-2.5 text-sm text-[var(--color-fg)] placeholder:text-[var(--color-fg-faint)] focus:border-[var(--color-brand)] focus:outline-none"
+                />
+              </div>
+              {payError && (
+                <p className="mt-3 text-xs text-[var(--color-brand)]">{payError}</p>
+              )}
+              <button
+                type="button"
+                onClick={payNow}
+                disabled={paying}
+                className="press mt-4 inline-flex w-full items-center justify-center gap-2 bg-[var(--color-brand)] px-6 py-4 text-sm font-medium text-white transition hover:bg-[var(--color-brand-hot)] disabled:opacity-50"
+              >
+                {paying
+                  ? "Taking you to secure checkout…"
+                  : `Pay ${sym}${depositStr} now →`}
+              </button>
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px] text-[var(--color-fg-faint)]">
+                <span>✓ Confirmed instantly</span>
+                <span>✓ Money-back guarantee</span>
+              </div>
+              <p className="mt-2 text-center text-[11px] text-[var(--color-fg-faint)]">
+                🔒 Secured by PayChangu · Airtel · Mpamba · Visa · Mastercard
+              </p>
+            </div>
+          )}
+
+          {/* ── Manual payment ── */}
+          {/* MWK: tucked behind a toggle (fallback). ZMW: the primary method, always open. */}
           <div className="border border-[var(--color-line)] p-6">
-            <p className="eyebrow mb-5">— How to pay</p>
-            <ol className="flex flex-col gap-5">
-              {/* Step 1 */}
-              <li className="flex gap-3 sm:gap-4">
-                <span className="numeral flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--color-brand)] text-sm text-[var(--color-brand)]">
-                  1
+            {currency === "MWK" ? (
+              <button
+                type="button"
+                onClick={() => setShowManual((v) => !v)}
+                aria-expanded={showManual}
+                className="flex w-full items-center justify-between gap-4 text-left"
+              >
+                <span className="eyebrow">— Or pay manually</span>
+                <span
+                  className={`text-lg font-light transition-transform duration-200 ${
+                    showManual
+                      ? "rotate-45 text-[var(--color-brand)]"
+                      : "text-[var(--color-fg-muted)]"
+                  }`}
+                >
+                  +
                 </span>
-                <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <p className="text-sm font-medium text-[var(--color-fg)]">
-                      Send {sym}{depositStr}
-                    </p>
-                    <CopyButton value={depositPlain} srLabel="amount" />
+              </button>
+            ) : (
+              <p className="eyebrow mb-5">— How to pay</p>
+            )}
+
+            {(currency !== "MWK" || showManual) && (
+              <div className={currency === "MWK" ? "mt-5" : undefined}>
+                <ManualSteps
+                  sym={sym}
+                  depositStr={depositStr}
+                  depositPlain={depositPlain}
+                  momo={momo}
+                  bank={bank}
+                  payMethod={payMethod}
+                  setPayMethod={setPayMethod}
+                />
+
+                {/* Trust strip — ZMW manual flow only (MWK has its own in the Pay-now card) */}
+                {currency !== "MWK" && (
+                  <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-[var(--color-fg-faint)]">
+                    <span>✓ Confirmed within 1 hour</span>
+                    <span>✓ Money-back guarantee</span>
+                    <span>✓ Founder-run</span>
                   </div>
+                )}
 
-                  {/* Method tabs */}
-                  <div className="mt-3 inline-flex rounded-lg border border-[var(--color-line-bright)] p-0.5 text-xs">
-                    {(
-                      [
-                        ["momo", momo.provider],
-                        ["bank", `${bank.name} transfer`],
-                      ] as const
-                    ).map(([key, label]) => (
-                      <button
-                        key={key}
-                        type="button"
-                        onClick={() => setPayMethod(key)}
-                        className={`rounded-md px-3 py-1.5 font-medium transition ${
-                          payMethod === key
-                            ? "bg-[var(--color-brand)] text-white"
-                            : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
-                        }`}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </div>
-
-                  {/* Mobile money panel */}
-                  {payMethod === "momo" && (
-                    <div className="mt-3 border border-[var(--color-line)] p-3">
-                      <p className="eyebrow mb-1 text-[var(--color-fg-muted)]">
-                        — {momo.provider}
-                      </p>
-                      <div className="flex items-center justify-between gap-3">
-                        <p className="font-mono text-base text-[var(--color-fg)]">
-                          {momo.number}
-                        </p>
-                        <CopyButton
-                          value={momo.number.replace(/\s/g, "")}
-                          srLabel="mobile money number"
-                        />
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Bank transfer panel */}
-                  {payMethod === "bank" && (
-                    <div className="mt-3 border border-[var(--color-line)] p-3">
-                      <p className="eyebrow mb-2 text-[var(--color-fg-muted)]">
-                        — {bank.name} (bank transfer)
-                      </p>
-                      <dl className="flex flex-col gap-1.5 text-xs">
-                        <div className="flex justify-between gap-3">
-                          <dt className="shrink-0 text-[var(--color-fg-faint)]">Account name</dt>
-                          <dd className="min-w-0 text-right text-[var(--color-fg)]">{bank.account}</dd>
-                        </div>
-                        <div className="flex items-center justify-between gap-3">
-                          <dt className="shrink-0 text-[var(--color-fg-faint)]">Account no.</dt>
-                          <dd className="flex min-w-0 items-center gap-2">
-                            <span className="font-mono text-[var(--color-fg)]">{bank.number}</span>
-                            <CopyButton value={bank.number} srLabel="account number" />
-                          </dd>
-                        </div>
-                        {bank.branch && (
-                          <div className="flex justify-between gap-3">
-                            <dt className="shrink-0 text-[var(--color-fg-faint)]">Branch</dt>
-                            <dd className="min-w-0 text-right text-[var(--color-fg)]">{bank.branch}</dd>
-                          </div>
-                        )}
-                      </dl>
-                    </div>
-                  )}
-
-                  <p className="mt-2 text-xs text-[var(--color-fg-faint)]">
-                    Use your name as the payment reference
-                  </p>
-                </div>
-              </li>
-
-              {/* Step 2 */}
-              <li className="flex gap-3 sm:gap-4">
-                <span className="numeral flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--color-brand)] text-sm text-[var(--color-brand)]">
-                  2
-                </span>
-                <div>
-                  <p className="text-sm font-medium text-[var(--color-fg)]">
-                    Screenshot your confirmation
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--color-fg-faint)]">
-                    The SMS or app confirmation screen
-                  </p>
-                </div>
-              </li>
-
-              {/* Step 3 */}
-              <li className="flex gap-3 sm:gap-4">
-                <span className="numeral flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--color-brand)] text-sm text-[var(--color-brand)]">
-                  3
-                </span>
-                <div>
-                  <p className="text-sm font-medium text-[var(--color-fg)]">
-                    Tap the button below and send us your screenshot
-                  </p>
-                  <p className="mt-1 text-xs text-[var(--color-fg-faint)]">
-                    We confirm within 1 hour and start your project
-                  </p>
-                </div>
-              </li>
-            </ol>
+                <a
+                  href={waUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="press mt-5 inline-flex w-full items-center justify-center gap-2 bg-[var(--color-brand)] px-6 py-4 text-sm font-medium text-white transition hover:bg-[var(--color-brand-hot)]"
+                >
+                  I&apos;ve paid, send confirmation →
+                </a>
+              </div>
+            )}
           </div>
-
-          {/* Trust strip */}
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-[var(--color-fg-faint)]">
-            <span>✓ Confirmed within 1 hour</span>
-            <span>✓ Money-back guarantee</span>
-            <span>✓ Founder-run</span>
-          </div>
-
-          {/* WhatsApp confirm button */}
-          <a
-            href={waUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex w-full items-center justify-center gap-2 bg-[var(--color-brand)] px-6 py-4 text-sm font-medium text-white press transition hover:bg-[var(--color-brand-hot)]"
-          >
-            I&apos;ve paid, send confirmation →
-          </a>
 
           <p className="text-center text-xs text-[var(--color-fg-faint)]">
             Questions?{" "}
@@ -486,6 +528,149 @@ export default function CheckoutClient() {
         </div>
       </div>
     </div>
+  );
+}
+
+/* ─── ManualSteps ────────────────────────────────────────────── */
+// The "send money → screenshot → WhatsApp us" instructions. Shared by the
+// ZMW primary flow and the MWK "Or pay manually" fallback.
+function ManualSteps({
+  sym,
+  depositStr,
+  depositPlain,
+  momo,
+  bank,
+  payMethod,
+  setPayMethod,
+}: {
+  sym: string;
+  depositStr: string;
+  depositPlain: string;
+  momo: { provider: string; number: string; country: string };
+  bank: BankDetails;
+  payMethod: "momo" | "bank";
+  setPayMethod: (m: "momo" | "bank") => void;
+}) {
+  return (
+    <ol className="flex flex-col gap-5">
+      {/* Step 1 */}
+      <li className="flex gap-3 sm:gap-4">
+        <span className="numeral flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--color-brand)] text-sm text-[var(--color-brand)]">
+          1
+        </span>
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <p className="text-sm font-medium text-[var(--color-fg)]">
+              Send {sym}{depositStr}
+            </p>
+            <CopyButton value={depositPlain} srLabel="amount" />
+          </div>
+
+          {/* Method tabs */}
+          <div className="mt-3 inline-flex rounded-lg border border-[var(--color-line-bright)] p-0.5 text-xs">
+            {(
+              [
+                ["momo", momo.provider],
+                ["bank", `${bank.name} transfer`],
+              ] as const
+            ).map(([key, label]) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setPayMethod(key)}
+                className={`rounded-md px-3 py-1.5 font-medium transition ${
+                  payMethod === key
+                    ? "bg-[var(--color-brand)] text-white"
+                    : "text-[var(--color-fg-muted)] hover:text-[var(--color-fg)]"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
+
+          {/* Mobile money panel */}
+          {payMethod === "momo" && (
+            <div className="mt-3 border border-[var(--color-line)] p-3">
+              <p className="eyebrow mb-1 text-[var(--color-fg-muted)]">
+                — {momo.provider}
+              </p>
+              <div className="flex items-center justify-between gap-3">
+                <p className="font-mono text-base text-[var(--color-fg)]">
+                  {momo.number}
+                </p>
+                <CopyButton
+                  value={momo.number.replace(/\s/g, "")}
+                  srLabel="mobile money number"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Bank transfer panel */}
+          {payMethod === "bank" && (
+            <div className="mt-3 border border-[var(--color-line)] p-3">
+              <p className="eyebrow mb-2 text-[var(--color-fg-muted)]">
+                — {bank.name} (bank transfer)
+              </p>
+              <dl className="flex flex-col gap-1.5 text-xs">
+                <div className="flex justify-between gap-3">
+                  <dt className="shrink-0 text-[var(--color-fg-faint)]">Account name</dt>
+                  <dd className="min-w-0 text-right text-[var(--color-fg)]">{bank.account}</dd>
+                </div>
+                <div className="flex items-center justify-between gap-3">
+                  <dt className="shrink-0 text-[var(--color-fg-faint)]">Account no.</dt>
+                  <dd className="flex min-w-0 items-center gap-2">
+                    <span className="font-mono text-[var(--color-fg)]">{bank.number}</span>
+                    <CopyButton value={bank.number} srLabel="account number" />
+                  </dd>
+                </div>
+                {bank.branch && (
+                  <div className="flex justify-between gap-3">
+                    <dt className="shrink-0 text-[var(--color-fg-faint)]">Branch</dt>
+                    <dd className="min-w-0 text-right text-[var(--color-fg)]">{bank.branch}</dd>
+                  </div>
+                )}
+              </dl>
+            </div>
+          )}
+
+          <p className="mt-2 text-xs text-[var(--color-fg-faint)]">
+            Use your name as the payment reference
+          </p>
+        </div>
+      </li>
+
+      {/* Step 2 */}
+      <li className="flex gap-3 sm:gap-4">
+        <span className="numeral flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--color-brand)] text-sm text-[var(--color-brand)]">
+          2
+        </span>
+        <div>
+          <p className="text-sm font-medium text-[var(--color-fg)]">
+            Screenshot your confirmation
+          </p>
+          <p className="mt-1 text-xs text-[var(--color-fg-faint)]">
+            The SMS or app confirmation screen
+          </p>
+        </div>
+      </li>
+
+      {/* Step 3 */}
+      <li className="flex gap-3 sm:gap-4">
+        <span className="numeral flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[var(--color-brand)] text-sm text-[var(--color-brand)]">
+          3
+        </span>
+        <div>
+          <p className="text-sm font-medium text-[var(--color-fg)]">
+            Tap the button below and send us your screenshot
+          </p>
+          <p className="mt-1 text-xs text-[var(--color-fg-faint)]">
+            We confirm within 1 hour and start your project
+          </p>
+        </div>
+      </li>
+    </ol>
   );
 }
 

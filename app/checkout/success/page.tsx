@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Nav from "@/src/components/Nav";
 import { getTransactionStatus } from "@/src/lib/pesapal";
+import { verifyPayment } from "@/src/lib/paychangu";
 import { updateOrderByTxRef, getOrderByTxRef } from "@/src/lib/orders";
 
 export const metadata: Metadata = {
@@ -26,9 +27,15 @@ export default async function CheckoutSuccessPage({
   searchParams: Promise<{
     OrderTrackingId?: string;
     OrderMerchantReference?: string;
+    tx_ref?: string;
+    status?: string;
   }>;
 }) {
-  const { OrderTrackingId, OrderMerchantReference } = await searchParams;
+  const {
+    OrderTrackingId,
+    OrderMerchantReference,
+    tx_ref: payChanguRef,
+  } = await searchParams;
 
   let state: State = "pending";
 
@@ -50,6 +57,21 @@ export default async function CheckoutSuccessPage({
         raw: tx,
       });
       await getOrderByTxRef(OrderMerchantReference); // (kept for future receipt display)
+    } catch {
+      state = "error";
+    }
+  } else if (payChanguRef) {
+    try {
+      const pc = await verifyPayment(payChanguRef);
+      const s = pc.status.toLowerCase();
+      const mapped =
+        s === "success"
+          ? "successful"
+          : s === "failed" || s === "cancelled" || s === "reversed"
+            ? "failed"
+            : "pending";
+      state = mapped;
+      await updateOrderByTxRef(payChanguRef, { status: mapped, raw: pc });
     } catch {
       state = "error";
     }
