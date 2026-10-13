@@ -44,7 +44,7 @@ We build websites, AI WhatsApp assistants, and operations systems for SMEs in Ma
 - **Language:** TypeScript (strict)
 - **Styling:** Tailwind CSS v4 (CSS variables, not config-based)
 - **Animations:** Framer Motion (`framer-motion ^12.40.0`) — still the only runtime dep beyond Next/React. Loaded via `LazyMotion` (`MotionProvider`) + the `m` components to keep the bundle lean. **Use `m.*`, not `motion.*`** (strict mode throws otherwise).
-- **Payments:** PayChangu (MWK) + Pesapal (ZMW) — native `fetch`, no SDK (`src/lib/paychangu.ts`, `src/lib/pesapal.ts`). ⏸️ Built but HELD for KYC.
+- **Payments:** PayChangu (MWK) + Pesapal (ZMW) — native `fetch`, no SDK (`src/lib/paychangu.ts`, `src/lib/pesapal.ts`). ✅ **PayChangu (MWK) LIVE on `main`** as of 13 Oct 2026. ⏸️ Pesapal (ZMW) still HELD for KYC.
 - **Orders DB:** Supabase (REST, service-role key, no SDK — `src/lib/orders.ts`)
 - **AI:** Groq (on-site Wiyu via `/api/wiyu`, model `openai/gpt-oss-20b`)
 - **Hosting:** Netlify (auto-deploy on push to `main`)
@@ -107,10 +107,12 @@ wiyutech-site/
 ├── next.config.ts · tsconfig.json · package.json · netlify.toml
 └── CLAUDE.md                     (this file)
 
-⏸️ HELD on branch `wave8-hold` (for KYC, NOT on main):
-   src/lib/paychangu.ts · app/api/webhooks/paychangu · RoiCalculator.tsx ·
-   the "Pay now" form + checkout UX pass in CheckoutClient.tsx ·
-   PayChangu routing in app/api/checkout + /checkout/success · pricing.ts content-pack sync
+✅ LIVE on `main` (13 Oct 2026): PayChangu (MWK) automated checkout —
+   src/lib/paychangu.ts · app/api/webhooks/paychangu · MWK "Pay now" form in
+   CheckoutClient.tsx · PayChangu routing in app/api/checkout + /checkout/success.
+
+⏸️ STILL HELD on branch `wave8-hold` (for Pesapal KYC, NOT on main):
+   Pesapal (ZMW) routing · RoiCalculator.tsx ("cost of a slow reply" section)
 ---
 
 ## 🎨 Brand System (DO NOT VIOLATE)
@@ -173,9 +175,12 @@ Services.tsx was overhauled in Wave 5. There are now 3 core products with full m
 - Checkout: full first month upfront (MWK 199,999 / ZMW 3,199)
 
 ### Payment collection
-- **Automated checkout is BUILT but HELD for KYC** (see "Where We Are Now"):
-  MWK → PayChangu, ZMW → Pesapal, each with a manual mobile-money fallback.
-- Manual mobile money (current live method):
+- **MWK → PayChangu is LIVE** (13 Oct 2026): the `/checkout` page shows a "Pay now"
+  form for MWK (card / Airtel / Mpamba via PayChangu's hosted page), with manual
+  mobile money as the fallback. `/api/checkout` routes MWK to PayChangu and
+  **rejects ZMW** (so it never hits the unverified Pesapal endpoint).
+- **ZMW → Pesapal is still HELD for KYC** — ZMW stays on manual mobile money only.
+- Manual mobile money (still the live method for ZMW; fallback for MWK):
   - **Zambia (ZMW):** Airtel Money — 0774 668 193
   - **Malawi (MWK):** TNM Mpamba — 0893 306 186
 - USD is cash-only (no online USD collection)
@@ -430,17 +435,18 @@ If a deploy fails:
 - ✅ **Wave 7 shipped (premium UI):** Cuberto custom cursor · magnetic CTAs · animated hamburger · `.press` tactile buttons sitewide · border-beam on product CTAs · film grain · heading mask-reveals · count-ups (numbers + prices) that fire on scroll-in · mobile polish (no tap-flash) · LazyMotion perf pass · focus-visible rings · reduced-motion scoped to only kill LOOPING effects · copy rewritten to drop em dashes · Storefront Kit set as #1 · graphic design merged into Content & Design Pack (+15%) · homepage FAQ removed.
 - ✅ **On-site Wiyu:** live chat demo + sitewide floating bubble (`/api/wiyu`, Groq `openai/gpt-oss-20b`).
 - ✅ **On `main` now (Wave 8 partial):** price count-on-scroll + the Wiyu bubble.
+- ✅ **PayChangu (MWK) checkout LIVE on `main` (13 Oct 2026, commit 40392c7):** PayChangu KYC cleared. Hand-grafted onto `main` (NOT a merge of `wave8-hold`, which is stale and conflicts on `CheckoutClient.tsx`). MWK gets a "Pay now" form → PayChangu hosted page; `/api/webhooks/paychangu` (signed, re-verifies); `/checkout/success` verifies via `?tx_ref`; `/api/checkout` rejects non-MWK. Accepted-payment badges (Visa/Mastercard/Airtel/Mpamba) shown under the button. `pricing.ts` content-pack corrected to MWK 199,999 / ZMW 3,199. Netlify needs live `PAYCHANGU_SECRET_KEY` + `PAYCHANGU_WEBHOOK_SECRET` + `NEXT_PUBLIC_SITE_URL=https://wiyuletech.com` + `SUPABASE_*` (code does NOT read `PAYCHANGU_PUBLIC_KEY`).
 
-### ⏸️ HELD for KYC — on branch `wave8-hold`, NOT on `main`
-Built, build-clean, verified locally, but NOT deployed — waiting on PayChangu **and** Pesapal business verification:
-- **PayChangu (MWK) + Pesapal (ZMW) automated checkout** — `src/lib/paychangu.ts`, `/api/checkout` currency routing, `/api/webhooks/paychangu`, `/checkout/success` dual-verify, and the "Pay now" form + checkout UX pass (copy buttons, tabs, trust) in `CheckoutClient.tsx`.
-- **ROI calculator** (`RoiCalculator.tsx` — "cost of a slow reply" homepage section).
-- **Go-live steps:** finish KYC on both gateways · add `PAYCHANGU_SECRET_KEY` / `PAYCHANGU_PUBLIC_KEY` / `PAYCHANGU_WEBHOOK_SECRET` + confirm Supabase keys in **Netlify** · switch Pesapal to live base URL (`https://pay.pesapal.com/v3/api`) + live keys + re-register IPN · then merge `wave8-hold` → `main`.
+### ⏸️ HELD for Pesapal KYC — on branch `wave8-hold`, NOT on `main`
+Built, build-clean, but NOT deployed — waiting on Pesapal business verification:
+- **Pesapal (ZMW) automated checkout** — the ZMW branch of `/api/checkout`, `/checkout/success` Pesapal verify, and showing the "Pay now" card for ZMW in `CheckoutClient.tsx`.
+- **ROI calculator** (`RoiCalculator.tsx` — "cost of a slow reply" homepage section). Never actually payment-gated; can be grafted anytime.
+- **ZMW go-live steps:** finish Pesapal KYC · switch Pesapal to live base URL (`https://pay.pesapal.com/v3/api`) + live keys + re-register IPN · restore the Pesapal branch in `/api/checkout` (drop the `currency !== "MWK"` reject) · show the "Pay now" card for ZMW in `CheckoutClient.tsx`.
 - **Infra note:** Supabase project `edlqmvmpvnnvcatyxgbp` had PAUSED (free tier) and was restored. The `orders` table is the gateway-agnostic record store.
 
 ### ⚠️ Known issues / tech debt
 - **Stale n8n Wiyu model** — the WhatsApp Wiyu likely still points at the retired Llama model (see Wiyu section).
-- **pricing.ts drift on `main`:** `src/lib/pricing.ts` still has the OLD Content Pack name/price; the sync is in `wave8-hold`. Harmless (pricing.ts only feeds the not-yet-wired gateway); fixed when the branch merges.
+- ~~**pricing.ts drift on `main`**~~ ✅ FIXED (13 Oct 2026): content-pack is now "Content & Design Pack" at MWK 199,999 / ZMW 3,199 on `main` — matters now that the MWK gateway is live (was undercharging at 174,999).
 - **Canonical host mismatch:** `metadataBase`/sitemap/robots use apex `https://wiyuletech.com` while Netlify canonical is `www`. Clean 301, but align for perfect signals.
 - **`&apos;` inside `encodeURIComponent`:** `app/about/page.tsx` builds a WA prefill with `&apos;` — ships literal "&apos;". Use a real apostrophe in JS strings.
 
@@ -456,4 +462,4 @@ Built, build-clean, verified locally, but NOT deployed — waiting on PayChangu 
 
 ---
 
-_Last updated: 12 Oct 2026. Maintained by Tamsanga + Claude._
+_Last updated: 13 Oct 2026. Maintained by Tamsanga + Claude._
