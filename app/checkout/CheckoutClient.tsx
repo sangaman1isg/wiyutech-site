@@ -450,9 +450,10 @@ export default function CheckoutClient() {
                 <span>✓ Confirmed instantly</span>
                 <span>✓ Money-back guarantee</span>
               </div>
-              <p className="mt-2 text-center text-[11px] text-[var(--color-fg-faint)]">
-                🔒 Secured by PayChangu · Airtel · Mpamba · Visa · Mastercard
+              <p className="mt-3 text-center text-[11px] text-[var(--color-fg-faint)]">
+                🔒 Secured by PayChangu
               </p>
+              <PaymentMarks />
             </div>
           )}
 
@@ -527,6 +528,48 @@ export default function CheckoutClient() {
           </p>
         </div>
       </div>
+    </div>
+  );
+}
+
+/* ─── PaymentMarks ───────────────────────────────────────────── */
+// Accepted-payment badges under the "Pay now" button (PayChangu / MWK).
+// The hex values below are the networks' OFFICIAL brand colours (Visa blue,
+// Mastercard red/amber, Airtel red, Mpamba green) — hardcoded on purpose so
+// the logos read as authentic. These are NOT Wiyule tokens and are the one
+// sanctioned exception to the "no hardcoded hex" rule.
+function PaymentMarks() {
+  return (
+    <div className="mt-3 flex flex-wrap items-center justify-center gap-1.5">
+      {/* Visa */}
+      <span className="inline-flex h-6 items-center rounded-[3px] bg-white px-2 shadow-sm">
+        <span className="text-[13px] font-extrabold italic leading-none tracking-tight text-[#1434CB]">
+          VISA
+        </span>
+      </span>
+
+      {/* Mastercard */}
+      <span className="inline-flex h-6 items-center rounded-[3px] bg-white px-2 shadow-sm">
+        <svg width="28" height="17" viewBox="0 0 30 18" aria-label="Mastercard" role="img">
+          <circle cx="12" cy="9" r="8" fill="#EB001B" />
+          <circle cx="18" cy="9" r="8" fill="#F79E1B" />
+          <path d="M15 3.2a8 8 0 0 1 0 11.6 8 8 0 0 1 0-11.6Z" fill="#FF5F00" />
+        </svg>
+      </span>
+
+      {/* Airtel Money */}
+      <span className="inline-flex h-6 items-center rounded-[3px] bg-[#ED1C24] px-2 shadow-sm">
+        <span className="text-[11px] font-bold lowercase leading-none text-white">
+          airtel
+        </span>
+      </span>
+
+      {/* TNM Mpamba */}
+      <span className="inline-flex h-6 items-center rounded-[3px] bg-white px-2 shadow-sm">
+        <span className="text-[11px] font-bold leading-none text-[#00A859]">
+          Mpamba
+        </span>
+      </span>
     </div>
   );
 }
