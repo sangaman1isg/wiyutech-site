@@ -38,14 +38,25 @@ function twiml(message: string): Response {
 //
 // Stays DISABLED until TWILIO_AUTH_TOKEN is set in the environment — so v1
 // works immediately, and flipping on the check later is just adding the env var
-// (no code change). We reconstruct the URL from NEXT_PUBLIC_SITE_URL because
-// that is the exact URL configured in the Twilio console.
-function signatureOk(signature: string | null, params: Record<string, string>): boolean {
+// (no code change).
+//
+// The signed URL must EXACTLY match the one configured in the Twilio console.
+// Our canonical host is www.wiyuletech.com (the apex 308-redirects to it), so we
+// rebuild the URL from the request's forwarded host/proto headers — i.e. the
+// exact host Twilio called — rather than from NEXT_PUBLIC_SITE_URL (which is the
+// apex and shared with PayChangu). Self-configuring, no host to keep in sync.
+function signatureOk(req: Request, params: Record<string, string>): boolean {
   const authToken = process.env.TWILIO_AUTH_TOKEN;
   if (!authToken) return true; // check not enabled yet
+  const signature = req.headers.get("x-twilio-signature");
   if (!signature) return false;
 
-  const url = `${process.env.NEXT_PUBLIC_SITE_URL ?? ""}/api/whatsapp`;
+  const proto = req.headers.get("x-forwarded-proto") ?? "https";
+  const host =
+    req.headers.get("x-forwarded-host") ?? req.headers.get("host") ?? "";
+  const { pathname, search } = new URL(req.url);
+  const url = `${proto}://${host}${pathname}${search}`;
+
   const data = Object.keys(params)
     .sort()
     .reduce((acc, key) => acc + key + params[key], url);
@@ -68,7 +79,7 @@ export async function POST(req: Request) {
   const params: Record<string, string> = {};
   for (const [k, v] of form.entries()) params[k] = typeof v === "string" ? v : "";
 
-  if (!signatureOk(req.headers.get("x-twilio-signature"), params)) {
+  if (!signatureOk(req, params)) {
     // Not a genuine Twilio request — reject without calling Groq.
     return new Response("Forbidden", { status: 403 });
   }
